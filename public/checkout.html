@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KABARAK SOKO - Checkout</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        :root{--orange:#f68b1e;--orange-dark:#e67b12;--dark:#282828;--gray:#757575;--light-gray:#f5f5f5;--border:#e0e0e0;--white:#fff;--green:#2e7d32;--red:#c62828}
+        body{font-family:Arial,sans-serif;background:var(--light-gray);color:var(--dark);min-height:100vh}
+        button,input,textarea{font:inherit} button{cursor:pointer} a{color:inherit;text-decoration:none}
+        .top-bar{background:var(--orange);color:var(--white);padding:8px 20px;font-size:13px}
+        .top-bar-inner{max-width:1250px;margin:0 auto;display:flex;justify-content:space-between;gap:15px}
+        .header{background:var(--orange);color:var(--white);padding:14px 20px;box-shadow:0 2px 7px rgba(0,0,0,.15)}
+        .header-inner{max-width:1250px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+        .logo{font-size:27px;font-weight:900;letter-spacing:-1px;white-space:nowrap} .logo span{color:#fff3e0}
+        .back-button{border:none;background:var(--white);color:var(--orange-dark);padding:11px 18px;border-radius:4px;font-weight:700}
+        .main{max-width:1250px;margin:0 auto;padding:25px 15px 45px}
+        .page-title{font-size:28px;margin-bottom:18px}
+        .message{display:none;padding:14px;border-radius:4px;margin-bottom:18px;line-height:1.5;font-size:14px}
+        .message.show{display:block} .message.error{background:#ffebee;color:var(--red)} .message.success{background:#e8f5e9;color:var(--green)}
+        .checkout-layout{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:18px;align-items:start}
+        .panel{background:var(--white);border-radius:5px;box-shadow:0 1px 5px rgba(0,0,0,.08);overflow:hidden;margin-bottom:18px}
+        .panel-title{padding:17px 18px;border-bottom:1px solid var(--border);font-size:18px;font-weight:700}
+        .panel-body{padding:18px}
+        .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+        .form-group{display:flex;flex-direction:column;gap:7px} .form-group.full{grid-column:1/-1}
+        label{font-size:13px;font-weight:700}
+        input,textarea{width:100%;border:1px solid #ccc;border-radius:4px;padding:12px;outline:none;background:var(--white)}
+        input:focus,textarea:focus{border-color:var(--orange);box-shadow:0 0 0 2px rgba(246,139,30,.12)}
+        textarea{min-height:95px;resize:vertical}
+        .payment-options{display:grid;gap:12px}
+        .payment-option{border:1px solid var(--border);border-radius:5px;padding:15px;display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+        .payment-option:hover{border-color:var(--orange)} .payment-option.selected{border-color:var(--orange);background:#fff8ef}
+        .payment-option input{width:auto;margin-top:3px;accent-color:var(--orange)} .payment-option strong{display:block;margin-bottom:5px} .payment-option small{display:block;color:var(--gray);line-height:1.5}
+        .order-items{display:grid;gap:12px;margin-bottom:18px}
+        .order-item{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:11px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border)}
+        .order-item:last-child{border-bottom:none;padding-bottom:0}
+        .item-image{width:62px;height:62px;border-radius:4px;background:#f1f1f1;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#999;font-size:10px;text-align:center}
+        .item-image img{width:100%;height:100%;object-fit:cover}
+        .item-name{font-size:14px;font-weight:700;line-height:1.35;margin-bottom:4px} .item-quantity{color:var(--gray);font-size:12px} .item-price{font-weight:700;white-space:nowrap;font-size:13px}
+        .summary-row{display:flex;justify-content:space-between;gap:15px;padding:8px 0;font-size:14px}
+        .summary-total{border-top:1px solid var(--border);margin-top:8px;padding-top:15px;font-size:20px;font-weight:800}
+        .summary-note{color:var(--gray);font-size:12px;line-height:1.5;margin-top:12px}
+        .place-order{width:100%;border:none;background:var(--orange);color:var(--white);padding:15px;border-radius:4px;font-weight:800;font-size:15px;margin-top:18px}
+        .place-order:hover{background:var(--orange-dark)} .place-order:disabled{opacity:.6;cursor:not-allowed}
+        .empty-cart{background:var(--white);padding:45px 20px;text-align:center;border-radius:5px;box-shadow:0 1px 5px rgba(0,0,0,.08)}
+        .empty-cart h2{margin-bottom:8px} .empty-cart p{color:var(--gray);margin-bottom:20px}
+        .empty-cart a{display:inline-block;background:var(--orange);color:var(--white);padding:11px 18px;border-radius:4px;font-weight:700}
+        .footer{background:#313131;color:var(--white);padding:30px 20px}
+        .footer-inner{max-width:1250px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+        .footer h3{font-size:14px;margin-bottom:10px} .footer p{color:#ddd;font-size:12px;margin-bottom:7px}
+        .copyright{max-width:1250px;margin:25px auto 0;padding-top:18px;border-top:1px solid #555;color:#bbb;font-size:12px;text-align:center}
+        @media(max-width:850px){.checkout-layout{grid-template-columns:1fr}}
+        @media(max-width:600px){.top-bar{display:none}.header{padding:12px}.logo{font-size:21px}.back-button{padding:9px 11px;font-size:11px}.main{padding:18px 10px 35px}.page-title{font-size:24px}.form-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <div class="top-bar"><div class="top-bar-inner"><span>Welcome to KABARAK SOKO</span><span>Secure Checkout</span></div></div>
+    <header class="header"><div class="header-inner"><a href="/" class="logo">KABARAK <span>SOKO</span></a><button type="button" class="back-button" id="backButton">CONTINUE SHOPPING</button></div></header>
+    <main class="main">
+        <h1 class="page-title">Checkout</h1>
+        <div id="message" class="message" role="alert"></div>
+        <div id="checkoutPage"><div class="checkout-layout">
+            <section>
+                <div class="panel"><div class="panel-title">Delivery Information</div><div class="panel-body">
+                    <form id="checkoutForm" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group"><label for="deliveryName">Full Name</label><input type="text" id="deliveryName" required placeholder="Enter your full name"></div>
+                            <div class="form-group"><label for="deliveryPhone">Phone Number (M-Pesa)</label><input type="tel" id="deliveryPhone" required placeholder="07XXXXXXXX"></div>
+                            <div class="form-group"><label for="county">County</label><input type="text" id="county" required placeholder="e.g. Nakuru"></div>
+                            <div class="form-group"><label for="town">Town / City</label><input type="text" id="town" required placeholder="e.g. Nakuru Town"></div>
+                            <div class="form-group full"><label for="address">Delivery Address</label><textarea id="address" required placeholder="Estate, building, house number, landmark"></textarea></div>
+                        </div>
+                        <div class="panel" style="margin-top:18px"><div class="panel-title">Payment Method</div><div class="panel-body"><div class="payment-options">
+                            <label class="payment-option selected" id="codOption"><input type="radio" name="payment" value="cod" checked><div><strong>Cash on Delivery</strong><small>Pay when your order is delivered. No extra fee.</small></div></label>
+                            <label class="payment-option" id="mpesaOption"><input type="radio" name="payment" value="mpesa"><div><strong>M-Pesa STK Push</strong><small>You will receive a prompt on your phone to enter M-Pesa PIN. (Mock for Step 8 test)</small></div></label>
+                        </div></div></div>
+                    </form>
+                </div></section>
+                <aside>
+                    <div class="panel"><div class="panel-title">Order Summary</div><div class="panel-body">
+                        <div id="orderItems" class="order-items"></div>
+                        <div class="summary-row"><span>Subtotal</span><span id="subtotal">KSh 0</span></div>
+                        <div class="summary-row"><span>Delivery</span><span>FREE</span></div>
+                        <div class="summary-row summary-total"><span>Total</span><span id="total">KSh 0</span></div>
+                        <p class="summary-note">Your total is validated on server. Prices are from products.json, not from cart.</p>
+                        <button id="placeOrderBtn" class="place-order">PLACE ORDER</button>
+                    </div></div>
+                </aside>
+            </div></div>
+        <div id="emptyCart" class="empty-cart" style="display:none"><h2>Your cart is empty</h2><p>Add products to continue checkout</p><a href="/">START SHOPPING</a></div>
+    </main>
+
+<script>
+const messageEl = document.getElementById('message');
+const orderItemsEl = document.getElementById('orderItems');
+const subtotalEl = document.getElementById('subtotal');
+const totalEl = document.getElementById('total');
+const placeBtn = document.getElementById('placeOrderBtn');
+const checkoutPage = document.getElementById('checkoutPage');
+const emptyCart = document.getElementById('emptyCart');
+
+function showMessage(text,type){
+  messageEl.textContent=text;
+  messageEl.className='message show '+type;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function getCart(){
+  // Support both keys from earlier steps
+  let raw = localStorage.getItem('kabarakSokoCart') || localStorage.getItem('cart') || '[]';
+  try{
+    let parsed = JSON.parse(raw);
+    if(Array.isArray(parsed)) return parsed;
+    if(parsed && Array.isArray(parsed.items)) return parsed.items;
+    return [];
+  }catch{return []}
+}
+function getToken(){
+  return localStorage.getItem('token') || localStorage.getItem('authToken') || localStorage.getItem('kabarakToken') || '';
+}
+function formatKSh(n){ return 'KSh '+Number(n).toLocaleString(); }
+
+let cart = getCart();
+if(cart.length===0){
+  checkoutPage.style.display='none';
+  emptyCart.style.display='block';
+}else{
+  renderCart();
+}
+
+function renderCart(){
+  orderItemsEl.innerHTML='';
+  let subtotal=0;
+  cart.forEach(item=>{
+    const qty = item.qty || item.quantity || 1;
+    const price = Number(item.price)||0;
+    subtotal+= price*qty;
+    const div=document.createElement('div');
+    div.className='order-item';
+    const img = item.image ? `<img src="${item.image}" alt="">` : 'No Image';
+    div.innerHTML=`<div class="item-image">${img}</div><div><div class="item-name">${item.name||'Product'}</div><div class="item-quantity">Qty: ${qty}</div></div><div class="item-price">${formatKSh(price*qty)}</div>`;
+    orderItemsEl.appendChild(div);
+  });
+  subtotalEl.textContent=formatKSh(subtotal);
+  totalEl.textContent=formatKSh(subtotal);
+}
+
+document.getElementById('backButton').onclick=()=>{ location.href='/'; };
+document.querySelectorAll('.payment-option').forEach(opt=>{
+  opt.addEventListener('click',()=>{
+    document.querySelectorAll('.payment-option').forEach(o=>o.classList.remove('selected'));
+    opt.classList.add('selected');
+    opt.querySelector('input').checked=true;
+  });
+});
+
+placeBtn.onclick=async()=>{
+  const name=document.getElementById('deliveryName').value.trim();
+  const phone=document.getElementById('deliveryPhone').value.trim();
+  const county=document.getElementById('county').value.trim();
+  const town=document.getElementById('town').value.trim();
+  const address=document.getElementById('address').value.trim();
+  const payment=document.querySelector('input[name="payment"]:checked')?.value || 'cod';
+
+  if(!name||!phone||!county||!town||!address){
+    showMessage('Please fill all delivery fields','error'); return;
+  }
+  const token=getToken();
+  if(!token){
+    showMessage('Please login first. Redirecting to login...','error');
+    setTimeout(()=>location.href='/login.html',1500); return;
+  }
+
+  // Prepare items for backend - keep compatible with orders.js
+  const items = cart.map(i=>({
+    productId: i._id || i.id || i.productId,
+    id: i._id || i.id,
+    qty: i.qty || i.quantity || 1,
+    quantity: i.qty || i.quantity || 1
+  }));
+
+  placeBtn.disabled=true; placeBtn.textContent='PLACING ORDER...';
+
+  try{
+    const res=await fetch('/api/orders',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({
+        items,
+        deliveryAddress:{name,phone,county,town,address},
+        paymentMethod:payment
+      })
+    });
+    const data=await res.json();
+    if(!res.ok || !data.success){
+      throw new Error(data.message||'Failed to place order');
+    }
+    // SUCCESS - clear cart
+    localStorage.removeItem('kabarakSokoCart');
+    localStorage.removeItem('cart');
+    localStorage.removeItem('kabarak_cart');
+    showMessage(data.message + ' Order ID: '+data.order.id, 'success');
+    placeBtn.textContent='ORDER PLACED ✓';
+    setTimeout(()=>{
+      alert('Order '+data.order.id+' placed! Total: '+formatKSh(data.order.total));
+      location.href='/';
+    },1500);
+  }catch(err){
+    showMessage(err.message,'error');
+    placeBtn.disabled=false; placeBtn.textContent='PLACE ORDER';
+  }
+};
+</script>
+</body>
+</html>

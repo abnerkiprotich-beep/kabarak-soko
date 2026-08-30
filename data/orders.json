@@ -1,0 +1,119 @@
+[
+  {
+    "id": "KSO-1788086385550-E8YJZV",
+    "userId": "f18cac01-fcb6-4177-810d-330b9bc9ce1d",
+    "userEmail": "abnertraders@gmail.com",
+    "userName": "",
+    "products": [
+      {
+        "productId": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+        "name": "Samsung Galaxy A15",
+        "price": 18999,
+        "qty": 1,
+        "itemTotal": 18999
+      }
+    ],
+    "items": [
+      {
+        "productId": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+        "name": "Samsung Galaxy A15",
+        "price": 18999,
+        "qty": 1,
+        "itemTotal": 18999
+      }
+    ],
+    "total": 18999,
+    "status": "confirmed",
+    "paymentMethod": "cod",
+    "mpesaReceipt": "",
+    "checkoutRequestId": "",
+    "merchantRequestId": "",
+    "deliveryAddress": {
+      "name": "Abner Kiprotich",
+      "phone": "0790140643",
+      "county": "Nakuru",
+      "town": "Nakuru",
+      "address": "Kabarak University Hostels"
+    },
+    "createdAt": "2026-08-30T10:39:45.551Z",
+    "updatedAt": "2026-08-30T10:39:45.551Z"
+  },
+  {
+    "id": "KSO-1788088906860-ONL3GM",
+    "userId": "f18cac01-fcb6-4177-810d-330b9bc9ce1d",
+    "userEmail": "abnertraders@gmail.com",
+    "userName": "Abner Kiprotich",
+    "products": [
+      {
+        "productId": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+        "name": "Samsung Galaxy A15",
+        "price": 18999,
+        "qty": 1,
+        "itemTotal": 18999
+      }
+    ],
+    "items": [
+      {
+        "productId": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+        "name": "Samsung Galaxy A15",
+        "price": 18999,
+        "qty": 1,
+        "itemTotal": 18999
+      }
+    ],
+    "total": 18999,
+    "status": "confirmed",
+    "paymentMethod": "cod",
+    "mpesaReceipt": "",
+    "checkoutRequestId": "",
+    "merchantRequestId": "",
+    "deliveryAddress": {
+      "name": "Abner Kiprotich",
+      "phone": "0790140643",
+      "county": "Nakuru",
+      "town": "Nakuru",
+      "address": "Kabarak University Hostels"
+    },
+    "createdAt": "2026-08-30T11:21:46.859Z",
+    "updatedAt": "2026-08-30T11:21:46.859Z"
+  },
+  {
+    "id": "KSO-1788090467684-X80S3J",
+    "userId": "168197dd-8a77-48f1-8d81-d42f27656956",
+    "userEmail": "step10_1788090467@test.local",
+    "userName": "Step Ten Test",
+    "products": [
+      {
+        "productId": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+        "name": "Samsung Galaxy A15",
+        "price": 18999,
+        "qty": 1,
+        "itemTotal": 18999
+      }
+    ],
+    "items": [
+      {
+        "productId": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+        "name": "Samsung Galaxy A15",
+        "price": 18999,
+        "qty": 1,
+        "itemTotal": 18999
+      }
+    ],
+    "total": 18999,
+    "status": "confirmed",
+    "paymentMethod": "cod",
+    "mpesaReceipt": "",
+    "checkoutRequestId": "",
+    "merchantRequestId": "",
+    "deliveryAddress": {
+      "name": "Step Ten Test",
+      "phone": "0712345678",
+      "county": "Nakuru",
+      "town": "Nakuru",
+      "address": "Test Address"
+    },
+    "createdAt": "2026-08-30T11:47:47.684Z",
+    "updatedAt": "2026-08-30T11:47:47.684Z"
+  }
+]

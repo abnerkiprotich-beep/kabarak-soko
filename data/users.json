@@ -1,0 +1,24 @@
+[
+  {
+    "_id": "f18cac01-fcb6-4177-810d-330b9bc9ce1d",
+    "name": "Abner Kiprotich",
+    "email": "abnertraders@gmail.com",
+    "password": "$2a$12$7GEToETSDgoa7JSCnB43m..fuDf3pKexTTGhO5AUSImBxeIqOhFE.",
+    "role": "admin",
+    "phone": "0790140643",
+    "address": "Kabarak",
+    "createdAt": "2026-08-30T08:24:07.874Z",
+    "updatedAt": "2026-08-30T08:24:07.875Z"
+  },
+  {
+    "_id": "168197dd-8a77-48f1-8d81-d42f27656956",
+    "name": "Step Ten Test",
+    "email": "step10_1788090467@test.local",
+    "password": "$2a$12$9UHKzDwEJ0vwe8GgX8EiWOXghtPgIFQ3W3jmRiw4PeAIO0znd8dyO",
+    "role": "user",
+    "phone": "0712345678",
+    "address": "Test",
+    "createdAt": "2026-08-30T11:47:47.646Z",
+    "updatedAt": "2026-08-30T11:47:47.646Z"
+  }
+]

@@ -1,0 +1,2526 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KABARAK SOKO Admin Dashboard">
+    <title>KABARAK SOKO - Admin Dashboard</title>
+
+```
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --orange: #f68b1e;
+        --orange-dark: #e67b12;
+        --dark: #282828;
+        --gray: #757575;
+        --light: #f5f5f5;
+        --border: #e0e0e0;
+        --white: #ffffff;
+        --green: #2e7d32;
+        --red: #c62828;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--light);
+        color: var(--dark);
+        min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+        font: inherit;
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .top-bar {
+        background: #d96f08;
+        color: white;
+        font-size: 12px;
+        padding: 7px 20px;
+    }
+
+    .top-bar-content {
+        max-width: 1250px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .header {
+        background: var(--orange);
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .header-content {
+        max-width: 1250px;
+        margin: 0 auto;
+        min-height: 65px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px 20px;
+    }
+
+    .logo {
+        font-size: 25px;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .logo span {
+        color: #fff1df;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .header-button {
+        border: none;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        padding: 9px 13px;
+        border-radius: 4px;
+        font-weight: 700;
+    }
+
+    .header-button:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .main {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 25px 20px 50px;
+    }
+
+    .page-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+        font-size: 28px;
+    }
+
+    .page-heading p {
+        color: var(--gray);
+        margin-top: 5px;
+        font-size: 13px;
+    }
+
+    .admin-badge {
+        background: var(--dark);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .message {
+        display: none;
+        margin-bottom: 18px;
+        padding: 14px 16px;
+        border-radius: 5px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .message.show {
+        display: block;
+    }
+
+    .message.success {
+        background: #e8f5e9;
+        color: var(--green);
+    }
+
+    .message.error {
+        background: #ffebee;
+        color: var(--red);
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid var(--orange);
+    }
+
+    .stat-label {
+        color: var(--gray);
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 26px;
+        font-weight: 900;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .panel {
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .panel-header {
+        padding: 17px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .panel-header h2 {
+        font-size: 17px;
+    }
+
+    .panel-header span {
+        font-size: 11px;
+        color: var(--gray);
+    }
+
+    .panel-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 11px;
+        outline: none;
+        background: white;
+    }
+
+    .form-group textarea {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-color: var(--orange);
+    }
+
+    .two-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .submit-button {
+        width: 100%;
+        border: none;
+        background: var(--orange);
+        color: white;
+        padding: 13px;
+        border-radius: 4px;
+        font-weight: 800;
+        margin-top: 5px;
+    }
+
+    .submit-button:hover {
+        background: var(--orange-dark);
+    }
+
+    .submit-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .secondary-button {
+        border: 1px solid var(--orange);
+        background: white;
+        color: var(--orange-dark);
+        padding: 9px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .products-table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 13px 12px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        vertical-align: middle;
+        font-size: 12px;
+    }
+
+    th {
+        background: #fafafa;
+        color: var(--gray);
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+
+    .product-name-cell {
+        font-weight: 700;
+        min-width: 180px;
+    }
+
+    .price-cell {
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .stock {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 15px;
+        background: #e8f5e9;
+        color: var(--green);
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .stock.low {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .stock.empty {
+        background: #ffebee;
+        color: var(--red);
+    }
+
+    .empty {
+        text-align: center;
+        color: var(--gray);
+        padding: 40px 20px;
+    }
+
+    .orders-panel {
+        margin-top: 20px;
+    }
+
+    .order-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-row:last-child {
+        border-bottom: none;
+    }
+
+    .order-id {
+        font-weight: 800;
+        font-size: 13px;
+    }
+
+    .order-meta {
+        color: var(--gray);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+    .status {
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 800;
+        background: #eee;
+    }
+
+    .status.confirmed,
+    .status.processing,
+    .status.shipped,
+    .status.delivered {
+        background: #e8f5e9;
+        color: var(--green);
+    }
+
+    .status.pending {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .status.cancelled {
+        background: #ffebee;
+        color: var(--red);
+    }
+
+    .logout-button {
+        background: #424242;
+    }
+
+    .login-screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: var(--light);
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 420px;
+        background: white;
+        padding: 30px;
+        border-radius: 6px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.12);
+        text-align: center;
+    }
+
+    .login-box h1 {
+        color: var(--orange);
+        font-size: 25px;
+        margin-bottom: 8px;
+    }
+
+    .login-box p {
+        color: var(--gray);
+        font-size: 13px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .login-button {
+        width: 100%;
+        border: none;
+        background: var(--orange);
+        color: white;
+        padding: 12px;
+        border-radius: 4px;
+        font-weight: 800;
+    }
+
+    .login-error {
+        display: none;
+        background: #ffebee;
+        color: var(--red);
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        font-size: 12px;
+    }
+
+    .login-error.show {
+        display: block;
+    }
+
+    .footer {
+        background: #313131;
+        color: white;
+        text-align: center;
+        padding: 25px;
+        font-size: 12px;
+        margin-top: 30px;
+    }
+
+    @media (max-width: 1000px) {
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .top-bar {
+            display: none;
+        }
+
+        .header-content {
+            padding: 10px 12px;
+        }
+
+        .logo {
+            font-size: 20px;
+        }
+
+        .header-button {
+            padding: 8px;
+            font-size: 11px;
+        }
+
+        .main {
+            padding: 18px 10px 40px;
+        }
+
+        .page-heading {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .stats {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-card {
+            padding: 15px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+        }
+
+        .two-columns {
+            grid-template-columns: 1fr;
+        }
+
+        .order-row {
+            grid-template-columns: 1fr auto;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .header-actions {
+            gap: 3px;
+        }
+
+        .header-button {
+            font-size: 10px;
+        }
+
+        .login-box {
+            padding: 22px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<div id="adminApplication">
+
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <span>KABARAK SOKO Administration</span>
+            <span>Secure Admin Area</span>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-content">
+
+            <a href="/" class="logo">
+                KABARAK <span>SOKO</span>
+            </a>
+
+            <div class="header-actions">
+
+                <a href="/" class="header-button">
+                    🛒 Store
+                </a>
+
+                <a href="/orders.html" class="header-button">
+                    📦 Orders
+                </a>
+
+                <button
+                    type="button"
+                    class="header-button logout-button"
+                    id="logoutButton"
+                >
+                    LOGOUT
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+    <main class="main">
+
+        <div class="page-heading">
+
+            <div>
+                <h1>Admin Dashboard</h1>
+
+                <p id="welcomeText">
+                    Manage KABARAK SOKO products and orders.
+                </p>
+            </div>
+
+            <div class="admin-badge">
+                ADMIN
+            </div>
+
+        </div>
+
+        <div
+            id="globalMessage"
+            class="message"
+            role="alert"
+        ></div>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    TOTAL PRODUCTS
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalProducts"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    IN STOCK
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="inStockProducts"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    LOW STOCK
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="lowStockProducts"
+                >
+                    0
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    ORDERS
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalOrders"
+                >
+                    0
+                </div>
+            </div>
+
+        </section>
+
+        <div class="dashboard-grid">
+
+            <section class="panel">
+
+                <div class="panel-header">
+                    <h2>Add New Product</h2>
+
+                    <span>
+                        Product Management
+                    </span>
+                </div>
+
+                <div class="panel-body">
+
+                    <form id="productForm">
+
+                        <div class="form-group">
+
+                            <label for="productName">
+                                Product Name *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="productName"
+                                required
+                                placeholder="e.g. Samsung Galaxy A15"
+                            >
+
+                        </div>
+
+                        <div class="two-columns">
+
+                            <div class="form-group">
+
+                                <label for="productPrice">
+                                    Price (KSh) *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="productPrice"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                    placeholder="25000"
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="productOldPrice">
+                                    Old Price
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="productOldPrice"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="30000"
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="productCategory">
+                                Category *
+                            </label>
+
+                            <select
+                                id="productCategory"
+                                required
+                            >
+
+                                <option value="">
+                                    Select category
+                                </option>
+
+                                <option value="Supermarket">
+                                    Supermarket
+                                </option>
+
+                                <option value="Phones">
+                                    Phones & Tablets
+                                </option>
+
+                                <option value="Fashion">
+                                    Fashion
+                                </option>
+
+                                <option value="Electronics">
+                                    Electronics
+                                </option>
+
+                                <option value="Home">
+                                    Home & Office
+                                </option>
+
+                                <option value="Health">
+                                    Health & Beauty
+                                </option>
+
+                                <option value="Appliances">
+                                    Appliances
+                                </option>
+
+                                <option value="Computing">
+                                    Computing
+                                </option>
+
+                                <option value="Baby">
+                                    Baby Products
+                                </option>
+
+                                <option value="Sports">
+                                    Sport & Fitness
+                                </option>
+
+                                <option value="Automotive">
+                                    Automotive
+                                </option>
+
+                                <option value="Other">
+                                    Other Categories
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="productDescription">
+                                Description *
+                            </label>
+
+                            <textarea
+                                id="productDescription"
+                                required
+                                placeholder="Describe the product..."
+                            ></textarea>
+
+                        </div>
+
+                        <div class="two-columns">
+
+                            <div class="form-group">
+
+                                <label for="productStock">
+                                    Stock *
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="productStock"
+                                    min="0"
+                                    step="1"
+                                    value="0"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="productSeller">
+                                    Seller *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="productSeller"
+                                    value="KABARAK SOKO"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="productImage">
+                                Image URL
+                            </label>
+
+                            <input
+                                type="url"
+                                id="productImage"
+                                placeholder="https://example.com/product.jpg"
+                            >
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="submit-button"
+                            id="addProductButton"
+                        >
+                            ADD PRODUCT
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+            <section class="panel">
+
+                <div class="panel-header">
+
+                    <h2>Products</h2>
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="refreshProducts"
+                    >
+                        REFRESH
+                    </button>
+
+                </div>
+
+                <div
+                    class="products-table-wrapper"
+                    id="productsTable"
+                >
+                    <div class="empty">
+                        Loading products...
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <section class="panel orders-panel">
+
+            <div class="panel-header">
+
+                <h2>Recent Orders</h2>
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    id="refreshOrders"
+                >
+                    REFRESH
+                </button>
+
+            </div>
+
+            <div id="ordersContainer">
+
+                <div class="empty">
+                    Loading orders...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 KABARAK SOKO. Admin Dashboard.
+    </footer>
+
+</div>
+
+<div
+    id="loginScreen"
+    class="login-screen"
+    style="display:none;"
+>
+
+    <div class="login-box">
+
+        <h1>KABARAK SOKO</h1>
+
+        <p>
+            Admin authentication is required to access the dashboard.
+        </p>
+
+        <div
+            id="loginError"
+            class="login-error"
+        ></div>
+
+        <form id="adminLoginForm">
+
+            <div class="form-group">
+
+                <label for="loginEmail">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    required
+                    autocomplete="username"
+                    placeholder="admin@example.com"
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    required
+                    autocomplete="current-password"
+                    placeholder="Enter password"
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+                id="loginButton"
+            >
+                LOGIN
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+    const adminApplication =
+        document.getElementById(
+            "adminApplication"
+        );
+
+    const loginScreen =
+        document.getElementById(
+            "loginScreen"
+        );
+
+    const globalMessage =
+        document.getElementById(
+            "globalMessage"
+        );
+
+    const loginError =
+        document.getElementById(
+            "loginError"
+        );
+
+    const productForm =
+        document.getElementById(
+            "productForm"
+        );
+
+    const productsTable =
+        document.getElementById(
+            "productsTable"
+        );
+
+    const ordersContainer =
+        document.getElementById(
+            "ordersContainer"
+        );
+
+    const totalProducts =
+        document.getElementById(
+            "totalProducts"
+        );
+
+    const inStockProducts =
+        document.getElementById(
+            "inStockProducts"
+        );
+
+    const lowStockProducts =
+        document.getElementById(
+            "lowStockProducts"
+        );
+
+    const totalOrders =
+        document.getElementById(
+            "totalOrders"
+        );
+
+    const welcomeText =
+        document.getElementById(
+            "welcomeText"
+        );
+
+
+    let products = [];
+    let orders = [];
+
+
+    function getToken() {
+
+        return (
+            localStorage.getItem("token") ||
+            localStorage.getItem("kabarakSokoToken") ||
+            localStorage.getItem("jwt") ||
+            ""
+        );
+
+    }
+
+
+    function getStoredUser() {
+
+        const keys = [
+            "user",
+            "kabarakSokoUser",
+            "currentUser"
+        ];
+
+        for (
+            const key of keys
+        ) {
+
+            try {
+
+                const value =
+                    localStorage.getItem(
+                        key
+                    );
+
+                if (!value) {
+                    continue;
+                }
+
+                const user =
+                    JSON.parse(
+                        value
+                    );
+
+                if (
+                    user &&
+                    typeof user === "object"
+                ) {
+
+                    return user;
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(
+            value ?? ""
+        )
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    function formatPrice(value) {
+
+        const number =
+            Number(value) || 0;
+
+        return (
+            "KSh " +
+            number.toLocaleString(
+                "en-KE",
+                {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                }
+            )
+        );
+
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "-";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "-";
+
+        }
+
+        return date.toLocaleString(
+            "en-KE",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+
+    }
+
+
+    function showMessage(
+        text,
+        type = "success"
+    ) {
+
+        globalMessage.textContent =
+            text;
+
+        globalMessage.className =
+            "message show " + type;
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    function clearMessage() {
+
+        globalMessage.textContent =
+            "";
+
+        globalMessage.className =
+            "message";
+
+    }
+
+
+    function showLoginError(text) {
+
+        loginError.textContent =
+            text;
+
+        loginError.className =
+            "login-error show";
+
+    }
+
+
+    function logout() {
+
+        localStorage.removeItem(
+            "token"
+        );
+
+        localStorage.removeItem(
+            "kabarakSokoToken"
+        );
+
+        localStorage.removeItem(
+            "jwt"
+        );
+
+        localStorage.removeItem(
+            "user"
+        );
+
+        localStorage.removeItem(
+            "kabarakSokoUser"
+        );
+
+        localStorage.removeItem(
+            "currentUser"
+        );
+
+        window.location.href =
+            "/login.html";
+
+    }
+
+
+    document
+        .getElementById(
+            "logoutButton"
+        )
+        .addEventListener(
+            "click",
+            logout
+        );
+
+
+    function showDashboard(user) {
+
+        adminApplication.style.display =
+            "block";
+
+        loginScreen.style.display =
+            "none";
+
+        if (
+            user &&
+            user.name
+        ) {
+
+            welcomeText.textContent =
+                "Welcome, " +
+                user.name +
+                ". Manage KABARAK SOKO products and orders.";
+
+        }
+
+    }
+
+
+    function showLogin() {
+
+        adminApplication.style.display =
+            "none";
+
+        loginScreen.style.display =
+            "flex";
+
+    }
+
+
+    async function verifyAdmin() {
+
+        const token =
+            getToken();
+
+        if (!token) {
+
+            showLogin();
+
+            return false;
+
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/auth/me",
+                    {
+                        method: "GET",
+
+                        headers: {
+                            Authorization:
+                                "Bearer " +
+                                token
+                        }
+                    }
+                );
+
+            const data =
+                await response
+                    .json()
+                    .catch(
+                        () => ({})
+                    );
+
+            if (!response.ok) {
+
+                showLogin();
+
+                return false;
+
+            }
+
+            const user =
+                data.user ||
+                data;
+
+            if (
+                !user ||
+                user.role !== "admin"
+            ) {
+
+                showLoginError(
+                    "This account does not have administrator privileges."
+                );
+
+                showLogin();
+
+                return false;
+
+            }
+
+            showDashboard(
+                user
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "Admin verification error:",
+                error
+            );
+
+            showLogin();
+
+            return false;
+
+        }
+
+    }
+
+
+    async function fetchProducts() {
+
+        productsTable.innerHTML =
+            `
+            <div class="empty">
+                Loading products...
+            </div>
+            `;
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/products"
+                );
+
+            const data =
+                await response
+                    .json()
+                    .catch(
+                        () => ({})
+                    );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load products."
+                );
+
+            }
+
+            if (
+                Array.isArray(data)
+            ) {
+
+                products =
+                    data;
+
+            } else if (
+                Array.isArray(
+                    data.products
+                )
+            ) {
+
+                products =
+                    data.products;
+
+            } else {
+
+                products =
+                    [];
+
+            }
+
+            renderProducts();
+
+            updateStatistics();
+
+        } catch (error) {
+
+            console.error(
+                "Fetch products error:",
+                error
+            );
+
+            productsTable.innerHTML =
+                `
+                <div class="empty">
+                    Unable to load products.
+                </div>
+                `;
+
+            showMessage(
+                error.message ||
+                "Unable to load products.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    function renderProducts() {
+
+        if (
+            products.length === 0
+        ) {
+
+            productsTable.innerHTML =
+                `
+                <div class="empty">
+                    <strong>
+                        No products found.
+                    </strong>
+
+                    <p>
+                        Add your first product using the form.
+                    </p>
+                </div>
+                `;
+
+            return;
+
+        }
+
+        const rows =
+            products
+                .map(
+                    product => {
+
+                        const stock =
+                            Number(
+                                product.stock
+                            ) || 0;
+
+                        let stockClass =
+                            "stock";
+
+                        if (
+                            stock <= 0
+                        ) {
+
+                            stockClass +=
+                                " empty";
+
+                        } else if (
+                            stock <= 5
+                        ) {
+
+                            stockClass +=
+                                " low";
+
+                        }
+
+                        const image =
+                            Array.isArray(
+                                product.images
+                            ) &&
+                            product.images.length >
+                                0
+                                ? product.images[0]
+                                : "";
+
+                        return `
+                        <tr>
+
+                            <td class="product-name-cell">
+
+                                ${
+                                    image
+                                        ? `
+                                        <img
+                                            src="${escapeHtml(image)}"
+                                            alt="${escapeHtml(product.name)}"
+                                            style="
+                                                width:42px;
+                                                height:42px;
+                                                object-fit:cover;
+                                                border-radius:4px;
+                                                vertical-align:middle;
+                                                margin-right:8px;
+                                            "
+                                        >
+                                        `
+                                        : ""
+                                }
+
+                                ${escapeHtml(
+                                    product.name ||
+                                    "Unnamed product"
+                                )}
+
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    product.category ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td class="price-cell">
+                                ${formatPrice(
+                                    product.price
+                                )}
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="${stockClass}"
+                                >
+                                    ${stock}
+                                </span>
+
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    product.seller ||
+                                    "-"
+                                )}
+                            </td>
+
+                        </tr>
+                        `;
+
+                    }
+                )
+                .join("");
+
+        productsTable.innerHTML =
+            `
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Product
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Seller
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    ${rows}
+                </tbody>
+
+            </table>
+            `;
+
+    }
+
+
+    function updateStatistics() {
+
+        totalProducts.textContent =
+            products.length;
+
+        const inStock =
+            products.filter(
+                product =>
+                    Number(
+                        product.stock
+                    ) > 0
+            ).length;
+
+        const lowStock =
+            products.filter(
+                product => {
+
+                    const stock =
+                        Number(
+                            product.stock
+                        ) || 0;
+
+                    return (
+                        stock > 0 &&
+                        stock <= 5
+                    );
+
+                }
+            ).length;
+
+        inStockProducts.textContent =
+            inStock;
+
+        lowStockProducts.textContent =
+            lowStock;
+
+        totalOrders.textContent =
+            orders.length;
+
+    }
+
+
+    productForm.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            clearMessage();
+
+            const token =
+                getToken();
+
+            if (!token) {
+
+                showLogin();
+
+                return;
+
+            }
+
+            const name =
+                document
+                    .getElementById(
+                        "productName"
+                    )
+                    .value
+                    .trim();
+
+            const price =
+                Number(
+                    document
+                        .getElementById(
+                            "productPrice"
+                        )
+                        .value
+                );
+
+            const oldPriceInput =
+                document
+                    .getElementById(
+                        "productOldPrice"
+                    )
+                    .value;
+
+            const oldPrice =
+                oldPriceInput
+                    ? Number(
+                        oldPriceInput
+                    )
+                    : null;
+
+            const category =
+                document
+                    .getElementById(
+                        "productCategory"
+                    )
+                    .value
+                    .trim();
+
+            const description =
+                document
+                    .getElementById(
+                        "productDescription"
+                    )
+                    .value
+                    .trim();
+
+            const stock =
+                Number(
+                    document
+                        .getElementById(
+                            "productStock"
+                        )
+                        .value
+                );
+
+            const seller =
+                document
+                    .getElementById(
+                        "productSeller"
+                    )
+                    .value
+                    .trim();
+
+            const image =
+                document
+                    .getElementById(
+                        "productImage"
+                    )
+                    .value
+                    .trim();
+
+            if (
+                !name ||
+                !category ||
+                !description ||
+                !seller
+            ) {
+
+                showMessage(
+                    "Please fill in all required product fields.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            if (
+                !Number.isFinite(price) ||
+                price < 0
+            ) {
+
+                showMessage(
+                    "Enter a valid product price.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            if (
+                !Number.isFinite(stock) ||
+                stock < 0
+            ) {
+
+                showMessage(
+                    "Enter a valid stock quantity.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            if (
+                oldPrice !== null &&
+                (
+                    !Number.isFinite(oldPrice) ||
+                    oldPrice < 0
+                )
+            ) {
+
+                showMessage(
+                    "Enter a valid old price.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            const button =
+                document.getElementById(
+                    "addProductButton"
+                );
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "ADDING PRODUCT...";
+
+            try {
+
+                const payload = {
+
+                    name: name,
+
+                    price: price,
+
+                    oldPrice: oldPrice,
+
+                    category: category,
+
+                    description: description,
+
+                    images:
+                        image
+                            ? [image]
+                            : [],
+
+                    stock: stock,
+
+                    rating: 0,
+
+                    reviews: 0,
+
+                    seller: seller
+
+                };
+
+                const response =
+                    await fetch(
+                        "/api/products",
+                        {
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    "Bearer " +
+                                    token
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+
+                        }
+                    );
+
+                const data =
+                    await response
+                        .json()
+                        .catch(
+                            () => ({})
+                        );
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+
+                    showMessage(
+                        data.message ||
+                        "You are not authorized to add products.",
+                        "error"
+                    );
+
+                    return;
+
+                }
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to create product."
+                    );
+
+                }
+
+                showMessage(
+                    "Product added successfully.",
+                    "success"
+                );
+
+                productForm.reset();
+
+                document
+                    .getElementById(
+                        "productSeller"
+                    )
+                    .value =
+                    "KABARAK SOKO";
+
+                document
+                    .getElementById(
+                        "productStock"
+                    )
+                    .value =
+                    "0";
+
+                await fetchProducts();
+
+            } catch (error) {
+
+                console.error(
+                    "Add product error:",
+                    error
+                );
+
+                showMessage(
+                    error.message ||
+                    "Unable to add product.",
+                    "error"
+                );
+
+            } finally {
+
+                button.disabled =
+                    false;
+
+                button.textContent =
+                    "ADD PRODUCT";
+
+            }
+
+        }
+    );
+
+
+    async function fetchOrders() {
+
+        ordersContainer.innerHTML =
+            `
+            <div class="empty">
+                Loading orders...
+            </div>
+            `;
+
+        const token =
+            getToken();
+
+        if (!token) {
+
+            ordersContainer.innerHTML =
+                `
+                <div class="empty">
+                    Please log in as an administrator.
+                </div>
+                `;
+
+            return;
+
+        }
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/orders",
+                    {
+                        method: "GET",
+
+                        headers: {
+                            Authorization:
+                                "Bearer " +
+                                token
+                        }
+                    }
+                );
+
+            const data =
+                await response
+                    .json()
+                    .catch(
+                        () => ({})
+                    );
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+
+                ordersContainer.innerHTML =
+                    `
+                    <div class="empty">
+                        Admin authorization is required to view orders.
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load orders."
+                );
+
+            }
+
+            if (
+                Array.isArray(data)
+            ) {
+
+                orders =
+                    data;
+
+            } else if (
+                Array.isArray(
+                    data.orders
+                )
+            ) {
+
+                orders =
+                    data.orders;
+
+            } else {
+
+                orders =
+                    [];
+
+            }
+
+            renderOrders();
+
+            updateStatistics();
+
+        } catch (error) {
+
+            console.error(
+                "Fetch orders error:",
+                error
+            );
+
+            orders = [];
+
+            ordersContainer.innerHTML =
+                `
+                <div class="empty">
+
+                    <strong>
+                        Orders API unavailable
+                    </strong>
+
+                    <p>
+                        ${escapeHtml(
+                            error.message ||
+                            "Unable to load orders."
+                        )}
+                    </p>
+
+                </div>
+                `;
+
+            updateStatistics();
+
+        }
+
+    }
+
+
+    function renderOrders() {
+
+        if (
+            orders.length === 0
+        ) {
+
+            ordersContainer.innerHTML =
+                `
+                <div class="empty">
+
+                    <strong>
+                        No orders found.
+                    </strong>
+
+                    <p>
+                        New customer orders will appear here.
+                    </p>
+
+                </div>
+                `;
+
+            return;
+
+        }
+
+        const sortedOrders =
+            [...orders].sort(
+                (
+                    first,
+                    second
+                ) => {
+
+                    return (
+                        new Date(
+                            second.createdAt ||
+                            0
+                        ) -
+                        new Date(
+                            first.createdAt ||
+                            0
+                        )
+                    );
+
+                }
+            );
+
+        ordersContainer.innerHTML =
+            sortedOrders
+                .map(
+                    order => {
+
+                        const status =
+                            String(
+                                order.status ||
+                                "pending"
+                            ).toLowerCase();
+
+                        const items =
+                            Array.isArray(
+                                order.products
+                            )
+                                ? order.products
+                                : (
+                                    Array.isArray(
+                                        order.items
+                                    )
+                                        ? order.items
+                                        : []
+                                );
+
+                        const itemCount =
+                            items.reduce(
+                                (
+                                    total,
+                                    item
+                                ) => {
+
+                                    return (
+                                        total +
+                                        (
+                                            Number(
+                                                item.qty ||
+                                                0
+                                            ) || 0
+                                        )
+                                    );
+
+                                },
+                                0
+                            );
+
+                        return `
+                        <div class="order-row">
+
+                            <div>
+
+                                <div class="order-id">
+                                    ${escapeHtml(
+                                        order.id ||
+                                        "Order"
+                                    )}
+                                </div>
+
+                                <div class="order-meta">
+
+                                    ${escapeHtml(
+                                        order.userEmail ||
+                                        order.userName ||
+                                        "Customer"
+                                    )}
+
+                                    •
+
+                                    ${itemCount}
+                                    item(s)
+
+                                    •
+
+                                    ${escapeHtml(
+                                        formatDate(
+                                            order.createdAt
+                                        )
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                            <div>
+                                ${escapeHtml(
+                                    String(
+                                        order.paymentMethod ||
+                                        "-"
+                                    ).toUpperCase()
+                                )}
+                            </div>
+
+                            <div class="price-cell">
+                                ${formatPrice(
+                                    order.total
+                                )}
+                            </div>
+
+                            <div>
+
+                                <span
+                                    class="status ${escapeHtml(status)}"
+                                >
+                                    ${escapeHtml(status)}
+                                </span>
+
+                            </div>
+
+                        </div>
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+    document
+        .getElementById(
+            "refreshProducts"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                clearMessage();
+
+                await fetchProducts();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "refreshOrders"
+        )
+        .addEventListener(
+            "click",
+            async () => {
+
+                clearMessage();
+
+                await fetchOrders();
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "adminLoginForm"
+        )
+        .addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                const email =
+                    document
+                        .getElementById(
+                            "loginEmail"
+                        )
+                        .value
+                        .trim();
+
+                const password =
+                    document
+                        .getElementById(
+                            "loginPassword"
+                        )
+                        .value;
+
+                const button =
+                    document.getElementById(
+                        "loginButton"
+                    );
+
+                loginError.className =
+                    "login-error";
+
+                button.disabled =
+                    true;
+
+                button.textContent =
+                    "LOGGING IN...";
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/auth/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        email,
+                                        password
+                                    })
+                            }
+                        );
+
+                    const data =
+                        await response
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Login failed."
+                        );
+
+                    }
+
+                    if (!data.token) {
+
+                        throw new Error(
+                            "Login succeeded but no authentication token was returned."
+                        );
+
+                    }
+
+                    if (
+                        !data.user ||
+                        data.user.role !== "admin"
+                    ) {
+
+                        throw new Error(
+                            "This account is not an administrator account."
+                        );
+
+                    }
+
+                    localStorage.setItem(
+                        "token",
+                        data.token
+                    );
+
+                    localStorage.setItem(
+                        "user",
+                        JSON.stringify(
+                            data.user
+                        )
+                    );
+
+                    window.location.reload();
+
+                } catch (error) {
+
+                    console.error(
+                        "Admin login error:",
+                        error
+                    );
+
+                    showLoginError(
+                        error.message ||
+                        "Unable to log in."
+                    );
+
+                } finally {
+
+                    button.disabled =
+                        false;
+
+                    button.textContent =
+                        "LOGIN";
+
+                }
+
+            }
+        );
+
+
+    async function initialize() {
+
+        const authenticated =
+            await verifyAdmin();
+
+        if (!authenticated) {
+            return;
+        }
+
+        await fetchProducts();
+
+        await fetchOrders();
+
+    }
+
+
+    initialize();
+
+</script>
+```
+
+</body>
+</html>

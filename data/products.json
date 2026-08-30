@@ -1,0 +1,17 @@
+[
+  {
+    "_id": "7212c921-8cd1-4fd5-943c-f9ebf037897f",
+    "name": "Samsung Galaxy A15",
+    "price": 18999,
+    "oldPrice": 21999,
+    "category": "Phones",
+    "description": "Samsung Galaxy A15 smartphone",
+    "images": [],
+    "stock": 10,
+    "rating": 4.5,
+    "reviews": 25,
+    "seller": "Kabarak Soko",
+    "createdAt": "2026-08-30T07:34:16.733Z",
+    "updatedAt": "2026-08-30T07:34:16.734Z"
+  }
+]
