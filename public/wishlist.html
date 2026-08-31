@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - KABARAK SOKO</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+            padding-bottom: 80px;
+        }
+
+        /* HEADER */
+        .header {
+            background: #075b36;
+            color: white;
+            padding: 18px 18px 20px;
+        }
+
+        .header-title {
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .search-box {
+            width: 100%;
+            height: 52px;
+            background: white;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .search-icon {
+            font-size: 25px;
+            margin-right: 12px;
+        }
+
+        /* TITLE */
+        .page-title {
+            background: white;
+            padding: 22px 20px 18px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .page-title h1 {
+            font-size: 26px;
+            margin-bottom: 7px;
+        }
+
+        .page-title p {
+            color: #777;
+            font-size: 15px;
+        }
+
+        /* WISHLIST */
+        .wishlist-container {
+            padding: 14px;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 7px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .product-image {
+            height: 180px;
+            background: #eeeeee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #888;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .remove-button {
+            position: absolute;
+            right: 9px;
+            top: 9px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .product-details {
+            padding: 12px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            min-height: 40px;
+            line-height: 20px;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 19px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .cart-button {
+            width: 100%;
+            border: none;
+            background: #087f49;
+            color: white;
+            padding: 11px 5px;
+            border-radius: 5px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .cart-button:active {
+            transform: scale(0.98);
+        }
+
+        /* EMPTY WISHLIST */
+        .empty-wishlist {
+            background: white;
+            border-radius: 8px;
+            padding: 50px 25px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .empty-icon {
+            font-size: 65px;
+            color: #087f49;
+            margin-bottom: 15px;
+        }
+
+        .empty-wishlist h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .empty-wishlist p {
+            color: #777;
+            line-height: 22px;
+            margin-bottom: 22px;
+        }
+
+        .shop-button {
+            display: inline-block;
+            background: #087f49;
+            color: white;
+            text-decoration: none;
+            padding: 13px 25px;
+            border-radius: 5px;
+            font-weight: 700;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 76px;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .bottom-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            font-size: 12px;
+            font-weight: 600;
+            gap: 4px;
+        }
+
+        .bottom-item .icon {
+            font-size: 25px;
+            line-height: 25px;
+        }
+
+        .bottom-item.active {
+            color: #087f49;
+        }
+
+        /* DESKTOP */
+        @media (min-width: 700px) {
+            body {
+                max-width: 700px;
+                margin: auto;
+                background: #eeeeee;
+            }
+
+            .bottom-nav {
+                max-width: 700px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="header-title">
+            KABARAK SOKO
+        </div>
+
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <span>Search products, brands and categories</span>
+        </div>
+
+    </header>
+
+
+    <!-- PAGE TITLE -->
+    <section class="page-title">
+
+        <h1>Wishlist</h1>
+
+        <p id="wishlistCount">
+            Your saved products
+        </p>
+
+    </section>
+
+
+    <!-- WISHLIST CONTENT -->
+    <main class="wishlist-container">
+
+        <div id="wishlistGrid" class="wishlist-grid"></div>
+
+        <div id="emptyWishlist" class="empty-wishlist">
+
+            <div class="empty-icon">
+                ♡
+            </div>
+
+            <h2>Your Wishlist is Empty</h2>
+
+            <p>
+                Save products you love by tapping the heart icon.
+                They will appear here for easy access later.
+            </p>
+
+            <a href="index.html" class="shop-button">
+                CONTINUE SHOPPING
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <a href="index.html" class="bottom-item">
+            <span class="icon">⌂</span>
+            <span>Home</span>
+        </a>
+
+        <a href="index.html#categories" class="bottom-item">
+            <span class="icon">▦</span>
+            <span>Categories</span>
+        </a>
+
+        <a href="cart.html" class="bottom-item">
+            <span class="icon">🛒</span>
+            <span>Cart</span>
+        </a>
+
+        <a href="wishlist.html" class="bottom-item active">
+            <span class="icon">♡</span>
+            <span>Wishlist</span>
+        </a>
+
+        <a href="account.html" class="bottom-item">
+            <span class="icon">👤</span>
+            <span>Account</span>
+        </a>
+
+    </nav>
+
+
+    <script>
+
+        /*
+         * KABARAK SOKO WISHLIST
+         *
+         * The page looks for wishlist information
+         * saved in localStorage.
+         */
+
+        function getWishlist() {
+
+            const possibleKeys = [
+                "wishlist",
+                "kabarakWishlist",
+                "wishlistItems"
+            ];
+
+            for (const key of possibleKeys) {
+
+                const saved = localStorage.getItem(key);
+
+                if (!saved) {
+                    continue;
+                }
+
+                try {
+
+                    const data = JSON.parse(saved);
+
+                    if (Array.isArray(data)) {
+                        return data;
+                    }
+
+                } catch (error) {
+
+                    console.log(
+                        "Could not read wishlist:",
+                        error
+                    );
+
+                }
+
+            }
+
+            return [];
+        }
+
+
+        function saveWishlist(items) {
+
+            localStorage.setItem(
+                "wishlist",
+                JSON.stringify(items)
+            );
+
+            localStorage.setItem(
+                "kabarakWishlist",
+                JSON.stringify(items)
+            );
+
+        }
+
+
+        function removeFromWishlist(index) {
+
+            const wishlist = getWishlist();
+
+            wishlist.splice(index, 1);
+
+            saveWishlist(wishlist);
+
+            displayWishlist();
+
+        }
+
+
+        function addToCart(product) {
+
+            let cart = [];
+
+            const savedCart =
+                localStorage.getItem("cart");
+
+            if (savedCart) {
+
+                try {
+                    cart = JSON.parse(savedCart);
+
+                    if (!Array.isArray(cart)) {
+                        cart = [];
+                    }
+
+                } catch (error) {
+                    cart = [];
+                }
+
+            }
+
+
+            /*
+             * Check whether the product already
+             * exists in the cart.
+             */
+
+            const existingIndex =
+                cart.findIndex(function(item) {
+
+                    return String(
+                        item.id || item._id || item.name
+                    ) === String(
+                        product.id ||
+                        product._id ||
+                        product.name
+                    );
+
+                });
+
+
+            if (existingIndex !== -1) {
+
+                cart[existingIndex].qty =
+                    Number(
+                        cart[existingIndex].qty || 1
+                    ) + 1;
+
+            } else {
+
+                product.qty = 1;
+
+                cart.push(product);
+
+            }
+
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify(cart)
+            );
+
+
+            alert(
+                "Product added to your cart."
+            );
+
+        }
+
+
+        function displayWishlist() {
+
+            const wishlist = getWishlist();
+
+            const grid =
+                document.getElementById(
+                    "wishlistGrid"
+                );
+
+            const empty =
+                document.getElementById(
+                    "emptyWishlist"
+                );
+
+            const count =
+                document.getElementById(
+                    "wishlistCount"
+                );
+
+
+            /*
+             * Update count
+             */
+
+            if (wishlist.length === 0) {
+
+                count.textContent =
+                    "Your saved products";
+
+            } else {
+
+                count.textContent =
+                    wishlist.length +
+                    (
+                        wishlist.length === 1
+                            ? " saved product"
+                            : " saved products"
+                    );
+
+            }
+
+
+            /*
+             * Empty state
+             */
+
+            if (wishlist.length === 0) {
+
+                grid.innerHTML = "";
+
+                empty.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            empty.style.display =
+                "none";
+
+
+            /*
+             * Display products
+             */
+
+            grid.innerHTML =
+                wishlist.map(
+                    function(product, index) {
+
+                        const name =
+                            product.name ||
+                            product.title ||
+                            "Product";
+
+
+                        const price =
+                            product.price ||
+                            product.amount ||
+                            0;
+
+
+                        const image =
+                            product.image ||
+                            product.imageUrl ||
+                            product.img ||
+                            "";
+
+
+                        let imageHTML =
+                            "Product image unavailable";
+
+
+                        if (image) {
+
+                            imageHTML =
+                                '<img src="' +
+                                image +
+                                '" alt="' +
+                                escapeHTML(name) +
+                                '">';
+
+                        }
+
+
+                        return `
+                            <article class="product-card">
+
+                                <button
+                                    class="remove-button"
+                                    onclick="removeFromWishlist(${index})"
+                                    aria-label="Remove from wishlist"
+                                >
+                                    ♥
+                                </button>
+
+                                <div class="product-image">
+                                    ${imageHTML}
+                                </div>
+
+                                <div class="product-details">
+
+                                    <div class="product-name">
+                                        ${escapeHTML(name)}
+                                    </div>
+
+                                    <div class="product-price">
+                                        KSh ${formatPrice(price)}
+                                    </div>
+
+                                    <button
+                                        class="cart-button"
+                                        onclick='addToCart(${JSON.stringify(product).replace(/'/g, "&#39;")})'
+                                    >
+                                        ADD TO CART
+                                    </button>
+
+                                </div>
+
+                            </article>
+                        `;
+
+                    }
+                ).join("");
+
+        }
+
+
+        /*
+         * Prevent unsafe HTML from being inserted
+         * into the product name.
+         */
+
+        function escapeHTML(value) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent =
+                String(value);
+
+            return div.innerHTML;
+
+        }
+
+
+        function formatPrice(value) {
+
+            const number =
+                Number(
+                    String(value)
+                        .replace(/[^0-9.]/g, "")
+                );
+
+            if (isNaN(number)) {
+                return "0";
+            }
+
+            return number.toLocaleString(
+                "en-KE"
+            );
+
+        }
+
+
+        displayWishlist();
+
+    </script>
+
+</body>
+</html>

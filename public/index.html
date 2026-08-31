@@ -3383,25 +3383,11 @@
        ======================================================== */
 
     cartButton.addEventListener(
-      'click',
-      () => {
-
-        showMobileMessage(
-          'Your Cart',
-          `Your cart currently contains ${
-            cart.reduce(
-              (total, item) =>
-                total +
-                Number(
-                  item.qty || 0
-                ),
-              0
-            )
-          } item(s).`
-        );
-
-      }
-    );
+    'click',
+    () => {
+        window.location.href = 'cart.html';
+    }
+);
 
 
     /* =======================================================
@@ -3409,16 +3395,11 @@
        ======================================================== */
 
     accountButton.addEventListener(
-      'click',
-      () => {
-
-        showMobileMessage(
-          'Account',
-          'Your KABARAK SOKO account area will be available here.'
-        );
-
-      }
-    );
+    'click',
+    () => {
+        window.location.href = 'account.html';
+    }
+);
 
 
     /* =======================================================
@@ -3426,16 +3407,11 @@
        ======================================================== */
 
     helpButton.addEventListener(
-      'click',
-      () => {
-
-        showMobileMessage(
-          'Help Centre',
-          'KABARAK SOKO customer support and help services will be available here.'
-        );
-
-      }
-    );
+    'click',
+    () => {
+        window.location.href = 'help.html';
+    }
+);
 
 
     /* =======================================================
@@ -3558,53 +3534,21 @@
       }
 
 
-      if (
-        tab === 'cart'
-      ) {
+      if (tab === 'cart') {
+    window.location.href = 'cart.html';
+    return;
+}
 
-        showMobileMessage(
-          'Cart',
-          `Your cart currently contains ${
-            cart.reduce(
-              (total, item) =>
-                total +
-                Number(
-                  item.qty || 0
-                ),
-              0
-            )
-          } item(s).`
-        );
-
-        return;
-
-      }
+      if (tab === 'wishlist') {
+    window.location.href = 'wishlist.html';
+    return;
+}
 
 
-      if (
-        tab === 'wishlist'
-      ) {
-
-        showMobileMessage(
-          'Wishlist',
-          'Your saved products will appear in your KABARAK SOKO wishlist.'
-        );
-
-        return;
-
-      }
-
-
-      if (
-        tab === 'account'
-      ) {
-
-        showMobileMessage(
-          'Account',
-          'Your KABARAK SOKO account, orders and profile will appear here.'
-        );
-
-      }
+      if (tab === 'account') {
+    window.location.href = 'account.html';
+    return;
+}
 
     }
 
@@ -3779,16 +3723,12 @@
 
 
             if (
-              destination ===
-              'cart'
-            ) {
-
-              showMobileMessage(
-                'Cart',
-                'Your cart is ready for shopping.'
-              );
-
-            }
+    destination ===
+    'cart'
+) {
+    window.location.href = 'cart.html';
+    return;
+}
 
           }
         );
