@@ -1,78 +1,3810 @@
-<!-- REPLACE YOUR <script> AT THE BOTTOM WITH THIS ONE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
 
-<script>
-let cart = JSON.parse(localStorage.getItem('kabarakSokoCart')||'[]');
-const cartCountEl = document.getElementById('cartCount');
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
 
-function updateCart(){ 
-  if(cartCountEl) cartCountEl.textContent = cart.reduce((a,b)=>a+(b.qty||0),0);
-  localStorage.setItem('kabarakSokoCart', JSON.stringify(cart));
-}
+  <meta
+    name="description"
+    content="KABARAK SOKO - Your online shopping marketplace"
+  >
 
-function addToCart(name, price){
-  let exist = cart.find(c => c.name === name);
-  if(exist){ exist.qty++; } else { cart.push({name, price, qty:1}); }
-  updateCart();
-  alert(name + ' added to cart ✅');
-}
+  <meta
+    name="theme-color"
+    content="#16834b"
+  >
 
-// MAKE HEADER BUTTONS WORK TOO
-document.querySelectorAll('[data-tab="cart"]').forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    e.preventDefault();
-    window.location.href = '/cart.html';
-  });
-});
-document.querySelectorAll('[data-tab="account"]').forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const user = localStorage.getItem('kabarakSokoUser');
-    window.location.href = user ? '/account.html' : '/login.html';
-  });
-});
+  <title>KABARAK SOKO - Online Shopping</title>
 
-// BOTTOM NAV - FIXED
-document.querySelectorAll('.bottom-nav-item').forEach(item=>{
-  item.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const tab = item.dataset.tab;
+  <style>
 
-    if(tab === 'home'){
-      document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.remove('active'));
-      item.classList.add('active');
-      window.scrollTo({top:0,behavior:'smooth'});
-      // if you are on index.html, stay. If not, go home
-      if(window.location.pathname !== '/' && window.location.pathname !== '/index.html'){
-        window.location.href = '/';
+    /* =========================================================
+       KABARAK SOKO
+       JUMIA-STYLE MARKETPLACE HOME PAGE
+       GREEN THEME
+       ========================================================= */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --green: #16834b;
+      --green-dark: #0f6b3b;
+      --green-light: #e9f7ef;
+      --green-soft: #f0faf4;
+
+      --white: #ffffff;
+      --black: #222222;
+      --text: #282828;
+      --muted: #757575;
+
+      --light-bg: #f5f5f5;
+      --border: #e3e3e3;
+
+      --danger: #e53935;
+      --star: #f5a623;
+
+      --nav-height: 72px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background: var(--light-bg);
+      color: var(--text);
+
+      min-height: 100vh;
+
+      padding-bottom: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+
+    /* =========================================================
+       TOP BAR
+       ========================================================= */
+
+    .top-bar {
+      background: var(--green);
+      color: var(--white);
+
+      padding: 8px 20px;
+
+      font-size: 13px;
+    }
+
+    .top-bar-content {
+      max-width: 1250px;
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+    }
+
+    .top-bar-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .top-bar-links a {
+      font-weight: 600;
+    }
+
+
+    /* =========================================================
+       DESKTOP HEADER
+       ========================================================= */
+
+    .header {
+      background: var(--green);
+      color: var(--white);
+
+      padding: 12px 20px 18px;
+
+      position: sticky;
+      top: 0;
+
+      z-index: 1000;
+
+      box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .header-content {
+      max-width: 1250px;
+      margin: 0 auto;
+
+      display: flex;
+      align-items: center;
+
+      gap: 22px;
+    }
+
+    .logo {
+      min-width: 180px;
+
+      font-size: 28px;
+      font-weight: 900;
+
+      letter-spacing: -1px;
+
+      white-space: nowrap;
+    }
+
+    .logo span {
+      color: #d9f5e5;
+    }
+
+
+    /* =========================================================
+       SEARCH
+       ========================================================= */
+
+    .search-area {
+      flex: 1;
+
+      display: flex;
+
+      max-width: 700px;
+
+      height: 44px;
+    }
+
+    .search-area input {
+      flex: 1;
+
+      min-width: 0;
+
+      border: none;
+      outline: none;
+
+      padding: 0 16px;
+
+      border-radius: 4px 0 0 4px;
+
+      font-size: 14px;
+
+      color: var(--text);
+
+      background: var(--white);
+    }
+
+    .search-button {
+      width: 105px;
+
+      border: none;
+
+      background: #303030;
+
+      color: var(--white);
+
+      font-weight: 700;
+
+      border-radius: 0 4px 4px 0;
+    }
+
+    .search-button:hover {
+      background: #202020;
+    }
+
+
+    /* =========================================================
+       HEADER ACTIONS
+       ========================================================= */
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-action {
+      border: none;
+
+      background: transparent;
+
+      color: var(--white);
+
+      padding: 10px 8px;
+
+      min-width: 70px;
+
+      border-radius: 4px;
+
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .header-action:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .cart-count {
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      min-width: 20px;
+      height: 20px;
+
+      padding: 0 5px;
+
+      margin-left: 3px;
+
+      border-radius: 10px;
+
+      background: var(--white);
+
+      color: var(--green);
+
+      font-size: 11px;
+    }
+
+
+    /* =========================================================
+       MAIN
+       ========================================================= */
+
+    .main {
+      max-width: 1250px;
+
+      margin: 18px auto;
+
+      padding: 0 15px 40px;
+    }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero-layout {
+      display: grid;
+
+      grid-template-columns:
+        220px
+        minmax(0, 1fr)
+        220px;
+
+      gap: 12px;
+
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: var(--white);
+
+      border-radius: 6px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .panel-title {
+      padding: 15px;
+
+      border-bottom:
+        1px solid var(--border);
+
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       CATEGORY SIDEBAR
+       ========================================================= */
+
+    .categories-list {
+      list-style: none;
+
+      padding: 7px 0;
+    }
+
+    .categories-list li a {
+      display: block;
+
+      padding: 9px 15px;
+
+      font-size: 13px;
+
+      transition: 0.2s;
+    }
+
+    .categories-list li a:hover {
+      background: var(--green-light);
+
+      color: var(--green-dark);
+
+      padding-left: 19px;
+    }
+
+
+    /* =========================================================
+       SLIDER
+       ========================================================= */
+
+    .slider {
+      position: relative;
+
+      height: 330px;
+
+      background: #eee;
+    }
+
+    .slide {
+      position: absolute;
+
+      inset: 0;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 35px;
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition:
+        opacity 0.5s ease;
+
+      background:
+        linear-gradient(
+          135deg,
+          #16834b,
+          #31a967
+        );
+
+      color: var(--white);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .slide:nth-child(2) {
+      background:
+        linear-gradient(
+          135deg,
+          #0f6b3b,
+          #42b883
+        );
+    }
+
+    .slide:nth-child(3) {
+      background:
+        linear-gradient(
+          135deg,
+          #126b40,
+          #5ac98c
+        );
+    }
+
+    .slide:nth-child(4) {
+      background:
+        linear-gradient(
+          135deg,
+          #175c3b,
+          #3aaa70
+        );
+    }
+
+    .slide:nth-child(5) {
+      background:
+        linear-gradient(
+          135deg,
+          #0d5933,
+          #2ca865
+        );
+    }
+
+    .slide-content {
+      width: 100%;
+
+      max-width: 500px;
+    }
+
+    .slide-label {
+      display: inline-block;
+
+      padding: 7px 12px;
+
+      margin-bottom: 12px;
+
+      background:
+        rgba(255, 255, 255, 0.2);
+
+      border-radius: 3px;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .slide h2 {
+      font-size: 34px;
+
+      line-height: 1.1;
+
+      margin-bottom: 12px;
+    }
+
+    .slide p {
+      font-size: 15px;
+
+      line-height: 1.5;
+
+      margin-bottom: 20px;
+    }
+
+    .slide-button {
+      border: none;
+
+      background: var(--white);
+
+      color: var(--green-dark);
+
+      padding: 11px 18px;
+
+      border-radius: 4px;
+
+      font-weight: 700;
+    }
+
+    .slider-controls {
+      position: absolute;
+
+      bottom: 15px;
+
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      display: flex;
+
+      gap: 7px;
+
+      z-index: 5;
+    }
+
+    .slider-dot {
+      width: 9px;
+      height: 9px;
+
+      border: none;
+
+      border-radius: 50%;
+
+      background:
+        rgba(255, 255, 255, 0.5);
+    }
+
+    .slider-dot.active {
+      background: var(--white);
+
+      transform: scale(1.2);
+    }
+
+
+    /* =========================================================
+       QUICK ACTIONS
+       ========================================================= */
+
+    .quick-actions {
+      display: flex;
+
+      flex-direction: column;
+    }
+
+    .quick-action {
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 17px 15px;
+
+      border-bottom:
+        1px solid var(--border);
+    }
+
+    .quick-action:last-child {
+      border-bottom: none;
+    }
+
+    .quick-icon {
+      width: 35px;
+      height: 35px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background: var(--green-light);
+
+      color: var(--green);
+
+      font-weight: 900;
+    }
+
+    .quick-action strong {
+      display: block;
+
+      font-size: 13px;
+
+      margin-bottom: 3px;
+    }
+
+    .quick-action small {
+      color: var(--muted);
+
+      font-size: 11px;
+    }
+
+
+    /* =========================================================
+       SECTIONS
+       ========================================================= */
+
+    .section {
+      margin-bottom: 18px;
+    }
+
+    .section-header {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      background: var(--white);
+
+      padding: 15px 17px;
+
+      border-bottom:
+        1px solid var(--border);
+    }
+
+    .section-header h2 {
+      font-size: 20px;
+    }
+
+    .section-header a {
+      color: var(--green-dark);
+
+      font-size: 13px;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       CATEGORY CARDS
+       ========================================================= */
+
+    .category-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+      gap: 10px;
+
+      padding: 10px 0;
+    }
+
+    .category-card {
+      background: var(--white);
+
+      padding: 20px 10px;
+
+      text-align: center;
+
+      border-radius: 5px;
+
+      transition: 0.2s;
+    }
+
+    .category-card:hover {
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-icon {
+      font-size: 30px;
+
+      margin-bottom: 10px;
+    }
+
+    .category-card span {
+      display: block;
+
+      font-size: 12px;
+
+      font-weight: 600;
+    }
+
+
+    /* =========================================================
+       PRODUCTS
+       ========================================================= */
+
+    .product-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+      gap: 10px;
+
+      padding: 10px 0;
+    }
+
+    .product-card {
+      position: relative;
+
+      background: var(--white);
+
+      border-radius: 5px;
+
+      overflow: hidden;
+
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 5px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .wishlist-button {
+      position: absolute;
+
+      top: 10px;
+      right: 10px;
+
+      z-index: 2;
+
+      width: 34px;
+      height: 34px;
+
+      border: none;
+
+      border-radius: 50%;
+
+      background:
+        rgba(255, 255, 255, 0.95);
+
+      color: #777;
+
+      font-size: 20px;
+    }
+
+    .wishlist-button.active {
+      color: var(--danger);
+    }
+
+    .product-image {
+      width: 100%;
+
+      height: 190px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      background: #f7f7f7;
+
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+    }
+
+    .product-placeholder {
+      color: #aaa;
+
+      font-size: 13px;
+
+      text-align: center;
+
+      padding: 20px;
+    }
+
+    .product-info {
+      padding: 12px;
+    }
+
+    .product-name {
+      height: 38px;
+
+      overflow: hidden;
+
+      margin-bottom: 8px;
+
+      font-size: 14px;
+
+      line-height: 1.35;
+    }
+
+    .product-price {
+      font-size: 18px;
+
+      font-weight: 700;
+
+      margin-bottom: 5px;
+    }
+
+    .product-old-price {
+      color: var(--muted);
+
+      text-decoration: line-through;
+
+      font-size: 12px;
+
+      margin-right: 7px;
+    }
+
+    .discount {
+      color: var(--green);
+
+      font-size: 12px;
+
+      font-weight: 700;
+    }
+
+    .rating {
+      display: flex;
+
+      align-items: center;
+
+      gap: 4px;
+
+      margin: 8px 0;
+
+      font-size: 12px;
+    }
+
+    .stars {
+      color: var(--star);
+
+      letter-spacing: 1px;
+    }
+
+    .reviews {
+      color: var(--muted);
+    }
+
+    .add-cart-button {
+      width: 100%;
+
+      border: none;
+
+      background: var(--green);
+
+      color: var(--white);
+
+      padding: 10px;
+
+      border-radius: 3px;
+
+      font-weight: 700;
+
+      font-size: 13px;
+
+      margin-top: 5px;
+
+      transition:
+        background 0.2s;
+    }
+
+    .add-cart-button:hover {
+      background: var(--green-dark);
+    }
+
+    .empty-products {
+      grid-column: 1 / -1;
+
+      padding: 50px 20px;
+
+      text-align: center;
+
+      background: var(--white);
+
+      color: var(--muted);
+    }
+
+    .loading {
+      grid-column: 1 / -1;
+
+      background: var(--white);
+
+      padding: 50px;
+
+      text-align: center;
+
+      color: var(--muted);
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .footer {
+      background: #303030;
+
+      color: var(--white);
+
+      padding: 35px 20px;
+
+      margin-top: 20px;
+    }
+
+    .footer-content {
+      max-width: 1250px;
+
+      margin: 0 auto;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 30px;
+    }
+
+    .footer h3 {
+      margin-bottom: 14px;
+
+      font-size: 15px;
+    }
+
+    .footer p,
+    .footer a {
+      display: block;
+
+      color: #ddd;
+
+      font-size: 12px;
+
+      margin-bottom: 9px;
+    }
+
+    .copyright {
+      max-width: 1250px;
+
+      margin: 30px auto 0;
+
+      padding-top: 20px;
+
+      border-top:
+        1px solid #555;
+
+      color: #bbb;
+
+      font-size: 12px;
+
+      text-align: center;
+    }
+
+
+    /* =========================================================
+       MOBILE BOTTOM NAVIGATION
+       ========================================================= */
+
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    .bottom-nav-item {
+      flex: 1;
+
+      min-width: 0;
+
+      height: 100%;
+
+      border: none;
+
+      background: transparent;
+
+      color: #333;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 3px;
+
+      padding: 5px 2px;
+
+      position: relative;
+    }
+
+    .bottom-nav-icon {
+      width: 27px;
+      height: 27px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      font-size: 24px;
+
+      line-height: 1;
+    }
+
+    .bottom-nav-label {
+      font-size: 11px;
+
+      line-height: 1.1;
+
+      white-space: nowrap;
+    }
+
+    .bottom-nav-item.active {
+      color: var(--green);
+
+      font-weight: 700;
+    }
+
+    .bottom-nav-item.active
+    .bottom-nav-icon {
+      transform: scale(1.04);
+    }
+
+    .bottom-cart-badge {
+      position: absolute;
+
+      top: 4px;
+
+      margin-left: 18px;
+
+      min-width: 16px;
+      height: 16px;
+
+      padding: 0 4px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      background: var(--green);
+
+      color: var(--white);
+
+      border-radius: 10px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       MOBILE ACCOUNT / NAV OVERLAY
+       ========================================================= */
+
+    .mobile-page-message {
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      background:
+        rgba(0, 0, 0, 0.45);
+
+      z-index: 2000;
+
+      align-items: flex-end;
+
+      justify-content: center;
+    }
+
+    .mobile-page-message.show {
+      display: flex;
+    }
+
+    .mobile-message-card {
+      width: 100%;
+
+      max-width: 600px;
+
+      background: var(--white);
+
+      border-radius:
+        18px 18px 0 0;
+
+      padding: 25px 20px 35px;
+
+      animation:
+        slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform:
+          translateY(100%);
+      }
+
+      to {
+        transform:
+          translateY(0);
       }
     }
-    if(tab === 'categories'){
-      document.querySelectorAll('.bottom-nav-item').forEach(n=>n.classList.remove('active'));
-      item.classList.add('active');
-      document.getElementById('sectionTitle').scrollIntoView({behavior:'smooth'});
-    }
-    if(tab === 'cart'){
-      window.location.href = '/cart.html'; // REAL PAGE - NOT CLOSE
-    }
-    if(tab === 'wishlist'){
-      window.location.href = '/cart.html'; // you don't have wishlist.html, so goes to cart for now. Create wishlist.html later
-    }
-    if(tab === 'account'){
-      const user = localStorage.getItem('kabarakSokoUser');
-      window.location.href = user ? '/account.html' : '/login.html';
-    }
-  });
-});
 
-// ADD TO CART BUTTONS WORK NOW
-document.addEventListener('click', (e)=>{
-  if(e.target.classList.contains('add-cart-button')){
-    const card = e.target.closest('.product-card');
-    const name = card.querySelector('.product-name').innerText;
-    const price = card.querySelector('.product-price').innerText;
-    addToCart(name, price);
-  }
-});
+    .mobile-message-card h3 {
+      font-size: 20px;
 
-updateCart();
-</script>
+      margin-bottom: 8px;
+    }
+
+    .mobile-message-card p {
+      color: var(--muted);
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+      margin-bottom: 20px;
+    }
+
+    .mobile-message-close {
+      width: 100%;
+
+      border: none;
+
+      background: var(--green);
+
+      color: var(--white);
+
+      padding: 13px;
+
+      border-radius: 6px;
+
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (max-width: 1000px) {
+
+      .header-content {
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        min-width: auto;
+      }
+
+      .search-area {
+        order: 3;
+
+        flex-basis: 100%;
+
+        max-width: none;
+      }
+
+      .hero-layout {
+        grid-template-columns:
+          190px
+          minmax(0, 1fr);
+      }
+
+      .quick-actions {
+        display: none;
+      }
+
+      .category-grid {
+        grid-template-columns:
+          repeat(3, 1fr);
+      }
+
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 700px) {
+
+      body {
+        padding-bottom:
+          var(--nav-height);
+      }
+
+      .top-bar {
+        display: none;
+      }
+
+      .header {
+        padding: 10px 12px 12px;
+
+        position: sticky;
+
+        top: 0;
+      }
+
+      .header-content {
+        gap: 10px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .header-actions {
+        display: none;
+      }
+
+      .search-area {
+        order: 2;
+
+        height: 46px;
+
+        flex-basis: 100%;
+
+        max-width: none;
+      }
+
+      .search-area input {
+        border-radius: 24px 0 0 24px;
+
+        padding-left: 18px;
+
+        font-size: 14px;
+      }
+
+      .search-button {
+        width: 75px;
+
+        border-radius:
+          0 24px 24px 0;
+      }
+
+      .main {
+        margin: 10px auto;
+
+        padding:
+          0 10px 20px;
+      }
+
+      .hero-layout {
+        grid-template-columns: 1fr;
+
+        margin-bottom: 10px;
+      }
+
+      .categories-panel {
+        display: none;
+      }
+
+      .slider {
+        height: 260px;
+
+        border-radius: 8px;
+      }
+
+      .slide {
+        padding: 25px;
+      }
+
+      .slide h2 {
+        font-size: 27px;
+      }
+
+      .slide p {
+        font-size: 14px;
+      }
+
+      .quick-actions {
+        display: none;
+      }
+
+      .category-grid {
+        grid-template-columns:
+          repeat(2, 1fr);
+
+        gap: 7px;
+      }
+
+      .category-card {
+        padding:
+          17px 8px;
+      }
+
+      .product-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 7px;
+      }
+
+      .product-image {
+        height: 160px;
+      }
+
+      .product-info {
+        padding: 10px;
+      }
+
+      .product-name {
+        font-size: 13px;
+      }
+
+      .product-price {
+        font-size: 16px;
+      }
+
+      .footer {
+        display: none;
+      }
+
+
+      /* -----------------------------------------
+         FIVE-TAB MOBILE NAVIGATION
+         ----------------------------------------- */
+
+      .mobile-bottom-nav {
+        display: flex;
+
+        position: fixed;
+
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        height: var(--nav-height);
+
+        background: var(--white);
+
+        border-top:
+          1px solid var(--border);
+
+        box-shadow:
+          0 -3px 15px rgba(0, 0, 0, 0.10);
+
+        z-index: 1500;
+
+        padding:
+          4px 3px
+          env(safe-area-inset-bottom);
+      }
+
+      .bottom-nav-item {
+        height:
+          calc(
+            var(--nav-height)
+            - env(safe-area-inset-bottom)
+          );
+      }
+
+      .section-header {
+        padding:
+          13px 12px;
+      }
+
+      .section-header h2 {
+        font-size: 19px;
+      }
+
+    }
+
+
+    /* =========================================================
+       SMALL PHONES
+       ========================================================= */
+
+    @media (max-width: 420px) {
+
+      .logo {
+        font-size: 20px;
+      }
+
+      .search-button {
+        width: 70px;
+      }
+
+      .slider {
+        height: 245px;
+      }
+
+      .slide h2 {
+        font-size: 24px;
+      }
+
+      .slide p {
+        font-size: 13px;
+      }
+
+      .product-image {
+        height: 140px;
+      }
+
+      .product-price {
+        font-size: 15px;
+      }
+
+      .bottom-nav-label {
+        font-size: 10px;
+      }
+
+      .bottom-nav-icon {
+        font-size: 22px;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- =======================================================
+       TOP BAR
+       ======================================================== -->
+
+  <div class="top-bar">
+
+    <div class="top-bar-content">
+
+      <div>
+        Welcome to KABARAK SOKO
+      </div>
+
+      <div class="top-bar-links">
+
+        <a href="#help">
+          Help Centre
+        </a>
+
+        <a href="#sell">
+          Sell on KABARAK SOKO
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       HEADER
+       ======================================================== -->
+
+  <header class="header">
+
+    <div class="header-content">
+
+
+      <a
+        href="/"
+        class="logo"
+        id="logoLink"
+      >
+        KABARAK
+        <span>SOKO</span>
+      </a>
+
+
+      <form
+        class="search-area"
+        id="searchForm"
+      >
+
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search products, brands and categories..."
+          autocomplete="off"
+        >
+
+        <button
+          type="submit"
+          class="search-button"
+        >
+          SEARCH
+        </button>
+
+      </form>
+
+
+      <div class="header-actions">
+
+        <button
+          class="header-action"
+          id="accountButton"
+          type="button"
+        >
+          👤 Account
+        </button>
+
+
+        <button
+          class="header-action"
+          id="helpButton"
+          type="button"
+        >
+          ❓ Help
+        </button>
+
+
+        <button
+          class="header-action"
+          id="cartButton"
+          type="button"
+        >
+          🛒 Cart
+
+          <span
+            class="cart-count"
+            id="cartCount"
+          >
+            0
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =======================================================
+       MAIN CONTENT
+       ======================================================== -->
+
+  <main class="main" id="homeSection">
+
+
+    <!-- =====================================================
+         HERO
+         ====================================================== -->
+
+    <section class="hero-layout">
+
+
+      <!-- CATEGORY SIDEBAR -->
+
+      <aside class="panel categories-panel">
+
+        <div class="panel-title">
+          Categories
+        </div>
+
+        <ul class="categories-list">
+
+          <li>
+            <a
+              href="#"
+              data-category="Supermarket"
+            >
+              🛒 Supermarket
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Phones"
+            >
+              📱 Phones & Tablets
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Fashion"
+            >
+              👕 Fashion
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Electronics"
+            >
+              💻 Electronics
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Home"
+            >
+              🏠 Home & Office
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Health"
+            >
+              💊 Health & Beauty
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Appliances"
+            >
+              🔌 Appliances
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Computing"
+            >
+              🖥️ Computing
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Baby"
+            >
+              👶 Baby Products
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Sports"
+            >
+              ⚽ Sport & Fitness
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Automotive"
+            >
+              🚗 Automotive
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="#"
+              data-category="Other"
+            >
+              📦 Other Categories
+            </a>
+          </li>
+
+        </ul>
+
+      </aside>
+
+
+      <!-- SLIDER -->
+
+      <section class="panel slider">
+
+
+        <div class="slide active">
+
+          <div class="slide-content">
+
+            <span class="slide-label">
+              KABARAK SOKO
+            </span>
+
+            <h2>
+              Shop Everything You Need
+            </h2>
+
+            <p>
+              Discover great products at affordable
+              prices and enjoy convenient online shopping.
+            </p>
+
+            <button
+              class="slide-button"
+              type="button"
+              data-nav="home"
+            >
+              SHOP NOW
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="slide">
+
+          <div class="slide-content">
+
+            <span class="slide-label">
+              HOT DEALS
+            </span>
+
+            <h2>
+              Big Savings Every Day
+            </h2>
+
+            <p>
+              Find amazing deals across electronics,
+              fashion, phones and more.
+            </p>
+
+            <button
+              class="slide-button"
+              type="button"
+              data-nav="categories"
+            >
+              VIEW DEALS
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="slide">
+
+          <div class="slide-content">
+
+            <span class="slide-label">
+              PHONES & TABLETS
+            </span>
+
+            <h2>
+              Upgrade Your Tech
+            </h2>
+
+            <p>
+              Shop smartphones, tablets and accessories
+              from trusted sellers.
+            </p>
+
+            <button
+              class="slide-button"
+              type="button"
+              data-category="Phones"
+            >
+              SHOP PHONES
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="slide">
+
+          <div class="slide-content">
+
+            <span class="slide-label">
+              FASHION
+            </span>
+
+            <h2>
+              Style For Everyone
+            </h2>
+
+            <p>
+              Refresh your wardrobe with the latest
+              fashion for every occasion.
+            </p>
+
+            <button
+              class="slide-button"
+              type="button"
+              data-category="Fashion"
+            >
+              SHOP FASHION
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="slide">
+
+          <div class="slide-content">
+
+            <span class="slide-label">
+              FAST & EASY
+            </span>
+
+            <h2>
+              Convenient Shopping
+            </h2>
+
+            <p>
+              Order online and choose the payment
+              and delivery option that works for you.
+            </p>
+
+            <button
+              class="slide-button"
+              type="button"
+              data-nav="cart"
+            >
+              START SHOPPING
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="slider-controls">
+
+          <button
+            class="slider-dot active"
+            type="button"
+            aria-label="Slide 1"
+          ></button>
+
+          <button
+            class="slider-dot"
+            type="button"
+            aria-label="Slide 2"
+          ></button>
+
+          <button
+            class="slider-dot"
+            type="button"
+            aria-label="Slide 3"
+          ></button>
+
+          <button
+            class="slider-dot"
+            type="button"
+            aria-label="Slide 4"
+          ></button>
+
+          <button
+            class="slider-dot"
+            type="button"
+            aria-label="Slide 5"
+          ></button>
+
+        </div>
+
+      </section>
+
+
+      <!-- QUICK ACTIONS -->
+
+      <aside class="panel quick-actions">
+
+        <a
+          href="#help"
+          class="quick-action"
+        >
+
+          <div class="quick-icon">
+            ?
+          </div>
+
+          <div>
+
+            <strong>
+              Help Centre
+            </strong>
+
+            <small>
+              Need assistance?
+            </small>
+
+          </div>
+
+        </a>
+
+
+        <a
+          href="#sell"
+          class="quick-action"
+        >
+
+          <div class="quick-icon">
+            S
+          </div>
+
+          <div>
+
+            <strong>
+              Sell on KABARAK SOKO
+            </strong>
+
+            <small>
+              Start selling today
+            </small>
+
+          </div>
+
+        </a>
+
+
+        <a
+          href="tel:+254700000000"
+          class="quick-action"
+        >
+
+          <div class="quick-icon">
+            ☎
+          </div>
+
+          <div>
+
+            <strong>
+              Call To Order
+            </strong>
+
+            <small>
+              +254 700 000 000
+            </small>
+
+          </div>
+
+        </a>
+
+      </aside>
+
+    </section>
+
+
+    <!-- =====================================================
+         POPULAR CATEGORIES
+         ====================================================== -->
+
+    <section
+      class="section"
+      id="categoriesSection"
+    >
+
+      <div class="section-header">
+
+        <h2>
+          Popular Categories
+        </h2>
+
+        <a
+          href="#"
+          id="viewCategories"
+        >
+          VIEW ALL
+        </a>
+
+      </div>
+
+
+      <div class="category-grid">
+
+
+        <a
+          href="#"
+          class="category-card"
+          data-category="Phones"
+        >
+
+          <div class="category-icon">
+            📱
+          </div>
+
+          <span>
+            Phones
+          </span>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="category-card"
+          data-category="Fashion"
+        >
+
+          <div class="category-icon">
+            👕
+          </div>
+
+          <span>
+            Fashion
+          </span>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="category-card"
+          data-category="Electronics"
+        >
+
+          <div class="category-icon">
+            💻
+          </div>
+
+          <span>
+            Electronics
+          </span>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="category-card"
+          data-category="Supermarket"
+        >
+
+          <div class="category-icon">
+            🛒
+          </div>
+
+          <span>
+            Supermarket
+          </span>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="category-card"
+          data-category="Home"
+        >
+
+          <div class="category-icon">
+            🏠
+          </div>
+
+          <span>
+            Home & Office
+          </span>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="category-card"
+          data-category="Appliances"
+        >
+
+          <div class="category-icon">
+            🔌
+          </div>
+
+          <span>
+            Appliances
+          </span>
+
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRODUCTS
+         ====================================================== -->
+
+    <section
+      class="section"
+      id="productsSection"
+    >
+
+      <div class="section-header">
+
+        <h2 id="productsTitle">
+          Featured Products
+        </h2>
+
+        <a
+          href="#"
+          id="clearFilter"
+        >
+          VIEW ALL
+        </a>
+
+      </div>
+
+
+      <div
+        class="product-grid"
+        id="productGrid"
+      >
+
+        <div class="loading">
+          Loading products...
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+       ======================================================== -->
+
+  <footer class="footer">
+
+    <div class="footer-content">
+
+
+      <div>
+
+        <h3>
+          ABOUT KABARAK SOKO
+        </h3>
+
+        <p>
+          Your trusted online shopping marketplace.
+        </p>
+
+        <p>
+          Shop from anywhere, anytime.
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h3>
+          HELP & SUPPORT
+        </h3>
+
+        <a href="#help">
+          Help Centre
+        </a>
+
+        <a href="#delivery">
+          Delivery Information
+        </a>
+
+        <a href="#returns">
+          Returns & Refunds
+        </a>
+
+        <a href="#contact">
+          Contact Us
+        </a>
+
+      </div>
+
+
+      <div>
+
+        <h3>
+          PAYMENT OPTIONS
+        </h3>
+
+        <p>
+          M-Pesa
+        </p>
+
+        <p>
+          Cash on Delivery
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h3>
+          SELL WITH US
+        </h3>
+
+        <a href="#sell">
+          Sell on KABARAK SOKO
+        </a>
+
+        <a href="#seller">
+          Seller Centre
+        </a>
+
+        <a href="#terms">
+          Terms & Conditions
+        </a>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="copyright">
+
+      © 2026 KABARAK SOKO.
+      All rights reserved.
+
+    </div>
+
+  </footer>
+
+
+  <!-- =======================================================
+       FIVE-TAB MOBILE NAVIGATION
+       ======================================================== -->
+
+  <nav
+    class="mobile-bottom-nav"
+    id="mobileBottomNav"
+    aria-label="Main navigation"
+  >
+
+
+    <!-- HOME -->
+
+    <button
+      class="bottom-nav-item active"
+      type="button"
+      data-bottom-nav="home"
+      aria-label="Home"
+    >
+
+      <span class="bottom-nav-icon">
+        🏠
+      </span>
+
+      <span class="bottom-nav-label">
+        Home
+      </span>
+
+    </button>
+
+
+    <!-- CATEGORIES -->
+
+    <button
+      class="bottom-nav-item"
+      type="button"
+      data-bottom-nav="categories"
+      aria-label="Categories"
+    >
+
+      <span class="bottom-nav-icon">
+        ▦
+      </span>
+
+      <span class="bottom-nav-label">
+        Categories
+      </span>
+
+    </button>
+
+
+    <!-- CART -->
+
+    <button
+      class="bottom-nav-item"
+      type="button"
+      data-bottom-nav="cart"
+      aria-label="Cart"
+    >
+
+      <span class="bottom-nav-icon">
+        🛒
+      </span>
+
+      <span
+        class="bottom-cart-badge"
+        id="bottomCartCount"
+      >
+        0
+      </span>
+
+      <span class="bottom-nav-label">
+        Cart
+      </span>
+
+    </button>
+
+
+    <!-- WISHLIST -->
+
+    <button
+      class="bottom-nav-item"
+      type="button"
+      data-bottom-nav="wishlist"
+      aria-label="Wishlist"
+    >
+
+      <span class="bottom-nav-icon">
+        ♡
+      </span>
+
+      <span class="bottom-nav-label">
+        Wishlist
+      </span>
+
+    </button>
+
+
+    <!-- ACCOUNT -->
+
+    <button
+      class="bottom-nav-item"
+      type="button"
+      data-bottom-nav="account"
+      aria-label="Account"
+    >
+
+      <span class="bottom-nav-icon">
+        👤
+      </span>
+
+      <span class="bottom-nav-label">
+        Account
+      </span>
+
+    </button>
+
+
+  </nav>
+
+
+  <!-- =======================================================
+       MOBILE MESSAGE
+       ======================================================== -->
+
+  <div
+    class="mobile-page-message"
+    id="mobilePageMessage"
+  >
+
+    <div class="mobile-message-card">
+
+      <h3 id="mobileMessageTitle">
+        KABARAK SOKO
+      </h3>
+
+      <p id="mobileMessageText">
+        Welcome to KABARAK SOKO.
+      </p>
+
+      <button
+        type="button"
+        class="mobile-message-close"
+        id="mobileMessageClose"
+      >
+        CLOSE
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =======================================================
+       JAVASCRIPT
+       ======================================================== -->
+
+  <script>
+
+    /* =======================================================
+       DOM ELEMENTS
+       ======================================================== */
+
+    const productGrid =
+      document.getElementById(
+        'productGrid'
+      );
+
+    const productsTitle =
+      document.getElementById(
+        'productsTitle'
+      );
+
+    const searchForm =
+      document.getElementById(
+        'searchForm'
+      );
+
+    const searchInput =
+      document.getElementById(
+        'searchInput'
+      );
+
+    const cartCount =
+      document.getElementById(
+        'cartCount'
+      );
+
+    const bottomCartCount =
+      document.getElementById(
+        'bottomCartCount'
+      );
+
+    const cartButton =
+      document.getElementById(
+        'cartButton'
+      );
+
+    const accountButton =
+      document.getElementById(
+        'accountButton'
+      );
+
+    const helpButton =
+      document.getElementById(
+        'helpButton'
+      );
+
+    const clearFilter =
+      document.getElementById(
+        'clearFilter'
+      );
+
+    const categoriesSection =
+      document.getElementById(
+        'categoriesSection'
+      );
+
+    const productsSection =
+      document.getElementById(
+        'productsSection'
+      );
+
+    const mobileMessage =
+      document.getElementById(
+        'mobilePageMessage'
+      );
+
+    const mobileMessageTitle =
+      document.getElementById(
+        'mobileMessageTitle'
+      );
+
+    const mobileMessageText =
+      document.getElementById(
+        'mobileMessageText'
+      );
+
+    const mobileMessageClose =
+      document.getElementById(
+        'mobileMessageClose'
+      );
+
+
+    /* =======================================================
+       APPLICATION STATE
+       ======================================================== */
+
+    let products = [];
+
+    let cart =
+      JSON.parse(
+        localStorage.getItem(
+          'kabarakSokoCart'
+        ) || '[]'
+      );
+
+
+    /* =======================================================
+       CART
+       ======================================================== */
+
+    function updateCartCount() {
+
+      const totalItems =
+        cart.reduce(
+          (total, item) => {
+
+            return (
+              total +
+              Number(item.qty || 0)
+            );
+
+          },
+          0
+        );
+
+
+      cartCount.textContent =
+        totalItems;
+
+
+      bottomCartCount.textContent =
+        totalItems;
+
+    }
+
+
+    function saveCart() {
+
+      localStorage.setItem(
+        'kabarakSokoCart',
+        JSON.stringify(cart)
+      );
+
+      updateCartCount();
+
+    }
+
+
+    function addToCart(product) {
+
+      const productId =
+        product._id ||
+        product.id;
+
+
+      const existingProduct =
+        cart.find(
+          item =>
+            String(item.id) ===
+            String(productId)
+        );
+
+
+      if (existingProduct) {
+
+        existingProduct.qty += 1;
+
+      } else {
+
+        cart.push({
+
+          id: productId,
+
+          name:
+            product.name,
+
+          price:
+            Number(product.price) || 0,
+
+          image:
+            product.images &&
+            product.images.length > 0
+              ? product.images[0]
+              : '',
+
+          qty: 1
+
+        });
+
+      }
+
+
+      saveCart();
+
+
+      alert(
+        `${product.name} has been added to your cart.`
+      );
+
+    }
+
+
+    /* =======================================================
+       WISHLIST
+       ======================================================== */
+
+    function toggleWishlist(button) {
+
+      button.classList.toggle(
+        'active'
+      );
+
+
+      if (
+        button.classList.contains(
+          'active'
+        )
+      ) {
+
+        button.textContent =
+          '♥';
+
+      } else {
+
+        button.textContent =
+          '♡';
+
+      }
+
+    }
+
+
+    /* =======================================================
+       DISCOUNT
+       ======================================================== */
+
+    function calculateDiscount(
+      oldPrice,
+      price
+    ) {
+
+      const oldValue =
+        Number(oldPrice);
+
+      const currentValue =
+        Number(price);
+
+
+      if (
+        !oldValue ||
+        oldValue <= currentValue ||
+        currentValue < 0
+      ) {
+
+        return '';
+
+      }
+
+
+      const discount =
+        Math.round(
+          (
+            (oldValue - currentValue) /
+            oldValue
+          ) * 100
+        );
+
+
+      return `${discount}% OFF`;
+
+    }
+
+
+    /* =======================================================
+       STARS
+       ======================================================== */
+
+    function createStars(
+      rating
+    ) {
+
+      const numericRating =
+        Math.max(
+          0,
+          Math.min(
+            5,
+            Number(rating) || 0
+          )
+        );
+
+
+      const roundedRating =
+        Math.round(
+          numericRating
+        );
+
+
+      let stars = '';
+
+
+      for (
+        let i = 1;
+        i <= 5;
+        i += 1
+      ) {
+
+        stars +=
+          i <= roundedRating
+            ? '★'
+            : '☆';
+
+      }
+
+
+      return stars;
+
+    }
+
+
+    /* =======================================================
+       PRICE FORMAT
+       ======================================================== */
+
+    function formatPrice(
+      price
+    ) {
+
+      const numericPrice =
+        Number(price) || 0;
+
+
+      return `KSh ${numericPrice.toLocaleString(
+        'en-KE',
+        {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2
+        }
+      )}`;
+
+    }
+
+
+    /* =======================================================
+       HTML ESCAPING
+       ======================================================== */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          '&amp;'
+        )
+
+        .replace(
+          /</g,
+          '&lt;'
+        )
+
+        .replace(
+          />/g,
+          '&gt;'
+        )
+
+        .replace(
+          /"/g,
+          '&quot;'
+        )
+
+        .replace(
+          /'/g,
+          '&#039;'
+        );
+
+    }
+
+
+    /* =======================================================
+       RENDER PRODUCTS
+       ======================================================== */
+
+    function renderProducts(
+      productList
+    ) {
+
+      if (
+        !Array.isArray(
+          productList
+        ) ||
+        productList.length === 0
+      ) {
+
+        productGrid.innerHTML = `
+
+          <div class="empty-products">
+
+            <h3>
+              No products available yet
+            </h3>
+
+            <p>
+              Products will appear here once
+              they are added to KABARAK SOKO.
+            </p>
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      productGrid.innerHTML =
+        productList
+          .map(product => {
+
+            const image =
+              product.images &&
+              Array.isArray(
+                product.images
+              ) &&
+              product.images.length > 0
+
+                ? product.images[0]
+
+                : '';
+
+
+            const discount =
+              calculateDiscount(
+                product.oldPrice,
+                product.price
+              );
+
+
+            const productId =
+              String(
+                product._id ||
+                product.id ||
+                ''
+              );
+
+
+            return `
+
+              <article
+                class="product-card"
+              >
+
+                <button
+                  class="wishlist-button"
+                  type="button"
+                  aria-label="Add ${escapeHtml(
+                    product.name ||
+                    'product'
+                  )} to wishlist"
+                  data-wishlist="${escapeHtml(
+                    productId
+                  )}"
+                >
+                  ♡
+                </button>
+
+
+                <div
+                  class="product-image"
+                >
+
+                  ${
+                    image
+
+                      ? `
+
+                        <img
+                          src="${escapeHtml(
+                            image
+                          )}"
+                          alt="${escapeHtml(
+                            product.name ||
+                            'Product'
+                          )}"
+                          loading="lazy"
+                        >
+
+                      `
+
+                      : `
+
+                        <div
+                          class="product-placeholder"
+                        >
+                          Product image unavailable
+                        </div>
+
+                      `
+                  }
+
+                </div>
+
+
+                <div
+                  class="product-info"
+                >
+
+                  <div
+                    class="product-name"
+                  >
+                    ${escapeHtml(
+                      product.name ||
+                      'Unnamed Product'
+                    )}
+                  </div>
+
+
+                  <div
+                    class="product-price"
+                  >
+                    ${formatPrice(
+                      product.price
+                    )}
+                  </div>
+
+
+                  <div>
+
+                    ${
+                      product.oldPrice
+
+                        ? `
+
+                          <span
+                            class="product-old-price"
+                          >
+                            ${formatPrice(
+                              product.oldPrice
+                            )}
+                          </span>
+
+                        `
+
+                        : ''
+                    }
+
+
+                    ${
+                      discount
+
+                        ? `
+
+                          <span
+                            class="discount"
+                          >
+                            ${discount}
+                          </span>
+
+                        `
+
+                        : ''
+                    }
+
+                  </div>
+
+
+                  <div
+                    class="rating"
+                  >
+
+                    <span
+                      class="stars"
+                    >
+                      ${createStars(
+                        product.rating
+                      )}
+                    </span>
+
+                    <span
+                      class="reviews"
+                    >
+                      (${Number(
+                        product.reviews
+                      ) || 0})
+                    </span>
+
+                  </div>
+
+
+                  <button
+                    class="add-cart-button"
+                    type="button"
+                    data-product-id="${escapeHtml(
+                      productId
+                    )}"
+                  >
+                    ADD TO CART
+                  </button>
+
+                </div>
+
+              </article>
+
+            `;
+
+          })
+          .join('');
+
+
+      /* ADD TO CART EVENTS */
+
+      document
+        .querySelectorAll(
+          '.add-cart-button'
+        )
+        .forEach(button => {
+
+          button.addEventListener(
+            'click',
+            () => {
+
+              const productId =
+                button.dataset.productId;
+
+
+              const selectedProduct =
+                products.find(
+                  product => {
+
+                    return (
+                      String(
+                        product._id ||
+                        product.id
+                      ) ===
+                      String(
+                        productId
+                      )
+                    );
+
+                  }
+                );
+
+
+              if (
+                selectedProduct
+              ) {
+
+                addToCart(
+                  selectedProduct
+                );
+
+              }
+
+            }
+          );
+
+        });
+
+
+      /* WISHLIST EVENTS */
+
+      document
+        .querySelectorAll(
+          '.wishlist-button'
+        )
+        .forEach(button => {
+
+          button.addEventListener(
+            'click',
+            () => {
+
+              toggleWishlist(
+                button
+              );
+
+            }
+          );
+
+        });
+
+    }
+
+
+    /* =======================================================
+       LOAD PRODUCTS
+       ======================================================== */
+
+    async function fetchProducts() {
+
+      try {
+
+        productGrid.innerHTML = `
+
+          <div class="loading">
+            Loading products...
+          </div>
+
+        `;
+
+
+        const response =
+          await fetch(
+            '/api/products'
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            `Products request failed with status ${response.status}`
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          Array.isArray(data)
+        ) {
+
+          products =
+            data;
+
+        } else if (
+          Array.isArray(
+            data.products
+          )
+        ) {
+
+          products =
+            data.products;
+
+        } else {
+
+          products =
+            [];
+
+        }
+
+
+        renderProducts(
+          products
+        );
+
+      } catch (error) {
+
+        console.error(
+          'Failed to load products:',
+          error
+        );
+
+
+        productGrid.innerHTML = `
+
+          <div
+            class="empty-products"
+          >
+
+            <h3>
+              Unable to load products
+            </h3>
+
+            <p>
+              Please refresh the page
+              and try again.
+            </p>
+
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    /* =======================================================
+       SEARCH
+       ======================================================== */
+
+    function filterProducts(
+      searchTerm
+    ) {
+
+      const term =
+        searchTerm
+          .trim()
+          .toLowerCase();
+
+
+      if (!term) {
+
+        productsTitle.textContent =
+          'Featured Products';
+
+        renderProducts(
+          products
+        );
+
+        return;
+
+      }
+
+
+      const filteredProducts =
+        products.filter(
+          product => {
+
+            const name =
+              String(
+                product.name || ''
+              ).toLowerCase();
+
+
+            const category =
+              String(
+                product.category || ''
+              ).toLowerCase();
+
+
+            const description =
+              String(
+                product.description || ''
+              ).toLowerCase();
+
+
+            return (
+
+              name.includes(
+                term
+              ) ||
+
+              category.includes(
+                term
+              ) ||
+
+              description.includes(
+                term
+              )
+
+            );
+
+          }
+        );
+
+
+      productsTitle.textContent =
+        `Search results for "${searchTerm}"`;
+
+
+      renderProducts(
+        filteredProducts
+      );
+
+    }
+
+
+    /* =======================================================
+       CATEGORY FILTER
+       ======================================================== */
+
+    function filterByCategory(
+      category
+    ) {
+
+      const categoryName =
+        String(
+          category || ''
+        ).trim();
+
+
+      if (!categoryName) {
+
+        productsTitle.textContent =
+          'Featured Products';
+
+        renderProducts(
+          products
+        );
+
+        return;
+
+      }
+
+
+      const filteredProducts =
+        products.filter(
+          product => {
+
+            return (
+              String(
+                product.category || ''
+              ).toLowerCase() ===
+              categoryName.toLowerCase()
+            );
+
+          }
+        );
+
+
+      productsTitle.textContent =
+        categoryName;
+
+
+      renderProducts(
+        filteredProducts
+      );
+
+
+      productsSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+    }
+
+
+    /* =======================================================
+       SEARCH EVENT
+       ======================================================== */
+
+    searchForm.addEventListener(
+      'submit',
+      event => {
+
+        event.preventDefault();
+
+        filterProducts(
+          searchInput.value
+        );
+
+      }
+    );
+
+
+    /* =======================================================
+       CATEGORY EVENTS
+       ======================================================== */
+
+    document
+      .querySelectorAll(
+        '[data-category]'
+      )
+      .forEach(element => {
+
+        element.addEventListener(
+          'click',
+          event => {
+
+            event.preventDefault();
+
+
+            filterByCategory(
+              element.dataset.category
+            );
+
+          }
+        );
+
+      });
+
+
+    /* =======================================================
+       VIEW ALL
+       ======================================================== */
+
+    clearFilter.addEventListener(
+      'click',
+      event => {
+
+        event.preventDefault();
+
+
+        searchInput.value =
+          '';
+
+
+        productsTitle.textContent =
+          'Featured Products';
+
+
+        renderProducts(
+          products
+        );
+
+      }
+    );
+
+
+    const viewCategories =
+      document.getElementById(
+        'viewCategories'
+      );
+
+
+    viewCategories.addEventListener(
+      'click',
+      event => {
+
+        event.preventDefault();
+
+
+        categoriesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+      }
+    );
+
+
+    /* =======================================================
+       HEADER CART
+       ======================================================== */
+
+    cartButton.addEventListener(
+      'click',
+      () => {
+
+        showMobileMessage(
+          'Your Cart',
+          `Your cart currently contains ${
+            cart.reduce(
+              (total, item) =>
+                total +
+                Number(
+                  item.qty || 0
+                ),
+              0
+            )
+          } item(s).`
+        );
+
+      }
+    );
+
+
+    /* =======================================================
+       HEADER ACCOUNT
+       ======================================================== */
+
+    accountButton.addEventListener(
+      'click',
+      () => {
+
+        showMobileMessage(
+          'Account',
+          'Your KABARAK SOKO account area will be available here.'
+        );
+
+      }
+    );
+
+
+    /* =======================================================
+       HELP
+       ======================================================== */
+
+    helpButton.addEventListener(
+      'click',
+      () => {
+
+        showMobileMessage(
+          'Help Centre',
+          'KABARAK SOKO customer support and help services will be available here.'
+        );
+
+      }
+    );
+
+
+    /* =======================================================
+       MOBILE MESSAGE
+       ======================================================== */
+
+    function showMobileMessage(
+      title,
+      text
+    ) {
+
+      mobileMessageTitle.textContent =
+        title;
+
+      mobileMessageText.textContent =
+        text;
+
+      mobileMessage.classList.add(
+        'show'
+      );
+
+    }
+
+
+    function closeMobileMessage() {
+
+      mobileMessage.classList.remove(
+        'show'
+      );
+
+    }
+
+
+    mobileMessageClose.addEventListener(
+      'click',
+      closeMobileMessage
+    );
+
+
+    mobileMessage.addEventListener(
+      'click',
+      event => {
+
+        if (
+          event.target ===
+          mobileMessage
+        ) {
+
+          closeMobileMessage();
+
+        }
+
+      }
+    );
+
+
+    /* =======================================================
+       FIVE BOTTOM TABS
+       ======================================================== */
+
+    const bottomNavItems =
+      document.querySelectorAll(
+        '[data-bottom-nav]'
+      );
+
+
+    function setActiveBottomTab(
+      selectedTab
+    ) {
+
+      bottomNavItems.forEach(
+        item => {
+
+          item.classList.toggle(
+            'active',
+            item.dataset.bottomNav ===
+              selectedTab
+          );
+
+        }
+      );
+
+    }
+
+
+    function handleBottomNavigation(
+      tab
+    ) {
+
+      setActiveBottomTab(
+        tab
+      );
+
+
+      if (
+        tab === 'home'
+      ) {
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+        return;
+
+      }
+
+
+      if (
+        tab === 'categories'
+      ) {
+
+        categoriesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+        return;
+
+      }
+
+
+      if (
+        tab === 'cart'
+      ) {
+
+        showMobileMessage(
+          'Cart',
+          `Your cart currently contains ${
+            cart.reduce(
+              (total, item) =>
+                total +
+                Number(
+                  item.qty || 0
+                ),
+              0
+            )
+          } item(s).`
+        );
+
+        return;
+
+      }
+
+
+      if (
+        tab === 'wishlist'
+      ) {
+
+        showMobileMessage(
+          'Wishlist',
+          'Your saved products will appear in your KABARAK SOKO wishlist.'
+        );
+
+        return;
+
+      }
+
+
+      if (
+        tab === 'account'
+      ) {
+
+        showMobileMessage(
+          'Account',
+          'Your KABARAK SOKO account, orders and profile will appear here.'
+        );
+
+      }
+
+    }
+
+
+    bottomNavItems.forEach(
+      item => {
+
+        item.addEventListener(
+          'click',
+          () => {
+
+            handleBottomNavigation(
+              item.dataset.bottomNav
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+    /* =======================================================
+       SLIDER
+       ======================================================== */
+
+    let currentSlide = 0;
+
+
+    const slides =
+      document.querySelectorAll(
+        '.slide'
+      );
+
+
+    const dots =
+      document.querySelectorAll(
+        '.slider-dot'
+      );
+
+
+    function showSlide(
+      index
+    ) {
+
+      if (
+        slides.length === 0
+      ) {
+
+        return;
+
+      }
+
+
+      currentSlide =
+        (
+          index +
+          slides.length
+        ) %
+        slides.length;
+
+
+      slides.forEach(
+        (
+          slide,
+          slideIndex
+        ) => {
+
+          slide.classList.toggle(
+            'active',
+            slideIndex ===
+              currentSlide
+          );
+
+        }
+      );
+
+
+      dots.forEach(
+        (
+          dot,
+          dotIndex
+        ) => {
+
+          dot.classList.toggle(
+            'active',
+            dotIndex ===
+              currentSlide
+          );
+
+        }
+      );
+
+    }
+
+
+    dots.forEach(
+      (
+        dot,
+        index
+      ) => {
+
+        dot.addEventListener(
+          'click',
+          () => {
+
+            showSlide(
+              index
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+    setInterval(
+      () => {
+
+        showSlide(
+          currentSlide + 1
+        );
+
+      },
+      5000
+    );
+
+
+    /* =======================================================
+       SLIDE BUTTONS
+       ======================================================== */
+
+    document
+      .querySelectorAll(
+        '[data-nav]'
+      )
+      .forEach(button => {
+
+        button.addEventListener(
+          'click',
+          () => {
+
+            const destination =
+              button.dataset.nav;
+
+
+            if (
+              destination ===
+              'home'
+            ) {
+
+              window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+              });
+
+            }
+
+
+            if (
+              destination ===
+              'categories'
+            ) {
+
+              categoriesSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+
+            }
+
+
+            if (
+              destination ===
+              'cart'
+            ) {
+
+              showMobileMessage(
+                'Cart',
+                'Your cart is ready for shopping.'
+              );
+
+            }
+
+          }
+        );
+
+      });
+
+
+    /* =======================================================
+       INITIALIZE
+       ======================================================== */
+
+    updateCartCount();
+
+    fetchProducts();
+
+  </script>
+
+</body>
+</html>
