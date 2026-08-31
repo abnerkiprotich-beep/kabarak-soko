@@ -3,1298 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="KABARAK SOKO - Your online shopping marketplace">
-  <title>KABARAK SOKO - Online Shopping</title>
-
+  <title>KABARAK SOKO</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --orange: #f68b1e;
-      --orange-dark: #e67a0b;
-      --light-bg: #f5f5f5;
-      --white: #ffffff;
-      --text: #282828;
-      --muted: #757575;
-      --border: #e5e5e5;
-      --green: #008000;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--light-bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .top-bar {
-      background: var(--orange);
-      color: var(--white);
-      padding: 8px 20px;
-      font-size: 13px;
-    }
-
-    .top-bar-content {
-      max-width: 1250px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .top-bar-links {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .top-bar-links a {
-      font-weight: 600;
-    }
-
-    .header {
-      background: var(--orange);
-      color: var(--white);
-      padding: 12px 20px 18px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    .header-content {
-      max-width: 1250px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 22px;
-    }
-
-    .logo {
-      min-width: 180px;
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      white-space: nowrap;
-    }
-
-    .logo span {
-      color: #fff3e0;
-    }
-
-    .search-area {
-      flex: 1;
-      display: flex;
-      max-width: 700px;
-      height: 44px;
-    }
-
-    .search-area input {
-      flex: 1;
-      min-width: 0;
-      border: none;
-      outline: none;
-      padding: 0 16px;
-      border-radius: 4px 0 0 4px;
-      font-size: 14px;
-      color: var(--text);
-    }
-
-    .search-button {
-      width: 105px;
-      border: none;
-      background: #313131;
-      color: var(--white);
-      font-weight: 700;
-      border-radius: 0 4px 4px 0;
-    }
-
-    .search-button:hover {
-      background: #202020;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .header-action {
-      border: none;
-      background: transparent;
-      color: var(--white);
-      padding: 10px 8px;
-      min-width: 70px;
-      border-radius: 4px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .header-action:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .cart-count {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 20px;
-      height: 20px;
-      padding: 0 5px;
-      margin-left: 3px;
-      border-radius: 10px;
-      background: #fff;
-      color: var(--orange);
-      font-size: 11px;
-    }
-
-    .main {
-      max-width: 1250px;
-      margin: 18px auto;
-      padding: 0 15px 40px;
-    }
-
-    .hero-layout {
-      display: grid;
-      grid-template-columns: 220px minmax(0, 1fr) 220px;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .panel {
-      background: var(--white);
-      border-radius: 4px;
-      overflow: hidden;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-    }
-
-    .panel-title {
-      padding: 15px;
-      border-bottom: 1px solid var(--border);
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .categories-list {
-      list-style: none;
-      padding: 7px 0;
-    }
-
-    .categories-list li a {
-      display: block;
-      padding: 9px 15px;
-      font-size: 13px;
-      transition: 0.2s;
-    }
-
-    .categories-list li a:hover {
-      background: #fff3e6;
-      color: var(--orange-dark);
-      padding-left: 19px;
-    }
-
-    .slider {
-      position: relative;
-      height: 330px;
-      background: #eee;
-    }
-
-    .slide {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 35px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.5s ease;
-      background: linear-gradient(135deg, #f68b1e, #ffb347);
-      color: white;
-    }
-
-    .slide.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .slide:nth-child(2) {
-      background: linear-gradient(135deg, #ff8c00, #f4c430);
-    }
-
-    .slide:nth-child(3) {
-      background: linear-gradient(135deg, #d95f02, #fdae61);
-    }
-
-    .slide:nth-child(4) {
-      background: linear-gradient(135deg, #e6550d, #fd8d3c);
-    }
-
-    .slide:nth-child(5) {
-      background: linear-gradient(135deg, #cc4c02, #fe9929);
-    }
-
-    .slide-content {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .slide-label {
-      display: inline-block;
-      padding: 7px 12px;
-      margin-bottom: 12px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .slide h2 {
-      font-size: 34px;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-
-    .slide p {
-      font-size: 15px;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-
-    .slide-button {
-      border: none;
-      background: white;
-      color: var(--orange-dark);
-      padding: 11px 18px;
-      border-radius: 4px;
-      font-weight: 700;
-    }
-
-    .slider-controls {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 7px;
-      z-index: 5;
-    }
-
-    .slider-dot {
-      width: 9px;
-      height: 9px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-    }
-
-    .slider-dot.active {
-      background: white;
-      transform: scale(1.2);
-    }
-
-    .quick-actions {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .quick-action {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 17px 15px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .quick-action:last-child {
-      border-bottom: none;
-    }
-
-    .quick-icon {
-      width: 35px;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: #fff3e6;
-      color: var(--orange);
-      font-weight: 900;
-    }
-
-    .quick-action strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 3px;
-    }
-
-    .quick-action small {
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .section {
-      margin-bottom: 18px;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--white);
-      padding: 15px 17px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-header h2 {
-      font-size: 20px;
-    }
-
-    .section-header a {
-      color: var(--orange-dark);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      padding: 10px 0;
-    }
-
-    .product-card {
-      position: relative;
-      background: var(--white);
-      border-radius: 4px;
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
-    }
-
-    .wishlist-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 2;
-      width: 34px;
-      height: 34px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.95);
-      color: #777;
-      font-size: 20px;
-    }
-
-    .wishlist-button.active {
-      color: #e53935;
-    }
-
-    .product-image {
-      width: 100%;
-      height: 190px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f7f7f7;
-      overflow: hidden;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-placeholder {
-      color: #aaa;
-      font-size: 13px;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .product-info {
-      padding: 12px;
-    }
-
-    .product-name {
-      height: 38px;
-      overflow: hidden;
-      margin-bottom: 8px;
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    .product-price {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .product-old-price {
-      color: var(--muted);
-      text-decoration: line-through;
-      font-size: 12px;
-      margin-right: 7px;
-    }
-
-    .discount {
-      color: var(--green);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .rating {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin: 8px 0;
-      font-size: 12px;
-    }
-
-    .stars {
-      color: #f5a623;
-      letter-spacing: 1px;
-    }
-
-    .reviews {
-      color: var(--muted);
-    }
-
-    .add-cart-button {
-      width: 100%;
-      border: none;
-      background: var(--orange);
-      color: white;
-      padding: 10px;
-      border-radius: 3px;
-      font-weight: 700;
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    .add-cart-button:hover {
-      background: var(--orange-dark);
-    }
-
-    .empty-products {
-      grid-column: 1 / -1;
-      padding: 50px 20px;
-      text-align: center;
-      background: white;
-      color: var(--muted);
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 10px;
-      padding: 10px 0;
-    }
-
-    .category-card {
-      background: white;
-      padding: 20px 10px;
-      text-align: center;
-      border-radius: 4px;
-      transition: 0.2s;
-    }
-
-    .category-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .category-icon {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-    .category-card span {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .footer {
-      background: #313131;
-      color: white;
-      padding: 35px 20px;
-      margin-top: 20px;
-    }
-
-    .footer-content {
-      max-width: 1250px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 30px;
-    }
-
-    .footer h3 {
-      margin-bottom: 14px;
-      font-size: 15px;
-    }
-
-    .footer p,
-    .footer a {
-      display: block;
-      color: #ddd;
-      font-size: 12px;
-      margin-bottom: 9px;
-    }
-
-    .copyright {
-      max-width: 1250px;
-      margin: 30px auto 0;
-      padding-top: 20px;
-      border-top: 1px solid #555;
-      color: #bbb;
-      font-size: 12px;
-      text-align: center;
-    }
-
-    .loading {
-      grid-column: 1 / -1;
-      background: white;
-      padding: 50px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    @media (max-width: 1000px) {
-      .header-content {
-        flex-wrap: wrap;
-      }
-
-      .logo {
-        min-width: auto;
-      }
-
-      .search-area {
-        order: 3;
-        flex-basis: 100%;
-        max-width: none;
-      }
-
-      .hero-layout {
-        grid-template-columns: 190px minmax(0, 1fr);
-      }
-
-      .quick-actions {
-        display: none;
-      }
-
-      .category-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (max-width: 700px) {
-      .top-bar {
-        display: none;
-      }
-
-      .header {
-        padding: 12px;
-      }
-
-      .header-content {
-        gap: 10px;
-      }
-
-      .logo {
-        font-size: 22px;
-      }
-
-      .header-actions {
-        margin-left: auto;
-      }
-
-      .header-action {
-        min-width: auto;
-        padding: 8px 5px;
-      }
-
-      .hero-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .categories-panel {
-        display: none;
-      }
-
-      .slider {
-        height: 270px;
-      }
-
-      .slide h2 {
-        font-size: 27px;
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 7px;
-      }
-
-      .product-image {
-        height: 160px;
-      }
-
-      .category-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .footer-content {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 420px) {
-      .search-button {
-        width: 75px;
-      }
-
-      .header-action {
-        font-size: 11px;
-      }
-
-      .product-image {
-        height: 140px;
-      }
-
-      .product-price {
-        font-size: 16px;
-      }
-
-      .footer-content {
-        grid-template-columns: 1fr;
-      }
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Arial,sans-serif;background:#f5f5f5;padding-bottom:75px}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;font:inherit;border:none;background:none}
+.top-search{background:white;padding:14px 12px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.search-box{display:flex;align-items:center;background:#f1f1f1;border-radius:25px;padding:6px 16px 6px 6px;gap:12px;overflow:visible}
+.search-logo-icon{width:64px;height:64px;object-fit:contain;flex-shrink:0;background:transparent;border:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.4));margin:-12px 0 -12px -2px;transform:scale(1.15);z-index:10;mix-blend-mode:multiply}
+.search-box input{flex:1;border:none;background:transparent;outline:none;font-size:15px;font-weight:500}
+.banner-container{padding:12px;overflow:hidden;max-width:1250px;margin:0 auto}
+.banner-slider{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.banner-slider::-webkit-scrollbar{display:none}
+.banner{min-width:88%;height:185px;border-radius:18px;scroll-snap-align:center;background:linear-gradient(135deg,#7c4dff,#9c7cff);position:relative;padding:20px;color:white;display:flex;flex-direction:column;justify-content:center}
+.banner h3{font-size:11px;letter-spacing:1px;font-weight:700;opacity:0.9}
+.banner h2{font-size:28px;line-height:1.1;margin:8px 0;font-weight:900}
+.banner p{font-size:13px;opacity:0.9}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:#ddd}
+.dot.active{width:28px;border-radius:10px;background:#333}
+.cat-section{background:#fff8e1;margin:10px 12px;border-radius:18px;padding:16px 10px;max-width:1250px}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cat-item{text-align:center}
+.cat-circle{width:64px;height:64px;margin:0 auto 8px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.cat-circle::before{content:'';position:absolute;left:0;top:0;width:100%;height:100%;background:#ffbe00;clip-path:polygon(55% 0,100% 0,100% 100%,0 85%);z-index:0}
+.cat-circle span{z-index:1;font-size:26px;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:white;border-radius:50%}
+.cat-item p{font-size:11px;font-weight:700;color:#b7770f;line-height:1.2;margin-top:2px}
+.section-header{display:flex;justify-content:space-between;align-items:center;padding:18px 12px 10px;max-width:1250px;margin:0 auto}
+.section-header h2{font-size:20px;font-weight:800}
+.arrow-btn{width:54px;height:32px;background:#2d2d2d;color:white;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.product-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 12px 10px;scrollbar-width:none;max-width:1250px;margin:0 auto}
+.product-scroll::-webkit-scrollbar{display:none}
+.p-card{min-width:160px;max-width:160px;background:white;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.p-img{width:100%;height:145px;background:#f7f7f7;display:flex;align-items:center;justify-content:center}
+.p-img img{width:100%;height:100%;object-fit:cover}
+.p-info{padding:8px}
+.p-name{font-size:12px;height:32px;overflow:hidden;line-height:1.3}
+.p-price{font-weight:800;font-size:14px;margin-top:4px}
+.p-old{font-size:11px;color:#999;text-decoration:line-through}
+.add-btn{width:100%;background:#f68b1e;color:white;padding:7px;border-radius:6px;font-weight:700;font-size:11px;margin-top:6px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 0 10px;border-top:1px solid #eee;z-index:1000}
+.nav-item{text-align:center;font-size:10px;color:#555;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:50px}
+.nav-item.active{color:#f68b1e}
+.nav-icon{font-size:20px}
   </style>
 </head>
-
 <body>
-
-  <div class="top-bar">
-    <div class="top-bar-content">
-      <div>Welcome to KABARAK SOKO</div>
-      <div class="top-bar-links">
-        <a href="#help">Help Centre</a>
-        <a href="#sell">Sell on KABARAK SOKO</a>
-      </div>
+  <div class="top-search">
+    <div class="search-box">
+      <img src="/logo.png" alt="KABARAK SOKO" class="search-logo-icon">
+      <input id="searchInput" type="search" placeholder="Search on Kabarak Soko">
     </div>
   </div>
-
-  <header class="header">
-    <div class="header-content">
-
-      <a href="/" class="logo">
-        KABARAK <span>SOKO</span>
-      </a>
-
-      <form class="search-area" id="searchForm">
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="Search products, brands and categories..."
-          autocomplete="off"
-        >
-        <button type="submit" class="search-button">SEARCH</button>
-      </form>
-
-      <div class="header-actions">
-        <button class="header-action" id="accountButton" type="button">
-          👤 Account
-        </button>
-
-        <button class="header-action" id="helpButton" type="button">
-          ❓ Help
-        </button>
-
-        <button class="header-action" id="cartButton" type="button">
-          🛒 Cart
-          <span class="cart-count" id="cartCount">0</span>
-        </button>
+  <div class="banner-container">
+    <div class="banner-slider" id="bannerSlider">
+      <div class="banner">
+        <h3>KABARAK SOKO • MONDAY 9AM</h3>
+        <h2>140 Bob<br>Deals</h2>
+        <p>Up to 80% off • limited quantity</p>
+        <div style="margin-top:10px;font-size:12px;font-weight:700">Shop Now →</div>
       </div>
-
+      <div class="banner" style="background:linear-gradient(135deg,#ff8c00,#ffb347)">
+        <h3>HOT DEALS</h3>
+        <h2>Big Savings<br>Every Day</h2>
+        <p>Phones, Fashion, Electronics</p>
+      </div>
     </div>
-  </header>
-
-  <main class="main">
-
-    <section class="hero-layout">
-
-      <aside class="panel categories-panel">
-        <div class="panel-title">Categories</div>
-
-        <ul class="categories-list">
-          <li><a href="#" data-category="Supermarket">🛒 Supermarket</a></li>
-          <li><a href="#" data-category="Phones">📱 Phones & Tablets</a></li>
-          <li><a href="#" data-category="Fashion">👕 Fashion</a></li>
-          <li><a href="#" data-category="Electronics">💻 Electronics</a></li>
-          <li><a href="#" data-category="Home">🏠 Home & Office</a></li>
-          <li><a href="#" data-category="Health">💊 Health & Beauty</a></li>
-          <li><a href="#" data-category="Appliances">🔌 Appliances</a></li>
-          <li><a href="#" data-category="Computing">🖥️ Computing</a></li>
-          <li><a href="#" data-category="Baby">👶 Baby Products</a></li>
-          <li><a href="#" data-category="Sports">⚽ Sport & Fitness</a></li>
-          <li><a href="#" data-category="Automotive">🚗 Automotive</a></li>
-          <li><a href="#" data-category="Other">📦 Other Categories</a></li>
-        </ul>
-      </aside>
-
-      <section class="panel slider">
-
-        <div class="slide active">
-          <div class="slide-content">
-            <span class="slide-label">KABARAK SOKO</span>
-            <h2>Shop Everything You Need</h2>
-            <p>Discover great products at affordable prices and enjoy convenient online shopping.</p>
-            <button class="slide-button" type="button">SHOP NOW</button>
-          </div>
-        </div>
-
-        <div class="slide">
-          <div class="slide-content">
-            <span class="slide-label">HOT DEALS</span>
-            <h2>Big Savings Every Day</h2>
-            <p>Find amazing deals across electronics, fashion, phones and more.</p>
-            <button class="slide-button" type="button">VIEW DEALS</button>
-          </div>
-        </div>
-
-        <div class="slide">
-          <div class="slide-content">
-            <span class="slide-label">PHONES & TABLETS</span>
-            <h2>Upgrade Your Tech</h2>
-            <p>Shop smartphones, tablets and accessories from trusted sellers.</p>
-            <button class="slide-button" type="button">SHOP PHONES</button>
-          </div>
-        </div>
-
-        <div class="slide">
-          <div class="slide-content">
-            <span class="slide-label">FASHION</span>
-            <h2>Style For Everyone</h2>
-            <p>Refresh your wardrobe with the latest fashion for every occasion.</p>
-            <button class="slide-button" type="button">SHOP FASHION</button>
-          </div>
-        </div>
-
-        <div class="slide">
-          <div class="slide-content">
-            <span class="slide-label">FAST & EASY</span>
-            <h2>Convenient Shopping</h2>
-            <p>Order online and choose the payment and delivery option that works for you.</p>
-            <button class="slide-button" type="button">START SHOPPING</button>
-          </div>
-        </div>
-
-        <div class="slider-controls">
-          <button class="slider-dot active" type="button" aria-label="Slide 1"></button>
-          <button class="slider-dot" type="button" aria-label="Slide 2"></button>
-          <button class="slider-dot" type="button" aria-label="Slide 3"></button>
-          <button class="slider-dot" type="button" aria-label="Slide 4"></button>
-          <button class="slider-dot" type="button" aria-label="Slide 5"></button>
-        </div>
-
-      </section>
-
-      <aside class="panel quick-actions">
-
-        <a href="#help" class="quick-action">
-          <div class="quick-icon">?</div>
-          <div>
-            <strong>Help Centre</strong>
-            <small>Need assistance?</small>
-          </div>
-        </a>
-
-        <a href="#sell" class="quick-action">
-          <div class="quick-icon">S</div>
-          <div>
-            <strong>Sell on KABARAK SOKO</strong>
-            <small>Start selling today</small>
-          </div>
-        </a>
-
-        <a href="tel:+254700000000" class="quick-action">
-          <div class="quick-icon">☎</div>
-          <div>
-            <strong>Call To Order</strong>
-            <small>+254 700 000 000</small>
-          </div>
-        </a>
-
-      </aside>
-
-    </section>
-
-    <section class="section">
-      <div class="section-header">
-        <h2>Popular Categories</h2>
-        <a href="#" id="viewCategories">VIEW ALL</a>
-      </div>
-
-      <div class="category-grid">
-
-        <a href="#" class="category-card" data-category="Phones">
-          <div class="category-icon">📱</div>
-          <span>Phones</span>
-        </a>
-
-        <a href="#" class="category-card" data-category="Fashion">
-          <div class="category-icon">👕</div>
-          <span>Fashion</span>
-        </a>
-
-        <a href="#" class="category-card" data-category="Electronics">
-          <div class="category-icon">💻</div>
-          <span>Electronics</span>
-        </a>
-
-        <a href="#" class="category-card" data-category="Supermarket">
-          <div class="category-icon">🛒</div>
-          <span>Supermarket</span>
-        </a>
-
-        <a href="#" class="category-card" data-category="Home">
-          <div class="category-icon">🏠</div>
-          <span>Home & Office</span>
-        </a>
-
-        <a href="#" class="category-card" data-category="Appliances">
-          <div class="category-icon">🔌</div>
-          <span>Appliances</span>
-        </a>
-
-      </div>
-    </section>
-
-    <section class="section">
-
-      <div class="section-header">
-        <h2 id="productsTitle">Featured Products</h2>
-        <a href="#" id="clearFilter">VIEW ALL</a>
-      </div>
-
-      <div class="product-grid" id="productGrid">
-        <div class="loading">Loading products...</div>
-      </div>
-
-    </section>
-
-  </main>
-
-  <footer class="footer">
-
-    <div class="footer-content">
-
-      <div>
-        <h3>ABOUT KABARAK SOKO</h3>
-        <p>Your trusted online shopping marketplace.</p>
-        <p>Shop from anywhere, anytime.</p>
-      </div>
-
-      <div>
-        <h3>HELP & SUPPORT</h3>
-        <a href="#help">Help Centre</a>
-        <a href="#delivery">Delivery Information</a>
-        <a href="#returns">Returns & Refunds</a>
-        <a href="#contact">Contact Us</a>
-      </div>
-
-      <div>
-        <h3>PAYMENT OPTIONS</h3>
-        <p>M-Pesa</p>
-        <p>Cash on Delivery</p>
-      </div>
-
-      <div>
-        <h3>SELL WITH US</h3>
-        <a href="#sell">Sell on KABARAK SOKO</a>
-        <a href="#seller">Seller Centre</a>
-        <a href="#terms">Terms & Conditions</a>
-      </div>
-
+    <div class="dots"><div class="dot active"></div><div class="dot"></div></div>
+  </div>
+  <div class="cat-section">
+    <div class="cat-grid">
+      <a href="#" class="cat-item" data-category="Phones"><div class="cat-circle"><span>📱</span></div><p>Phone<br>Deals</p></a>
+      <a href="#" class="cat-item" data-category="Appliances"><div class="cat-circle"><span>💡</span></div><p>Solar &<br>Lighting</p></a>
+      <a href="#" class="cat-item" data-category="Electronics"><div class="cat-circle"><span>⌚</span></div><p>Smartwatch<br>es</p></a>
+      <a href="#" class="cat-item" data-category="Fashion"><div class="cat-circle"><span>👟</span></div><p>Shoe Deals</p></a>
+      <a href="#" class="cat-item" data-category="Computing"><div class="cat-circle"><span>💻</span></div><p>Laptops</p></a>
+      <a href="#" class="cat-item" data-category="Home"><div class="cat-circle"><span>🛋️</span></div><p>TV Stands</p></a>
+      <a href="#" class="cat-item" data-category="Appliances"><div class="cat-circle"><span>📺</span></div><p>TVs</p></a>
+      <a href="#" class="cat-item" data-category="Electronics"><div class="cat-circle"><span>🔊</span></div><p>Music<br>Systems</p></a>
     </div>
+  </div>
+  <div class="section-header"><h2 id="sectionTitle">Top selling items</h2><button class="arrow-btn" id="viewAllBtn">→</button></div>
+  <div class="product-scroll" id="productGrid"><div style="padding:20px;color:#999">Loading products...</div></div>
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active" data-tab="home"><span class="nav-icon">🏠</span>Home</a>
+    <a href="#" class="nav-item" data-tab="categories"><span class="nav-icon">☰</span>Categories</a>
+    <a href="#" class="nav-item" data-tab="cart"><span class="nav-icon">🛒</span>Cart <span id="cartCount" style="background:#f68b1e;color:white;border-radius:10px;padding:1px 6px;font-size:10px">0</span></a>
+    <a href="#" class="nav-item" data-tab="wishlist"><span class="nav-icon">♡</span>Wishlist</a>
+    <a href="#" class="nav-item" data-tab="account"><span class="nav-icon">👤</span>Account</a>
+  </div>
+<script>
+  const productGrid=document.getElementById('productGrid');
+  const searchInput=document.getElementById('searchInput');
+  const cartCount=document.getElementById('cartCount');
+  const sectionTitle=document.getElementById('sectionTitle');
+  let products=[];
+  let cart=JSON.parse(localStorage.getItem('kabarakSokoCart')||'[]');
+  let wishlist=JSON.parse(localStorage.getItem('kabarakSokoWishlist')||'[]');
 
-    <div class="copyright">
-      © 2026 KABARAK SOKO. All rights reserved.
-    </div>
+  function updateCart(){cartCount.textContent=cart.reduce((s,i)=>s+Number(i.qty||0),0);localStorage.setItem('kabarakSokoCart',JSON.stringify(cart));}
+  function addToCart(p){const ex=cart.find(i=>String(i.id)===String(p._id||p.id)); if(ex) ex.qty++; else cart.push({id:p._id||p.id,name:p.name,price:p.price,qty:1}); updateCart(); alert(p.name+' added to cart');}
+  function escapeHtml(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-  </footer>
+  function render(list){
+    sectionTitle.textContent='Top selling items';
+    if(!list.length){productGrid.innerHTML='<div style="padding:20px;color:#999">No products found</div>';return}
+    productGrid.innerHTML=list.map(p=>{ const img=p.images&&p.images[0]?p.images[0]:''; return `<div class="p-card"><div class="p-img">${img?`<img src="${escapeHtml(img)}" alt="">`:`<span style="color:#aaa;font-size:11px">No image</span>`}</div><div class="p-info"><div class="p-name">${escapeHtml(p.name||'Product')}</div><div class="p-price">KSh ${(Number(p.price)||0).toLocaleString()}</div>${p.oldPrice?`<div class="p-old">KSh ${Number(p.oldPrice).toLocaleString()}</div>`:''}<button class="add-btn" data-id="${escapeHtml(String(p._id||p.id))}">ADD TO CART</button></div></div>`; }).join('');
+    document.querySelectorAll('.add-btn').forEach(b=>{ b.addEventListener('click',()=>{ const pr=products.find(x=>String(x._id||x.id)===b.dataset.id); if(pr) addToCart(pr); }); });
+  }
 
-  <script>
-    const productGrid = document.getElementById('productGrid');
-    const productsTitle = document.getElementById('productsTitle');
-    const searchForm = document.getElementById('searchForm');
-    const searchInput = document.getElementById('searchInput');
-    const cartCount = document.getElementById('cartCount');
-    const cartButton = document.getElementById('cartButton');
-    const accountButton = document.getElementById('accountButton');
-    const helpButton = document.getElementById('helpButton');
-    const clearFilter = document.getElementById('clearFilter');
+  function showCartView(){
+    sectionTitle.textContent='My Cart';
+    if(!cart.length){productGrid.innerHTML='<div style="width:100%;padding:30px;text-align:center;background:white;border-radius:12px"><div style="font-size:40px">🛒</div><p style="color:#999;margin-top:8px">Your cart is empty</p><button onclick="location.reload()" style="margin-top:12px;background:#f68b1e;color:white;padding:8px 16px;border-radius:6px">Continue Shopping</button></div>'; return}
+    let total=cart.reduce((s,i)=>s+(Number(i.price)*Number(i.qty)),0);
+    productGrid.innerHTML='<div style="width:100%;display:flex;flex-direction:column;gap:8px">'+cart.map(c=>`<div style="background:white;padding:12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center"><div><b>${escapeHtml(c.name)}</b><br><small>KSh ${Number(c.price).toLocaleString()} x ${c.qty}</small></div><div style="display:flex;gap:6px;align-items:center"><button onclick="changeQty('${c.id}',-1)" style="padding:4px 8px;background:#eee;border-radius:4px">-</button><b>${c.qty}</b><button onclick="changeQty('${c.id}',1)" style="padding:4px 8px;background:#eee;border-radius:4px">+</button><button onclick="removeCart('${c.id}')" style="color:red;margin-left:6px">✕</button></div></div>`).join('')+`<div style="background:white;padding:12px;border-radius:10px"><div style="display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span>KSh ${total.toLocaleString()}</span></div><button style="width:100%;margin-top:10px;background:#f68b1e;color:white;padding:12px;border-radius:8px;font-weight:700" onclick="alert('Checkout - KSh ${total.toLocaleString()}')">CHECKOUT</button></div></div>`;
+  }
+  function changeQty(id,d){ const it=cart.find(i=>String(i.id)===String(id)); if(!it) return; it.qty+=d; if(it.qty<=0) cart=cart.filter(i=>String(i.id)!==String(id)); updateCart(); showCartView(); }
+  function removeCart(id){ cart=cart.filter(i=>String(i.id)!==String(id)); updateCart(); showCartView(); }
 
-    let products = [];
-    let cart = JSON.parse(localStorage.getItem('kabarakSokoCart') || '[]');
+  function showCategoriesView(){
+    sectionTitle.textContent='Categories';
+    const cats=[...new Set(products.map(p=>p.category).filter(Boolean))];
+    if(!cats.length){ productGrid.innerHTML='<div style="padding:20px;color:#999">No categories yet</div>'; return }
+    productGrid.innerHTML='<div style="width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:10px">'+cats.map(c=>`<button onclick="filterByCat('${escapeHtml(c)}')" style="background:white;padding:18px;border-radius:12px;text-align:left;font-weight:700;border:1px solid #eee">${escapeHtml(c)}</button>`).join('')+'</div>';
+  }
+  function filterByCat(cat){ const f=products.filter(p=>String(p.category||'').toLowerCase()===cat.toLowerCase()); sectionTitle.textContent=cat; render(f.length?f:products); }
 
-    function updateCartCount() {
-      const totalItems = cart.reduce((total, item) => {
-        return total + Number(item.qty || 0);
-      }, 0);
+  function showWishlistView(){
+    sectionTitle.textContent='Wishlist';
+    wishlist=JSON.parse(localStorage.getItem('kabarakSokoWishlist')||'[]');
+    if(!wishlist.length){productGrid.innerHTML='<div style="width:100%;padding:30px;text-align:center;background:white;border-radius:12px"><div style="font-size:40px">♡</div><p style="color:#999">Wishlist empty</p></div>'; return}
+    productGrid.innerHTML=wishlist.map(p=>`<div class="p-card"><div class="p-info"><div class="p-name">${escapeHtml(p.name)}</div><div class="p-price">KSh ${Number(p.price).toLocaleString()}</div><button class="add-btn" onclick="addToCart({id:'${p.id}',_id:'${p.id}',name:'${escapeHtml(p.name)}',price:${p.price}})">ADD TO CART</button></div></div>`).join('');
+  }
 
-      cartCount.textContent = totalItems;
-    }
+  function showAccountView(){
+    sectionTitle.textContent='Account';
+    productGrid.innerHTML=`<div style="width:100%;background:white;border-radius:12px;padding:20px"><h3 style="font-weight:800">My Account</h3><div style="margin-top:12px;display:flex;flex-direction:column;gap:10px"><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">👤 Login / Register</button><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">📦 My Orders</button><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">📍 Kabarak Delivery</button><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">📞 Help Center</button></div></div>`;
+  }
 
-    function saveCart() {
-      localStorage.setItem('kabarakSokoCart', JSON.stringify(cart));
-      updateCartCount();
-    }
+  async function fetchProducts(){ try{ const r=await fetch('/api/products'); const d=await r.json(); products=Array.isArray(d)?d:(Array.isArray(d.products)?d.products:[]); render(products);}catch(e){productGrid.innerHTML='<div style="padding:20px">Failed to load.</div>'} }
 
-    function addToCart(product) {
-      const existingProduct = cart.find(item => String(item.id) === String(product._id || product.id));
+  searchInput.addEventListener('input',()=>{ const term=searchInput.value.toLowerCase().trim(); if(!term) return render(products); const f=products.filter(p=>(p.name||'').toLowerCase().includes(term)||(p.category||'').toLowerCase().includes(term)); render(f); });
+  document.querySelectorAll('[data-category]').forEach(el=>{ el.addEventListener('click',e=>{ e.preventDefault(); filterByCat(el.dataset.category); }); });
+  document.getElementById('viewAllBtn').addEventListener('click',()=>render(products));
 
-      if (existingProduct) {
-        existingProduct.qty += 1;
-      } else {
-        cart.push({
-          id: product._id || product.id,
-          name: product.name,
-          price: Number(product.price) || 0,
-          image: product.images && product.images.length > 0 ? product.images[0] : '',
-          qty: 1
-        });
-      }
-
-      saveCart();
-
-      alert(`${product.name} has been added to your cart.`);
-    }
-
-    function toggleWishlist(button) {
-      button.classList.toggle('active');
-
-      if (button.classList.contains('active')) {
-        button.textContent = '♥';
-      } else {
-        button.textContent = '♡';
-      }
-    }
-
-    function calculateDiscount(oldPrice, price) {
-      const oldValue = Number(oldPrice);
-      const currentValue = Number(price);
-
-      if (!oldValue || oldValue <= currentValue || currentValue < 0) {
-        return '';
-      }
-
-      const discount = Math.round(((oldValue - currentValue) / oldValue) * 100);
-
-      return `${discount}% OFF`;
-    }
-
-    function createStars(rating) {
-      const numericRating = Math.max(0, Math.min(5, Number(rating) || 0));
-      const roundedRating = Math.round(numericRating);
-
-      let stars = '';
-
-      for (let i = 1; i <= 5; i += 1) {
-        stars += i <= roundedRating ? '★' : '☆';
-      }
-
-      return stars;
-    }
-
-    function formatPrice(price) {
-      const numericPrice = Number(price) || 0;
-
-      return `KSh ${numericPrice.toLocaleString('en-KE', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-      })}`;
-    }
-
-    function renderProducts(productList) {
-      if (!Array.isArray(productList) || productList.length === 0) {
-        productGrid.innerHTML = `
-          <div class="empty-products">
-            <h3>No products available yet</h3>
-            <p>Products will appear here once they are added to KABARAK SOKO.</p>
-          </div>
-        `;
-
-        return;
-      }
-
-      productGrid.innerHTML = productList.map(product => {
-        const image =
-          product.images &&
-          Array.isArray(product.images) &&
-          product.images.length > 0
-            ? product.images[0]
-            : '';
-
-        const discount = calculateDiscount(product.oldPrice, product.price);
-
-        return `
-          <article class="product-card">
-
-            <button
-              class="wishlist-button"
-              type="button"
-              aria-label="Add ${escapeHtml(product.name || 'product')} to wishlist"
-              data-wishlist="${escapeHtml(String(product._id || product.id || ''))}"
-            >♡</button>
-
-            <div class="product-image">
-              ${
-                image
-                  ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(product.name || 'Product')}">`
-                  : `<div class="product-placeholder">Product image unavailable</div>`
-              }
-            </div>
-
-            <div class="product-info">
-
-              <div class="product-name">
-                ${escapeHtml(product.name || 'Unnamed Product')}
-              </div>
-
-              <div class="product-price">
-                ${formatPrice(product.price)}
-              </div>
-
-              <div>
-                ${
-                  product.oldPrice
-                    ? `<span class="product-old-price">${formatPrice(product.oldPrice)}</span>`
-                    : ''
-                }
-
-                ${
-                  discount
-                    ? `<span class="discount">${discount}</span>`
-                    : ''
-                }
-              </div>
-
-              <div class="rating">
-                <span class="stars">${createStars(product.rating)}</span>
-                <span class="reviews">(${Number(product.reviews) || 0})</span>
-              </div>
-
-              <button
-                class="add-cart-button"
-                type="button"
-                data-product-id="${escapeHtml(String(product._id || product.id || ''))}"
-              >
-                ADD TO CART
-              </button>
-
-            </div>
-
-          </article>
-        `;
-      }).join('');
-
-      document.querySelectorAll('.add-cart-button').forEach(button => {
-        button.addEventListener('click', () => {
-          const productId = button.dataset.productId;
-
-          const selectedProduct = products.find(product => {
-            return String(product._id || product.id) === String(productId);
-          });
-
-          if (selectedProduct) {
-            addToCart(selectedProduct);
-          }
-        });
-      });
-
-      document.querySelectorAll('.wishlist-button').forEach(button => {
-        button.addEventListener('click', () => {
-          toggleWishlist(button);
-        });
-      });
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    async function fetchProducts() {
-      try {
-        productGrid.innerHTML = '<div class="loading">Loading products...</div>';
-
-        const response = await fetch('/api/products');
-
-        if (!response.ok) {
-          throw new Error(`Products request failed with status ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          products = data;
-        } else if (Array.isArray(data.products)) {
-          products = data.products;
-        } else {
-          products = [];
-        }
-
-        renderProducts(products);
-      } catch (error) {
-        console.error('Failed to load products:', error);
-
-        productGrid.innerHTML = `
-          <div class="empty-products">
-            <h3>Unable to load products</h3>
-            <p>Please refresh the page and try again.</p>
-          </div>
-        `;
-      }
-    }
-
-    function filterProducts(searchTerm) {
-      const term = searchTerm.trim().toLowerCase();
-
-      if (!term) {
-        productsTitle.textContent = 'Featured Products';
-        renderProducts(products);
-        return;
-      }
-
-      const filteredProducts = products.filter(product => {
-        const name = String(product.name || '').toLowerCase();
-        const category = String(product.category || '').toLowerCase();
-        const description = String(product.description || '').toLowerCase();
-
-        return (
-          name.includes(term) ||
-          category.includes(term) ||
-          description.includes(term)
-        );
-      });
-
-      productsTitle.textContent = `Search results for "${searchTerm}"`;
-
-      renderProducts(filteredProducts);
-    }
-
-    function filterByCategory(category) {
-      const categoryName = String(category || '').trim();
-
-      if (!categoryName) {
-        productsTitle.textContent = 'Featured Products';
-        renderProducts(products);
-        return;
-      }
-
-      const filteredProducts = products.filter(product => {
-        return String(product.category || '').toLowerCase() === categoryName.toLowerCase();
-      });
-
-      productsTitle.textContent = categoryName;
-
-      renderProducts(filteredProducts);
-    }
-
-    searchForm.addEventListener('submit', event => {
-      event.preventDefault();
-      filterProducts(searchInput.value);
+  // WORKING BOTTOM TABS
+  document.querySelectorAll('.bottom-nav.nav-item').forEach(item=>{
+    item.addEventListener('click',e=>{
+      e.preventDefault();
+      document.querySelectorAll('.bottom-nav.nav-item').forEach(n=>n.classList.remove('active'));
+      item.classList.add('active');
+      const tab=item.dataset.tab;
+      if(tab==='home') render(products);
+      if(tab==='categories') showCategoriesView();
+      if(tab==='cart') showCartView();
+      if(tab==='wishlist') showWishlistView();
+      if(tab==='account') showAccountView();
+      window.scrollTo({top:0,behavior:'smooth'});
     });
+  });
 
-    document.querySelectorAll('[data-category]').forEach(element => {
-      element.addEventListener('click', event => {
-        event.preventDefault();
-        filterByCategory(element.dataset.category);
-      });
-    });
-
-    clearFilter.addEventListener('click', event => {
-      event.preventDefault();
-      searchInput.value = '';
-      productsTitle.textContent = 'Featured Products';
-      renderProducts(products);
-    });
-
-    cartButton.addEventListener('click', () => {
-      alert(`Your cart currently contains ${cart.reduce((total, item) => total + Number(item.qty || 0), 0)} item(s).`);
-    });
-
-    accountButton.addEventListener('click', () => {
-      alert('Account features will be added in the authentication step.');
-    });
-
-    helpButton.addEventListener('click', () => {
-      alert('KABARAK SOKO Help Centre will be available soon.');
-    });
-
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const dots = document.querySelectorAll('.slider-dot');
-
-    function showSlide(index) {
-      if (slides.length === 0) {
-        return;
-      }
-
-      currentSlide = (index + slides.length) % slides.length;
-
-      slides.forEach((slide, slideIndex) => {
-        slide.classList.toggle('active', slideIndex === currentSlide);
-      });
-
-      dots.forEach((dot, dotIndex) => {
-        dot.classList.toggle('active', dotIndex === currentSlide);
-      });
-    }
-
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        showSlide(index);
-      });
-    });
-
-    setInterval(() => {
-      showSlide(currentSlide + 1);
-    }, 5000);
-
-    updateCartCount();
-    fetchProducts();
-  </script>
-
+  updateCart(); fetchProducts();
+  let slide=0; setInterval(()=>{ const s=document.getElementById('bannerSlider'); if(s){ slide=(slide+1)%2; s.scrollTo({left:slide*s.clientWidth*0.88,behavior:'smooth'}); } },4000);
+</script>
 </body>
 </html>
