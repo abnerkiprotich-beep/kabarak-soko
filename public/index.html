@@ -952,9 +952,16 @@
        ========================================================= */
 
     .mobile-bottom-nav {
-      display: none;
-    }
-
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e3e3e3;
+  z-index: 1000;
+  height: 72px;
+}
     .bottom-nav-item {
       flex: 1;
 
