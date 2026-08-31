@@ -72,7 +72,7 @@
     </div>
     <div class="dots"><div class="dot active"></div><div class="dot"></div></div>
   </div>
-  <div class="cat-section">
+  <div class="cat-section" id="catSection">
     <div class="cat-grid">
       <a href="#" class="cat-item" data-category="Phones"><div class="cat-circle"><span>📱</span></div><p>Phone<br>Deals</p></a>
       <a href="#" class="cat-item" data-category="Appliances"><div class="cat-circle"><span>💡</span></div><p>Solar &<br>Lighting</p></a>
@@ -86,6 +86,7 @@
   </div>
   <div class="section-header"><h2 id="sectionTitle">Top selling items</h2><button class="arrow-btn" id="viewAllBtn">→</button></div>
   <div class="product-scroll" id="productGrid"><div style="padding:20px;color:#999">Loading products...</div></div>
+
   <div class="bottom-nav">
     <a href="#" class="nav-item active" data-tab="home"><span class="nav-icon">🏠</span>Home</a>
     <a href="#" class="nav-item" data-tab="categories"><span class="nav-icon">☰</span>Categories</a>
@@ -93,11 +94,13 @@
     <a href="#" class="nav-item" data-tab="wishlist"><span class="nav-icon">♡</span>Wishlist</a>
     <a href="#" class="nav-item" data-tab="account"><span class="nav-icon">👤</span>Account</a>
   </div>
+
 <script>
   const productGrid=document.getElementById('productGrid');
   const searchInput=document.getElementById('searchInput');
   const cartCount=document.getElementById('cartCount');
   const sectionTitle=document.getElementById('sectionTitle');
+  const catSection=document.getElementById('catSection');
   let products=[];
   let cart=JSON.parse(localStorage.getItem('kabarakSokoCart')||'[]');
   let wishlist=JSON.parse(localStorage.getItem('kabarakSokoWishlist')||'[]');
@@ -107,6 +110,8 @@
   function escapeHtml(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
   function render(list){
+    catSection.style.display='block';
+    document.getElementById('bannerSlider').parentElement.style.display='block';
     sectionTitle.textContent='Top selling items';
     if(!list.length){productGrid.innerHTML='<div style="padding:20px;color:#999">No products found</div>';return}
     productGrid.innerHTML=list.map(p=>{ const img=p.images&&p.images[0]?p.images[0]:''; return `<div class="p-card"><div class="p-img">${img?`<img src="${escapeHtml(img)}" alt="">`:`<span style="color:#aaa;font-size:11px">No image</span>`}</div><div class="p-info"><div class="p-name">${escapeHtml(p.name||'Product')}</div><div class="p-price">KSh ${(Number(p.price)||0).toLocaleString()}</div>${p.oldPrice?`<div class="p-old">KSh ${Number(p.oldPrice).toLocaleString()}</div>`:''}<button class="add-btn" data-id="${escapeHtml(String(p._id||p.id))}">ADD TO CART</button></div></div>`; }).join('');
@@ -114,53 +119,67 @@
   }
 
   function showCartView(){
+    catSection.style.display='none';
+    document.getElementById('bannerSlider').parentElement.style.display='none';
     sectionTitle.textContent='My Cart';
-    if(!cart.length){productGrid.innerHTML='<div style="width:100%;padding:30px;text-align:center;background:white;border-radius:12px"><div style="font-size:40px">🛒</div><p style="color:#999;margin-top:8px">Your cart is empty</p><button onclick="location.reload()" style="margin-top:12px;background:#f68b1e;color:white;padding:8px 16px;border-radius:6px">Continue Shopping</button></div>'; return}
+    if(!cart.length){productGrid.innerHTML='<div style="width:100%;padding:30px;text-align:center;background:white;border-radius:12px"><div style="font-size:40px">🛒</div><p style="color:#999;margin-top:8px">Your cart is empty</p><button onclick="switchTab(\'home\')" style="margin-top:12px;background:#f68b1e;color:white;padding:8px 16px;border-radius:6px">Continue Shopping</button></div>'; return}
     let total=cart.reduce((s,i)=>s+(Number(i.price)*Number(i.qty)),0);
-    productGrid.innerHTML='<div style="width:100%;display:flex;flex-direction:column;gap:8px">'+cart.map(c=>`<div style="background:white;padding:12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center"><div><b>${escapeHtml(c.name)}</b><br><small>KSh ${Number(c.price).toLocaleString()} x ${c.qty}</small></div><div style="display:flex;gap:6px;align-items:center"><button onclick="changeQty('${c.id}',-1)" style="padding:4px 8px;background:#eee;border-radius:4px">-</button><b>${c.qty}</b><button onclick="changeQty('${c.id}',1)" style="padding:4px 8px;background:#eee;border-radius:4px">+</button><button onclick="removeCart('${c.id}')" style="color:red;margin-left:6px">✕</button></div></div>`).join('')+`<div style="background:white;padding:12px;border-radius:10px"><div style="display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span>KSh ${total.toLocaleString()}</span></div><button style="width:100%;margin-top:10px;background:#f68b1e;color:white;padding:12px;border-radius:8px;font-weight:700" onclick="alert('Checkout - KSh ${total.toLocaleString()}')">CHECKOUT</button></div></div>`;
+    productGrid.innerHTML='<div style="width:100%;display:flex;flex-direction:column;gap:8px">'+cart.map(c=>`<div style="background:white;padding:12px;border-radius:10px;display:flex;justify-content:space-between;align-items:center"><div><b>${escapeHtml(c.name)}</b><br><small>KSh ${Number(c.price).toLocaleString()} x ${c.qty}</small></div><div style="display:flex;gap:6px;align-items:center"><button onclick="changeQty('${c.id}',-1)" style="padding:4px 8px;background:#eee;border-radius:4px">-</button><b>${c.qty}</b><button onclick="changeQty('${c.id}',1)" style="padding:4px 8px;background:#eee;border-radius:4px">+</button><button onclick="removeCart('${c.id}')" style="color:red;margin-left:6px">✕</button></div></div>`).join('')+`<div style="background:white;padding:12px;border-radius:10px"><div style="display:flex;justify-content:space-between;font-weight:800"><span>Total:</span><span>KSh ${total.toLocaleString()}</span></div><a href="/cart.html" style="display:block;width:100%;margin-top:10px;background:#f68b1e;color:white;padding:12px;border-radius:8px;font-weight:700;text-align:center">GO TO CHECKOUT</a></div></div>`;
   }
-  function changeQty(id,d){ const it=cart.find(i=>String(i.id)===String(id)); if(!it) return; it.qty+=d; if(it.qty<=0) cart=cart.filter(i=>String(i.id)!==String(id)); updateCart(); showCartView(); }
-  function removeCart(id){ cart=cart.filter(i=>String(i.id)!==String(id)); updateCart(); showCartView(); }
+  window.changeQty=function(id,d){ const it=cart.find(i=>String(i.id)===String(id)); if(!it) return; it.qty+=d; if(it.qty<=0) cart=cart.filter(i=>String(i.id)!==String(id)); updateCart(); showCartView(); }
+  window.removeCart=function(id){ cart=cart.filter(i=>String(i.id)!==String(id)); updateCart(); showCartView(); }
 
   function showCategoriesView(){
-    sectionTitle.textContent='Categories';
+    catSection.style.display='none';
+    document.getElementById('bannerSlider').parentElement.style.display='none';
+    sectionTitle.textContent='All Categories';
     const cats=[...new Set(products.map(p=>p.category).filter(Boolean))];
-    if(!cats.length){ productGrid.innerHTML='<div style="padding:20px;color:#999">No categories yet</div>'; return }
-    productGrid.innerHTML='<div style="width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:10px">'+cats.map(c=>`<button onclick="filterByCat('${escapeHtml(c)}')" style="background:white;padding:18px;border-radius:12px;text-align:left;font-weight:700;border:1px solid #eee">${escapeHtml(c)}</button>`).join('')+'</div>';
+    const allCats = cats.length?cats:["Phones","Appliances","Electronics","Fashion","Computing","Home"];
+    productGrid.innerHTML='<div style="width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:10px">'+allCats.map(c=>`<button onclick="filterByCat('${escapeHtml(c)}')" style="background:white;padding:18px;border-radius:12px;text-align:left;font-weight:700;border:1px solid #eee">📦 ${escapeHtml(c)}</button>`).join('')+'</div>';
   }
-  function filterByCat(cat){ const f=products.filter(p=>String(p.category||'').toLowerCase()===cat.toLowerCase()); sectionTitle.textContent=cat; render(f.length?f:products); }
+  window.filterByCat=function(cat){ const f=products.filter(p=>String(p.category||'').toLowerCase()===cat.toLowerCase()); sectionTitle.textContent=cat; catSection.style.display='none'; document.getElementById('bannerSlider').parentElement.style.display='none'; render(f.length?f:products); }
 
   function showWishlistView(){
+    catSection.style.display='none';
+    document.getElementById('bannerSlider').parentElement.style.display='none';
     sectionTitle.textContent='Wishlist';
     wishlist=JSON.parse(localStorage.getItem('kabarakSokoWishlist')||'[]');
-    if(!wishlist.length){productGrid.innerHTML='<div style="width:100%;padding:30px;text-align:center;background:white;border-radius:12px"><div style="font-size:40px">♡</div><p style="color:#999">Wishlist empty</p></div>'; return}
-    productGrid.innerHTML=wishlist.map(p=>`<div class="p-card"><div class="p-info"><div class="p-name">${escapeHtml(p.name)}</div><div class="p-price">KSh ${Number(p.price).toLocaleString()}</div><button class="add-btn" onclick="addToCart({id:'${p.id}',_id:'${p.id}',name:'${escapeHtml(p.name)}',price:${p.price}})">ADD TO CART</button></div></div>`).join('');
+    if(!wishlist.length){productGrid.innerHTML='<div style="width:100%;padding:30px;text-align:center;background:white;border-radius:12px"><div style="font-size:40px">♡</div><p style="color:#999">Wishlist empty</p><button onclick="switchTab(\'home\')" style="margin-top:12px;background:#f68b1e;color:white;padding:8px 16px;border-radius:6px">Browse Products</button></div>'; return}
+    productGrid.innerHTML='<div style="width:100%;display:flex;gap:10px;flex-wrap:wrap">'+wishlist.map(p=>`<div class="p-card"><div class="p-info"><div class="p-name">${escapeHtml(p.name)}</div><div class="p-price">KSh ${Number(p.price).toLocaleString()}</div><button class="add-btn" onclick="addToCart({id:'${p.id}',_id:'${p.id}',name:'${escapeHtml(p.name)}',price:${p.price}})">ADD TO CART</button></div></div>`).join('')+'</div>';
   }
 
   function showAccountView(){
+    catSection.style.display='none';
+    document.getElementById('bannerSlider').parentElement.style.display='none';
     sectionTitle.textContent='Account';
-    productGrid.innerHTML=`<div style="width:100%;background:white;border-radius:12px;padding:20px"><h3 style="font-weight:800">My Account</h3><div style="margin-top:12px;display:flex;flex-direction:column;gap:10px"><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">👤 Login / Register</button><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">📦 My Orders</button><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">📍 Kabarak Delivery</button><button style="padding:12px;background:#f5f5f5;border-radius:8px;text-align:left">📞 Help Center</button></div></div>`;
+    productGrid.innerHTML=`<div style="width:100%;background:white;border-radius:12px;padding:20px"><h3 style="font-weight:800;font-size:18px">My Account</h3><div style="margin-top:14px;display:flex;flex-direction:column;gap:10px"><a href="/register.html" style="padding:14px;background:#f68b1e;color:white;border-radius:10px;text-align:center;font-weight:700">👤 Create Account / Login</a><a href="/login.html" style="padding:12px;background:#f5f5f5;border-radius:8px;display:block">🔑 Login</a><a href="/orders.html" style="padding:12px;background:#f5f5f5;border-radius:8px;display:block">📦 My Orders</a><div style="padding:12px;background:#f5f5f5;border-radius:8px">📍 Kabarak University - Free Delivery</div><div style="padding:12px;background:#f5f5f5;border-radius:8px">📞 Help: 07XX XXX XXX</div></div></div>`;
   }
 
   async function fetchProducts(){ try{ const r=await fetch('/api/products'); const d=await r.json(); products=Array.isArray(d)?d:(Array.isArray(d.products)?d.products:[]); render(products);}catch(e){productGrid.innerHTML='<div style="padding:20px">Failed to load.</div>'} }
 
   searchInput.addEventListener('input',()=>{ const term=searchInput.value.toLowerCase().trim(); if(!term) return render(products); const f=products.filter(p=>(p.name||'').toLowerCase().includes(term)||(p.category||'').toLowerCase().includes(term)); render(f); });
-  document.querySelectorAll('[data-category]').forEach(el=>{ el.addEventListener('click',e=>{ e.preventDefault(); filterByCat(el.dataset.category); }); });
+  document.querySelectorAll('[data-category]').forEach(el=>{ el.addEventListener('click',e=>{ e.preventDefault(); window.filterByCat(el.dataset.category); }); });
   document.getElementById('viewAllBtn').addEventListener('click',()=>render(products));
 
-  // WORKING BOTTOM TABS
+  // FIXED WORKING BOTTOM TABS - THE MAIN FIX
+  function switchTab(tab){
+    document.querySelectorAll('.bottom-nav.nav-item').forEach(n=>n.classList.remove('active'));
+    const activeBtn = document.querySelector(`.bottom-nav.nav-item[data-tab="${tab}"]`);
+    if(activeBtn) activeBtn.classList.add('active');
+    if(tab==='home') render(products);
+    if(tab==='categories') showCategoriesView();
+    if(tab==='cart') showCartView();
+    if(tab==='wishlist') showWishlistView();
+    if(tab==='account') showAccountView();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  window.switchTab = switchTab;
+
   document.querySelectorAll('.bottom-nav.nav-item').forEach(item=>{
     item.addEventListener('click',e=>{
       e.preventDefault();
-      document.querySelectorAll('.bottom-nav.nav-item').forEach(n=>n.classList.remove('active'));
-      item.classList.add('active');
       const tab=item.dataset.tab;
-      if(tab==='home') render(products);
-      if(tab==='categories') showCategoriesView();
-      if(tab==='cart') showCartView();
-      if(tab==='wishlist') showWishlistView();
-      if(tab==='account') showAccountView();
-      window.scrollTo({top:0,behavior:'smooth'});
+      switchTab(tab);
     });
   });
 
