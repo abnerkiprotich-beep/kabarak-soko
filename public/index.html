@@ -155,8 +155,8 @@
 
   // === FIXED BOTTOM NAV - SPACE IS IMPORTANT ===
   function switchTab(tab){
-    document.querySelectorAll('.bottom-nav.nav-item').forEach(n=>n.classList.remove('active'));
-    const activeBtn = document.querySelector(`.bottom-nav.nav-item[data-tab="${tab}"]`);
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n=>n.classList.remove('active'));
+    const activeBtn = document.querySelector(`.bottom-nav .nav-item[data-tab="${tab}"]`);
     if(activeBtn) activeBtn.classList.add('active');
     if(tab==='home') render(products);
     if(tab==='categories') showCategoriesView();
