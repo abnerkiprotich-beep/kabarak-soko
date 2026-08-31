@@ -167,7 +167,7 @@
   }
   window.switchTab = switchTab;
 
-  document.querySelectorAll('.bottom-nav.nav-item').forEach(item=>{
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(item=>{
     item.addEventListener('click',e=>{
       e.preventDefault();
       const tab=item.dataset.tab;
