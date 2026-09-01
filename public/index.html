@@ -3386,19 +3386,7 @@
       'click',
       () => {
 
-        showMobileMessage(
-          'Your Cart',
-          `Your cart currently contains ${
-            cart.reduce(
-              (total, item) =>
-                total +
-                Number(
-                  item.qty || 0
-                ),
-              0
-            )
-          } item(s).`
-        );
+        window.location.href = 'cart.html';
 
       }
     );
@@ -3412,10 +3400,7 @@
       'click',
       () => {
 
-        showMobileMessage(
-          'Account',
-          'Your KABARAK SOKO account area will be available here.'
-        );
+        window.location.href = 'account.html';
 
       }
     );
@@ -3429,10 +3414,7 @@
       'click',
       () => {
 
-        showMobileMessage(
-          'Help Centre',
-          'KABARAK SOKO customer support and help services will be available here.'
-        );
+        window.location.href = 'help.html';
 
       }
     );
@@ -3562,19 +3544,7 @@
         tab === 'cart'
       ) {
 
-        showMobileMessage(
-          'Cart',
-          `Your cart currently contains ${
-            cart.reduce(
-              (total, item) =>
-                total +
-                Number(
-                  item.qty || 0
-                ),
-              0
-            )
-          } item(s).`
-        );
+        window.location.href = 'cart.html';
 
         return;
 
@@ -3585,10 +3555,7 @@
         tab === 'wishlist'
       ) {
 
-        showMobileMessage(
-          'Wishlist',
-          'Your saved products will appear in your KABARAK SOKO wishlist.'
-        );
+        window.location.href = 'wishlist.html';
 
         return;
 
@@ -3599,10 +3566,7 @@
         tab === 'account'
       ) {
 
-        showMobileMessage(
-          'Account',
-          'Your KABARAK SOKO account, orders and profile will appear here.'
-        );
+        window.location.href = 'account.html';
 
       }
 
@@ -3783,10 +3747,7 @@
               'cart'
             ) {
 
-              showMobileMessage(
-                'Cart',
-                'Your cart is ready for shopping.'
-              );
+              window.location.href = 'cart.html';
 
             }
 
