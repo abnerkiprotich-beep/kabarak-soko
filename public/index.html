@@ -2541,50 +2541,65 @@
 
 
   /* =======================================================
-     WISHLIST FUNCTIONS (NEW / FIXED)
-     ======================================================== */
+   WISHLIST FUNCTIONS (UPDATED – store full objects)
+   ======================================================== */
 
-  function loadWishlist() {
-    try {
-      const saved = localStorage.getItem('kabarakSokoWishlist');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        wishlist = Array.isArray(parsed) ? parsed : [];
-      } else {
-        wishlist = [];
-      }
-    } catch (e) {
-      console.error('Failed to load wishlist:', e);
+function loadWishlist() {
+  try {
+    const saved = localStorage.getItem('kabarakSokoWishlist');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      wishlist = Array.isArray(parsed) ? parsed : [];
+    } else {
       wishlist = [];
     }
+  } catch (e) {
+    console.error('Failed to load wishlist:', e);
+    wishlist = [];
   }
+}
 
-  function saveWishlist() {
-    try {
-      localStorage.setItem('kabarakSokoWishlist', JSON.stringify(wishlist));
-    } catch (e) {
-      console.error('Failed to save wishlist:', e);
-    }
+function saveWishlist() {
+  try {
+    localStorage.setItem('kabarakSokoWishlist', JSON.stringify(wishlist));
+  } catch (e) {
+    console.error('Failed to save wishlist:', e);
   }
+}
 
-  function toggleWishlist(button) {
-    const productId = button.dataset.wishlist;
-    if (!productId) return;
+function toggleWishlist(button) {
+  const productId = button.dataset.wishlist;
+  if (!productId) return;
 
-    const index = wishlist.indexOf(productId);
-    if (index > -1) {
-      // Remove from wishlist
-      wishlist.splice(index, 1);
-      button.classList.remove('active');
-      button.textContent = '♡';
-    } else {
-      // Add to wishlist
-      wishlist.push(productId);
-      button.classList.add('active');
-      button.textContent = '♥';
-    }
-    saveWishlist();
+  // Find the full product object from the products array
+  const product = products.find(p =>
+    String(p._id || p.id) === productId
+  );
+  if (!product) return;
+
+  // Check if already in wishlist (by id)
+  const index = wishlist.findIndex(item =>
+    String(item.id) === productId
+  );
+
+  if (index > -1) {
+    // Remove
+    wishlist.splice(index, 1);
+    button.classList.remove('active');
+    button.textContent = '♡';
+  } else {
+    // Add full product object (store id, name, price, image)
+    wishlist.push({
+      id: productId,
+      name: product.name,
+      price: product.price,
+      image: product.images && product.images.length > 0 ? product.images[0] : ''
+    });
+    button.classList.add('active');
+    button.textContent = '♥';
   }
+  saveWishlist();
+}
 
 
   /* =======================================================
