@@ -2458,12 +2458,11 @@
 
     let products = [];
 
-    let cart =
-      JSON.parse(
-        localStorage.getItem(
-          'Cart'
-        ) || '[]'
-      );
+    let cart = JSON.parse(
+  localStorage.getItem('cart') || 
+  localStorage.getItem('kabarakSokoCart') || 
+  '[]'
+);
 
 
     /* =======================================================
@@ -2471,19 +2470,19 @@
        ======================================================== */
 
     function updateCartCount() {
+  const totalItems = cart.reduce(
+    (total, item) => {
+      return (
+        total + 
+        Number(item.qty || item.quantity || 1)
+      );
+    },
+    0
+  );
 
-      const totalItems =
-        cart.reduce(
-          (total, item) => {
-
-            return (
-              total +
-              Number(item.qty || 0)
-            );
-
-          },
-          0
-        );
+  cartCount.textContent = totalItems;
+  bottomCartCount.textContent = totalItems;
+}
 
 
       cartCount.textContent =
