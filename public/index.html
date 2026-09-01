@@ -1727,33 +1727,31 @@
 
 
         <div class="slide">
+    <div class="slide-content">
 
-          <div class="slide-content">
+        <span class="slide-label">
+            PHONES & TABLETS
+        </span>
 
-            <span class="slide-label">
-              PHONES & TABLETS
-            </span>
+        <h2>
+            Upgrade Your Tech
+        </h2>
 
-            <h2>
-              Upgrade Your Tech
-            </h2>
+        <p>
+            Shop smartphones, tablets and accessories
+            from trusted sellers.
+        </p>
 
-            <p>
-              Shop smartphones, tablets and accessories
-              from trusted sellers.
-            </p>
+        <button
+            class="slide-button"
+            type="button"
+            data-category="Phones"
+        >
+            SHOP PHONES
+        </button>
 
-            <button
-              class="slide-button"
-              type="button"
-              data-category="Phones"
-            >
-              SHOP PHONES
-            </button>
-
-          </div>
-
-        </div>
+    </div>
+</div>
 
 
         <div class="slide">
@@ -2463,7 +2461,7 @@
     let cart =
       JSON.parse(
         localStorage.getItem(
-          'kabarakSokoCart'
+          'Cart'
         ) || '[]'
       );
 
@@ -2501,7 +2499,7 @@
     function saveCart() {
 
       localStorage.setItem(
-        'kabarakSokoCart',
+        'Cart',
         JSON.stringify(cart)
       );
 
