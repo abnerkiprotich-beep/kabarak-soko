@@ -200,22 +200,43 @@ function getProductImage(item) {
 
 /*
 ==================================================
-UPDATE CART COUNT
+UPDATE CART COUNT (FIXED)
 ==================================================
 */
 
 function updateCartCount() {
+    const count = getCartCount();
 
-    const cartCount =
-        document.getElementById('cartCount');
+    // Try common ID patterns used on home screen
+    const cartCount = document.getElementById('cartCount') ||
+                     document.getElementById('cart-count') ||
+                     document.getElementById('cartBadge') ||
+                     document.querySelector('.cart-badge') ||
+                     document.querySelector('[data-cart-count]');
 
     if (cartCount) {
-
-        cartCount.textContent =
-            getCartCount();
-
+        cartCount.textContent = count;
+        // Show/hide badge if count is 0
+        cartCount.style.display = count > 0 ? 'inline-block' : 'none';
     }
 
+    // Also update any element with class 'cart-count' (for compatibility)
+    document.querySelectorAll('.cart-count').forEach(el => {
+        el.textContent = count;
+    });
+}
+
+
+/*
+==================================================
+SYNC CART BADGE (FOR HOME PAGE)
+==================================================
+*/
+
+function syncCartBadge() {
+    // Force reload cart from localStorage
+    loadCart();
+    updateCartCount();
 }
 
 
@@ -843,7 +864,7 @@ function searchProducts() {
 
 /*
 ==================================================
-PAGE INITIALIZATION
+PAGE INITIALIZATION (FIXED)
 ==================================================
 */
 
@@ -853,8 +874,12 @@ document.addEventListener(
 
         loadCart();
 
-        renderCart();
-
+        // Render cart if on cart page, else just update badge
+        if (document.getElementById('cartContainer')) {
+            renderCart();
+        } else {
+            updateCartCount();
+        }
 
         const searchButton =
             document.getElementById(
@@ -893,6 +918,14 @@ document.addEventListener(
             );
 
         }
+
+        // Optional: Update badge when user returns to tab
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                loadCart();
+                updateCartCount();
+            }
+        });
 
     }
 );
