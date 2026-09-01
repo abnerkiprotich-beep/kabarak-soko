@@ -1,106 +1,138 @@
-// server/server.js - MongoDB Atlas Version
 const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const path = require('path');
-const fs = require('fs');
-const mongoose = require('mongoose');
+const router = express.Router();
+const Order = require('../models/Order');
 
-const productRoutes = require('./routes/products');
-const authRoutes = require('./routes/auth');
-const orderRoutes = require('./routes/orders');
+// Helper: build timeline based on initial status
+function buildTimeline(status) {
+  const base = [
+    { label: 'Order Placed', description: 'Your order has been received.', completed: true, current: true },
+    { label: 'Processing', description: 'Your order is being prepared.', completed: false, current: false },
+    { label: 'Shipped', description: 'Your order is on its way.', completed: false, current: false },
+    { label: 'Delivered', description: 'Your order has been delivered.', completed: false, current: false }
+  ];
 
-dotenv.config();
+  // For COD we treat as 'confirmed' immediately
+  if (status === 'confirmed') {
+    base[0].label = 'Order Confirmed';
+    base[0].description = 'Your order has been confirmed.';
+  }
 
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-const publicPath = path.join(__dirname, '../public');
-const indexPath = path.join(publicPath, 'index.html');
-
-console.log('========================================');
-console.log('KABARAK SOKO SERVER STARTING');
-console.log('========================================');
-console.log('Storage: MongoDB Atlas');
-console.log('========================================');
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(publicPath));
-
-// API Routes
-app.use('/api/products', productRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/orders', orderRoutes);
-
-// Fallback to index.html for frontend routing
-app.use((req, res) => {
-  try {
-    if (!fs.existsSync(indexPath)) {
-      return res.status(404).json({
-        success: false,
-        message: 'index.html not found',
-        path: indexPath
-      });
-    }
-    return res.sendFile(indexPath);
-  } catch (error) {
-    console.error('Fallback error:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Unable to load the application'
+  // Mark steps as completed/current based on status
+  const statusOrder = ['pending', 'confirmed', 'processing', 'paid', 'shipped', 'delivered', 'cancelled'];
+  const currentIndex = statusOrder.indexOf(status);
+  if (currentIndex !== -1) {
+    base.forEach((step, idx) => {
+      if (idx < currentIndex) step.completed = true;
+      if (idx === currentIndex) step.current = true;
+      if (idx > currentIndex) step.current = false;
     });
   }
-});
-
-// Error Handler
-app.use((error, req, res, next) => {
-  console.error('Express server error:', error);
-  if (res.headersSent) return next(error);
-  return res.status(500).json({
-    success: false,
-    message: 'Internal server error'
-  });
-});
-
-// Connect to MongoDB and Start Server
-async function startServer() {
-  try {
-    if (!process.env.MONGODB_URI) {
-      console.error('ERROR: MONGODB_URI is missing in .env file!');
-      process.exit(1);
-    }
-
-    console.log('Connecting to MongoDB Atlas...');
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ MongoDB Atlas Connected! Database: kabarak-soko');
-
-    const server = app.listen(PORT, () => {
-      console.log('========================================');
-      console.log(`KABARAK SOKO running on http://localhost:${PORT}`);
-      console.log(`Storage: MongoDB Atlas - PERSISTENT!`);
-      console.log(`Product API: http://localhost:${PORT}/api/products`);
-      console.log(`Auth API: http://localhost:${PORT}/api/auth`);
-      console.log(`Orders API: http://localhost:${PORT}/api/orders`);
-      console.log('========================================');
-    });
-
-    server.on('error', error => {
-      if (error.code === 'EADDRINUSE') {
-        console.error(`ERROR: Port ${PORT} is already in use.`);
-        process.exit(1);
-      }
-      console.error('Server startup error:', error);
-      process.exit(1);
-    });
-
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error.message);
-    console.error('Check your MONGODB_URI in .env file');
-    process.exit(1);
-  }
+  return base;
 }
 
-startServer();
+// ----------------------
+// POST /api/orders
+// Place a new order
+// ----------------------
+router.post('/', async (req, res) => {
+  try {
+    const { items, total, deliveryAddress, paymentMethod } = req.body;
+    const userId = req.user._id; // from auth middleware
+
+    // Basic validation
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: 'Cart cannot be empty.' });
+    }
+    if (!deliveryAddress || !deliveryAddress.name || !deliveryAddress.phone) {
+      return res.status(400).json({ message: 'Delivery address is incomplete.' });
+    }
+
+    // Decide initial status
+    let status = 'pending';
+    if (paymentMethod === 'cash_on_delivery') {
+      status = 'confirmed'; // skip pending for COD
+    }
+
+    const statusTimeline = buildTimeline(status);
+
+    const newOrder = new Order({
+      userId,
+      items,
+      total,
+      deliveryAddress,
+      paymentMethod,
+      status,
+      statusTimeline
+    });
+
+    await newOrder.save();
+
+    // Convert _id to id for frontend
+    const orderObj = newOrder.toObject();
+    orderObj.id = orderObj._id.toString();
+    delete orderObj._id;
+    delete orderObj.__v;
+
+    res.status(201).json({
+      success: true,
+      message: 'Order placed successfully.',
+      order: orderObj
+    });
+
+  } catch (error) {
+    console.error('Place order error:', error);
+    res.status(500).json({ message: 'Internal server error. Please try again.' });
+  }
+});
+
+// ----------------------
+// GET /api/orders/my
+// Get all orders for the authenticated user
+// ----------------------
+router.get('/my', async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
+
+    const formatted = orders.map(order => {
+      const obj = order.toObject();
+      obj.id = obj._id.toString();
+      delete obj._id;
+      delete obj.__v;
+      return obj;
+    });
+
+    res.json({ orders: formatted });
+  } catch (error) {
+    console.error('Fetch orders error:', error);
+    res.status(500).json({ message: 'Unable to fetch orders.' });
+  }
+});
+
+// ----------------------
+// GET /api/orders/:orderId
+// Get a single order by ID
+// ----------------------
+router.get('/:orderId', async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const userId = req.user._id;
+
+    const order = await Order.findOne({ _id: orderId, userId });
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+
+    const obj = order.toObject();
+    obj.id = obj._id.toString();
+    delete obj._id;
+    delete obj.__v;
+
+    res.json({ order: obj });
+  } catch (error) {
+    console.error('Fetch order details error:', error);
+    res.status(500).json({ message: 'Unable to load order details.' });
+  }
+});
+
+module.exports = router;
