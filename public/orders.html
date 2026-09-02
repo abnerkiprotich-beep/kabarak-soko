@@ -522,21 +522,17 @@
 
     // ---------- COMPATIBILITY HELPERS ----------
     function getOrderItems(order) {
-      // Try items array first, then products array
       let items = [];
       if (Array.isArray(order.items)) {
         items = order.items;
       } else if (Array.isArray(order.products)) {
         items = order.products;
       }
-
-      // Normalise each item: use id or productId, ensure name, price, qty
       return items.map(item => ({
         id: item.id || item.productId || '',
         name: item.name || 'Product',
         price: Number(item.price || 0),
         qty: Number(item.qty || 1),
-        // Keep original fields for backward compatibility
         ...item
       }));
     }
@@ -551,12 +547,10 @@
     }
 
     function getTimeline(order) {
-      // If statusTimeline exists, use it
       if (Array.isArray(order.statusTimeline) && order.statusTimeline.length > 0) {
         return order.statusTimeline;
       }
 
-      // Otherwise build a fallback timeline based on status
       const status = String(order.status || 'pending').toLowerCase();
       const statusOrder = ['pending', 'confirmed', 'processing', 'paid', 'shipped', 'delivered', 'cancelled'];
       const currentIndex = statusOrder.indexOf(status);
@@ -569,7 +563,6 @@
         { label: 'Delivered', description: 'Your order has been delivered.', completed: false, current: false }
       ];
 
-      // For cancelled orders
       if (status === 'cancelled') {
         base[0].completed = true;
         base[0].current = false;
@@ -577,19 +570,15 @@
         return base;
       }
 
-      // Mark completed and current based on status
       base.forEach((step, idx) => {
         if (idx < currentIndex) step.completed = true;
         if (idx === currentIndex) step.current = true;
         if (idx > currentIndex) step.current = false;
       });
 
-      // Remove duplicate "confirmed" if status is pending
       if (status === 'pending') {
-        base.splice(1, 1); // remove 'Confirmed' step
+        base.splice(1, 1);
       }
-
-      // Remove "paid" if not applicable
       if (status !== 'paid') {
         const paidIdx = base.findIndex(s => s.label === 'Paid');
         if (paidIdx !== -1) base.splice(paidIdx, 1);
@@ -656,8 +645,6 @@
     function renderOrderDetails(order) {
       const items = getOrderItems(order);
       const address = order.deliveryAddress || {};
-
-      // Compute total from items if order.total is missing
       const total = order.total || items.reduce((sum, item) => sum + (Number(item.price) * Number(item.qty)), 0);
 
       orderDetails.innerHTML = `

@@ -1,34 +1,56 @@
-require('dotenv').config();
 const mongoose = require('mongoose');
-const Product = require('./server/models/Product');
-const User = require('./server/models/User');
+const Product = require('./models/Product');
+require('dotenv').config();
 
-const run = async () => {
-  await mongoose.connect(process.env.MONGODB_URI);
-  
-  // Find or create admin user to be seller
-  let seller = await User.findOne({ email: "admin@kabarak.ac.ke" });
-  if (!seller) {
-    seller = await User.create({
-      name: "Admin",
-      email: "admin@kabarak.ac.ke",
-      password: "123456",
-      role: "admin"
-    });
-    console.log("Admin created");
+const sampleProducts = [
+  {
+    name: 'Samsung Galaxy A15',
+    description: '6.5" HD+ display, 128GB storage, 50MP camera',
+    price: 18999,
+    oldPrice: 21999,
+    category: 'Phones',
+    images: ['https://via.placeholder.com/150'],
+    stock: 50,
+    rating: 4.5,
+    reviews: 12
+  },
+  {
+    name: 'Soko T-Shirt',
+    description: 'Comfortable cotton t-shirt for everyday wear',
+    price: 800,
+    category: 'Fashion',
+    images: [],
+    stock: 100,
+    rating: 4.0,
+    reviews: 5
+  },
+  {
+    name: 'Bread',
+    description: 'Freshly baked white bread',
+    price: 55,
+    category: 'Supermarket',
+    images: [],
+    stock: 200,
+    rating: 4.2,
+    reviews: 8
+  },
+  {
+    name: 'Kabarak Milk 500ml',
+    description: 'Fresh pasteurised milk',
+    price: 60,
+    category: 'Supermarket',
+    images: [],
+    stock: 150,
+    rating: 4.8,
+    reviews: 15
   }
+];
 
-  await Product.deleteMany({});
-
-  const products = [
-    { name: "Kabarak Milk 500ml", price: 60, category: "Groceries", description: "Fresh", stock: 100, image: "https://via.placeholder.com/300", seller: seller._id },
-    { name: "Bread", price: 55, category: "Groceries", description: "Soft bread", stock: 50, image: "https://via.placeholder.com/300", seller: seller._id },
-    { name: "Soko T-Shirt", price: 800, category: "Clothing", description: "Merch", stock: 20, image: "https://via.placeholder.com/300", seller: seller._id }
-  ];
-
-  await Product.insertMany(products);
-  console.log("✅ 3 Products Added with seller!");
-  process.exit();
-};
-
-run();
+mongoose.connect(process.env.MONGODB_URI)
+  .then(async () => {
+    await Product.deleteMany({});
+    await Product.insertMany(sampleProducts);
+    console.log('✅ Products seeded');
+    process.exit(0);
+  })
+  .catch(err => console.error(err));
