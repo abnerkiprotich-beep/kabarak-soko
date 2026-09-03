@@ -1,16 +1,49 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const User = require('../models/User');
+const ReferralClick = require('../models/ReferralClick');
+const { sendEmail } = require('../../utils/sendEmail'); // <-- FIXED PATH
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
-    const existing = await User.findOne({ email });
+    const { name, email, password, phone, address, referralCode } = req.body;
+
+    const existing = await User.findOne({ email: email.toLowerCase() });
     if (existing) return res.status(400).json({ message: 'Email already registered' });
 
-    const user = new User({ name, email, password, phone });
+    const user = new User({ 
+      name, 
+      email: email.toLowerCase(), 
+      password, 
+      phone, 
+      address 
+    });
+
+    // --- AFFILIATE SYSTEM - REFERRAL FIX ---
+    if (referralCode) {
+      const referrer = await User.findOne({ affiliateCode: referralCode, isAffiliate: true });
+      if (referrer) {
+        user.referredBy = referralCode;
+        // Also log the referral click as converted
+        try {
+          const click = await ReferralClick.findOne({ affiliateCode: referralCode, converted: false })
+            .sort({ createdAt: -1 });
+          if (click) {
+            click.converted = true;
+            click.convertedAt = new Date();
+            click.referredUserId = user._id;
+            await click.save();
+          }
+        } catch (e) {
+          console.log('Referral click update error:', e.message);
+        }
+      }
+    }
+    // --- END AFFILIATE FIX ---
+
     await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -22,7 +55,7 @@ router.post('/register', async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin // <-- NOW INCLUDED
+        isAdmin: user.isAdmin
       }
     });
   } catch (error) {
@@ -35,7 +68,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(401).json({ message: 'Invalid email or password' });
 
     const isMatch = await user.comparePassword(password);
@@ -50,7 +83,7 @@ router.post('/login', async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin // <-- NOW INCLUDED
+        isAdmin: user.isAdmin
       }
     });
   } catch (error) {
@@ -58,16 +91,14 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-const crypto = require('crypto');
 
 // Request password reset
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Generate reset token (valid for 1 hour)
     const resetToken = crypto.randomBytes(32).toString('hex');
     const resetExpires = Date.now() + 3600000;
 
@@ -112,4 +143,5 @@ router.post('/reset-password', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 module.exports = router;

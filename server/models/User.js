@@ -49,6 +49,33 @@ storeId: {
     default: false
   },
   resetPasswordToken: { type: String, default: null },
+  // Add to userSchema
+isAffiliate: {
+  type: Boolean,
+  default: false
+},
+affiliateCode: {
+  type: String,
+  unique: true,
+  sparse: true
+},
+referredBy: {
+  type: String, // stores the affiliate code of the referrer
+  default: null
+},
+commissionBalance: {
+  type: Number,
+  default: 0
+},
+totalEarned: {
+  type: Number,
+  default: 0
+},
+affiliateAppliedAt: {
+  type: Date,
+  default: null
+},  
+  resetPasswordToken: { type: String, default:null },
   resetPasswordExpires: { type: Date, default: null }
 }, {
   timestamps: true

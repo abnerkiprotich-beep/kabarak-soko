@@ -26,6 +26,8 @@
         .login-link{text-align:center;margin-top:22px;font-size:13px}
         .login-link a{color:#16a34a;font-weight:700;text-decoration:none}
         .home-link{display:block;text-align:center;margin-top:18px;color:#6b7280;text-decoration:none;font-size:13px}
+        .ref-banner{display:none;background:#e8f7e8;border:1px solid #c6e8c6;color:#15803d;padding:10px 12px;border-radius:8px;margin-bottom:18px;font-size:13px;text-align:center;font-weight:600}
+        .ref-banner.show{display:block}
     </style>
 </head>
 <body>
@@ -34,6 +36,7 @@
     <section class="card">
         <h1>Create Account</h1>
         <p class="subtitle">Join Kabarak Soko today</p>
+        <div id="refBanner" class="ref-banner"></div>
         <div id="message" class="message"></div>
         <form id="registerForm">
             <label for="name">Full Name</label>
@@ -57,8 +60,18 @@
 <script>
     const registerForm = document.getElementById('registerForm');
     const message = document.getElementById('message');
+    const refBanner = document.getElementById('refBanner');
     const registerButton = document.getElementById('registerButton');
+
+    // Show referral banner if exists
+    const existingRef = localStorage.getItem('referralCode');
+    if (existingRef) {
+        refBanner.textContent = `🎉 Referred by: ${existingRef} - You'll support your referrer!`;
+        refBanner.classList.add('show');
+    }
+
     function showMessage(text, type){ message.textContent = text; message.className = `message ${type}`; }
+
     registerForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const name = document.getElementById('name').value.trim();
@@ -67,6 +80,10 @@
         const address = document.getElementById('address').value.trim();
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // CAPTURE REFERRAL CODE - This is the affiliate fix
+        const refCode = localStorage.getItem('referralCode') || "";
+
         if(password !== confirmPassword){ showMessage('Passwords do not match.','error'); return; }
         registerButton.disabled = true;
         registerButton.textContent = 'Creating account...';
@@ -75,12 +92,14 @@
             const response = await fetch('/api/auth/register',{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({name,email,phone,address,password})
+                body:JSON.stringify({name,email,phone,address,password,referralCode: refCode})
             });
             const data = await response.json();
             if(!response.ok){ throw new Error(data.message || 'Registration failed'); }
             localStorage.setItem('kabarakSokoToken', data.token);
             localStorage.setItem('kabarakSokoUser', JSON.stringify(data.user));
+            // Clear referral code after successful use
+            if (refCode) localStorage.removeItem('referralCode');
             showMessage('Account created successfully. Redirecting...','success');
             setTimeout(()=>{ window.location.href = '/'; }, 800);
         }catch(error){

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become an Affiliate - KABARAK SOKO</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', sans-serif;}
+body{background:#f5f7f5;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.card{background:#fff;max-width:500px;width:100%;padding:32px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.08);text-align:center}
+.logo{font-size:28px;font-weight:800;color:#16834b;margin-bottom:8px}
+h2{color:#111;margin:12px 0 8px}
+p{color:#555;line-height:1.6;margin-bottom:20px}
+.benefits{text-align:left;background:#f0faf4;padding:16px;border-radius:12px;margin:20px 0}
+.benefits li{margin:8px 0;list-style:none}
+.benefits li::before{content:"✅ ";color:#16834b}
+button{width:100%;padding:14px;background:#16834b;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:0.2s}
+button:hover{background:#126e3f}
+button:disabled{background:#aaa;cursor:not-allowed}
+#result{margin-top:18px;padding:12px;border-radius:8px;display:none;font-weight:600}
+.success{background:#e6f9ec;color:#16834b;border:1px solid #b7e8c3}
+.error{background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1}
+.link-box{margin-top:15px;background:#fff;border:2px dashed #16834b;padding:12px;border-radius:8px;word-break:break-all;display:none}
+small a{color:#16834b;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">KABARAK SOKO</div>
+  <h2>Become an Affiliate & Earn!</h2>
+  <p>Get 10% commission for every new customer you bring to Kabarak Soko.</p>
+
+  <ul class="benefits">
+    <li>Earn 10% per referral — paid to M-Pesa</li>
+    <li>Your personal link: <code>?ref=YOURCODE</code></li>
+    <li>Track clicks & earnings in real-time</li>
+    <li>No limit — invite the whole Kabarak!</li>
+  </ul>
+
+  <button id="btn">Become an Affiliate Now</button>
+  
+  <div id="result"></div>
+  <div id="linkBox" class="link-box"></div>
+  <p style="margin-top:18px"><small>Already an affiliate? <a href="/affiliate-dashboard.html">Go to Dashboard →</a></small></p>
+</div>
+
+<script>
+const btn = document.getElementById('btn');
+const result = document.getElementById('result');
+const linkBox = document.getElementById('linkBox');
+
+function showMsg(msg, type){
+  result.style.display='block';
+  result.className = type;
+  result.textContent = msg;
+}
+
+btn.addEventListener('click', async () => {
+  const token = localStorage.getItem('token');
+  if(!token){
+    showMsg('Please login first! Redirecting to login...','error');
+    setTimeout(()=> location.href='/login.html', 1500);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating your affiliate account...';
+
+  try{
+    const res = await fetch('/api/affiliate/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    });
+    const data = await res.json();
+
+    if(res.ok){
+      showMsg('🎉 Success! You are now an affiliate!', 'success');
+      const code = data.affiliateCode || data.code;
+      const link = `${window.location.origin}/?ref=${code}`;
+      linkBox.style.display='block';
+      linkBox.innerHTML = `<strong>Your Affiliate Link:</strong><br><a href="${link}" target="_blank">${link}</a><br><br><button onclick="navigator.clipboard.writeText('${link}'); alert('Copied!')" style="padding:8px 14px;background:#16834b;color:#fff;border:none;border-radius:6px;cursor:pointer">Copy Link</button>`;
+      btn.textContent = 'Already an Affiliate ✅';
+    } else {
+      if(data.message && data.message.includes('already')){
+        showMsg('You are already an affiliate!','success');
+        const code = data.affiliateCode;
+        if(code){
+          const link = `${window.location.origin}/?ref=${code}`;
+          linkBox.style.display='block';
+          linkBox.innerHTML = `<strong>Your Link:</strong><br>${link}`;
+        }
+      } else {
+        showMsg(data.message || 'Failed to register', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Try Again';
+      }
+    }
+  } catch(err){
+    showMsg('Server error. Is backend running?','error');
+    btn.disabled = false;
+    btn.textContent = 'Try Again';
+  }
+});
+
+// Auto-check if already affiliate
+(async ()=>{
+  const token = localStorage.getItem('token');
+  if(!token) return;
+  try{
+    const r = await fetch('/api/affiliate/stats', { headers:{'Authorization':'Bearer '+token}});
+    const d = await r.json();
+    if(d.affiliateCode){
+      showMsg('You are already an affiliate ✅','success');
+      const link = `${window.location.origin}/?ref=${d.affiliateCode}`;
+      linkBox.style.display='block';
+      linkBox.innerHTML = `<strong>Your Link:</strong><br><a href="${link}">${link}</a>`;
+      btn.textContent='Go to Dashboard';
+      btn.onclick=()=> location.href='/affiliate-dashboard.html';
+      btn.disabled=false;
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

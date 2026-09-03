@@ -5,10 +5,12 @@ const path = require('path');
 const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
+const affiliateRoutes = require('./routes/affiliate');
 const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
-const mpesaRoutes = require('./routes/mpesa'); // <-- NEW
+const mpesaRoutes = require('./routes/mpesa');
+const storeRoutes = require('./routes/stores');
 
 dotenv.config();
 
@@ -22,10 +24,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/affiliate', affiliateRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/mpesa', mpesaRoutes); // <-- NEW
+app.use('/api/mpesa', mpesaRoutes);
+app.use('/api/stores', storeRoutes);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));

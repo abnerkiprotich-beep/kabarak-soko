@@ -1233,6 +1233,7 @@ document.getElementById('refreshApprovals')?.addEventListener('click', loadAppro
         await loadOrders();
         await loadProducts();
         await loadUsers();
+        await approval();
       } catch (error) {
         console.error('Init error:', error);
       }

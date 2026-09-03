@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affiliate Dashboard - KABARAK SOKO</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #16834b;
+      --green-dark: #0f6b3b;
+      --green-light: #e9f7ef;
+      --white: #ffffff;
+      --dark: #282828;
+      --gray: #757575;
+      --light-bg: #f5f5f5;
+      --border: #e0e0e0;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--light-bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+    .header {
+      background: var(--green);
+      color: var(--white);
+      padding: 12px 20px;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .logo span { color: #d9f5e5; }
+    .header-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: var(--white);
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .header-btn:hover { background: rgba(255,255,255,0.25); }
+
+    .main {
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 0 20px 40px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    }
+    .stat-number {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--green);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    .panel {
+      background: var(--white);
+      border-radius: 6px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .panel-body { padding: 20px; }
+
+    .referral-link-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-light);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+    .referral-link-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      padding: 5px 0;
+      outline: none;
+    }
+    .referral-link-box button {
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .referral-link-box button:hover { background: var(--green-dark); }
+
+    .table-wrapper { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      padding: 12px 12px;
+      background: #f8f8f8;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge.pending { background: #fff3e0; color: #e65100; }
+    .badge.confirmed { background: #e8f5e9; color: var(--green); }
+    .badge.delivered { background: #e8f5e9; color: var(--green); }
+    .badge.cancelled { background: #ffebee; color: #c62828; }
+
+    .btn-sm {
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+
+    .message {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .message.show { display: block; }
+    .message.success { background: #e8f5e9; color: var(--green); }
+    .message.error { background: #ffebee; color: #c62828; }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    @media (max-width: 850px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .referral-link-box { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="logo">KABARAK <span>SOKO</span></a>
+    <div>
+      <a href="/" class="header-btn">Home</a>
+      <a href="/affiliate-dashboard.html" class="header-btn">Affiliate</a>
+      <button class="header-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <h1 class="page-title">📈 Affiliate Dashboard</h1>
+
+  <div id="message" class="message"></div>
+
+  <div id="affiliateContent">
+    <div class="loading-spinner">Loading affiliate data...</div>
+  </div>
+</main>
+
+<script>
+  function getToken() {
+    return localStorage.getItem('kabarakSokoToken') || localStorage.getItem('token') || '';
+  }
+
+  function formatPrice(value) {
+    return `KSh ${(Number(value) || 0).toLocaleString('en-KE', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+  }
+
+  function formatDate(value) {
+    if (!value) return '-';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return '-';
+    return d.toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  function showMessage(text, type = 'success') {
+    const el = document.getElementById('message');
+    el.textContent = text;
+    el.className = `message show ${type}`;
+    setTimeout(() => { el.className = 'message'; }, 5000);
+  }
+
+  async function apiFetch(url, options = {}) {
+    const token = getToken();
+    if (!token) {
+      window.location.href = '/login.html';
+      throw new Error('No token');
+    }
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        ...options.headers
+      }
+    });
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem('kabarakSokoToken');
+      localStorage.removeItem('token');
+      window.location.href = '/login.html';
+      throw new Error('Unauthorized');
+    }
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Request failed');
+    }
+    return data;
+  }
+
+  async function loadDashboard() {
+    const container = document.getElementById('affiliateContent');
+    container.innerHTML = '<div class="loading-spinner">Loading...</div>';
+
+    try {
+      const data = await apiFetch('/api/affiliate/dashboard');
+
+      const isAffiliate = data.affiliateCode ? true : false;
+
+      let html = '';
+
+      if (!isAffiliate) {
+        html = `
+          <div class="panel" style="text-align:center;padding:40px;">
+            <h2>Become an Affiliate</h2>
+            <p style="margin:15px 0;color:var(--gray);">Earn commissions by referring customers to KABARAK SOKO.</p>
+            <button class="btn-primary" id="becomeAffiliateBtn">Become Affiliate</button>
+          </div>
+        `;
+        container.innerHTML = html;
+        document.getElementById('becomeAffiliateBtn')?.addEventListener('click', becomeAffiliate);
+        return;
+      }
+
+      // Stats
+      html += `
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">${data.totalClicks || 0}</div>
+            <div class="stat-label">Total Clicks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${data.conversions || 0}</div>
+            <div class="stat-label">Conversions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${data.totalOrders || 0}</div>
+            <div class="stat-label">Orders</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${formatPrice(data.commissionBalance || 0)}</div>
+            <div class="stat-label">Balance</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Your Referral Link</span>
+            <button class="btn-primary" id="copyLinkBtn">Copy Link</button>
+          </div>
+          <div class="panel-body">
+            <div class="referral-link-box">
+              <input type="text" id="referralLinkInput" value="${escapeHtml(data.referralLink || '')}" readonly>
+              <button onclick="copyLink()">Copy</button>
+            </div>
+            <div style="font-size:13px;color:var(--gray);">
+              <strong>Your code:</strong> <span style="font-weight:700;color:var(--green);">${escapeHtml(data.affiliateCode)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Recent Transactions</span>
+          </div>
+          <div class="panel-body">
+            <div class="table-wrapper">
+              <table>
+                <thead><tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Commission</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr></thead>
+                <tbody>
+      `;
+
+      if (data.recentOrders && data.recentOrders.length > 0) {
+        data.recentOrders.forEach(order => {
+          const customer = order.userId || {};
+          html += `<tr>
+            <td>${escapeHtml(order._id)}</td>
+            <td>${escapeHtml(customer.name || '')}</td>
+            <td>${formatPrice(order.total)}</td>
+            <td>${formatPrice(order.affiliateCommission || 0)}</td>
+            <td><span class="badge ${order.status}">${order.status}</span></td>
+            <td>${formatDate(order.createdAt)}</td>
+          </tr>`;
+        });
+      } else {
+        html += `<tr><td colspan="6" style="text-align:center;color:var(--gray);">No transactions yet.</td></tr>`;
+      }
+
+      html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:15px;margin-top:10px;">
+          <button class="btn-primary" id="withdrawBtn">Withdraw Earnings</button>
+          <button class="btn-sm" style="background:#e3f2fd;color:#0d47a1;" id="refreshBtn">Refresh</button>
+        </div>
+      `;
+
+      container.innerHTML = html;
+
+      // Event listeners
+      document.getElementById('withdrawBtn')?.addEventListener('click', requestWithdrawal);
+      document.getElementById('refreshBtn')?.addEventListener('click', loadDashboard);
+
+    } catch (error) {
+      container.innerHTML = `<p style="color:var(--red);">Error: ${error.message}</p>`;
+    }
+  }
+
+  async function becomeAffiliate() {
+    try {
+      const data = await apiFetch('/api/affiliate/register', { method: 'POST' });
+      showMessage('You are now an affiliate! Your code: ' + data.affiliateCode, 'success');
+      loadDashboard();
+    } catch (error) {
+      showMessage(error.message, 'error');
+    }
+  }
+
+  function copyLink() {
+    const input = document.getElementById('referralLinkInput');
+    if (!input) return;
+    input.select();
+    document.execCommand('copy');
+    showMessage('Referral link copied to clipboard!', 'success');
+  }
+
+  async function requestWithdrawal() {
+    const amount = prompt('Enter amount to withdraw (KSh):');
+    if (!amount) return;
+    const num = parseFloat(amount);
+    if (isNaN(num) || num <= 0) {
+      showMessage('Invalid amount.', 'error');
+      return;
+    }
+    try {
+      const data = await apiFetch('/api/affiliate/withdraw', {
+        method: 'POST',
+        body: JSON.stringify({ amount: num })
+      });
+      showMessage(data.message, 'success');
+      loadDashboard();
+    } catch (error) {
+      showMessage(error.message, 'error');
+    }
+  }
+
+  document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    localStorage.removeItem('kabarakSokoToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('kabarakSokoUser');
+    window.location.href = '/login.html';
+  });
+
+  // Initial load
+  loadDashboard();
+</script>
+
+</body>
+</html>

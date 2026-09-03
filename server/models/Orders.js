@@ -24,27 +24,65 @@ const timelineSchema = new mongoose.Schema({
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-storeId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'Store',
-  required: false
-},
-commission: {
-  type: Number,
-  default: 0
-},
-sellerEarnings: {
-  type: Number,
-  default: 0
-},
-  items: { type: [itemSchema], required: true, validate: [v => v.length > 0, 'At least one item'] },
-  total: { type: Number, required: true, min: 0 },
-  deliveryAddress: { type: addressSchema, required: true },
-  paymentMethod: { type: String, enum: ['cash_on_delivery', 'mpesa', 'cod'], required: true },
-  status: { type: String, enum: ['pending', 'confirmed', 'processing', 'paid', 'shipped', 'delivered', 'cancelled'], default: 'pending' },
-  mpesaReceipt: { type: String, default: null },
-  statusTimeline: { type: [timelineSchema], default: [] }
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  storeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Store',
+    required: false // not required for all orders initially
+  },
+  items: {
+    type: [itemSchema],
+    required: true,
+    validate: [v => v.length > 0, 'At least one item']
+  },
+  total: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  commission: {
+    type: Number,
+    default: 0
+  },
+  sellerEarnings: {
+    type: Number,
+    default: 0
+  },
+  deliveryAddress: {
+    type: addressSchema,
+    required: true
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['cash_on_delivery', 'mpesa', 'cod'],
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'processing', 'paid', 'shipped', 'delivered', 'cancelled'],
+    default: 'pending'
+  },
+  mpesaReceipt: {
+    type: String,
+    default: null
+  },
+  statusTimeline: {
+    type: [timelineSchema],
+    default: []
+  }, // <-- COMMA ADDED HERE
+  affiliateCode: {
+    type: String,
+    default: null,
+    index: true
+  },
+  affiliateCommission: {
+    type: Number,
+    default: 0
+  }
 }, { timestamps: true });
 
 orderSchema.index({ userId: 1, createdAt: -1 });
