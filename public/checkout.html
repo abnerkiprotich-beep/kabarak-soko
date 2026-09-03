@@ -102,6 +102,7 @@
     .message.show { display: block; }
     .message.error { background: #ffebee; color: var(--red); }
     .message.success { background: #e8f5e9; color: var(--green); }
+    .message.info { background: #e3f2fd; color: #0d47a1; }
 
     .checkout-layout {
       display: grid;
@@ -180,6 +181,15 @@
     }
     .payment-option strong { display: block; margin-bottom: 5px; }
     .payment-option small { display: block; color: var(--gray); line-height: 1.5; }
+
+    /* M-Pesa phone input – shown only when M-Pesa selected */
+    .mpesa-phone-group {
+      display: none;
+      margin-top: 12px;
+    }
+    .mpesa-phone-group.show {
+      display: block;
+    }
 
     .order-items {
       display: grid;
@@ -368,7 +378,7 @@
                     <input type="text" id="deliveryName" required placeholder="Enter your full name">
                   </div>
                   <div class="form-group">
-                    <label for="deliveryPhone">Phone Number (M-Pesa)</label>
+                    <label for="deliveryPhone">Phone Number</label>
                     <input type="tel" id="deliveryPhone" required placeholder="07XXXXXXXX">
                   </div>
                   <div class="form-group">
@@ -407,6 +417,15 @@
                   </div>
                 </label>
               </div>
+
+              <!-- M-Pesa Phone Number Field (hidden by default) -->
+              <div class="mpesa-phone-group" id="mpesaPhoneGroup">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="mpesaPhone">M-Pesa Phone Number</label>
+                  <input type="tel" id="mpesaPhone" placeholder="07XXXXXXXX or 2547XXXXXXXX">
+                  <small style="color:var(--gray);font-size:12px;margin-top:4px;">The phone number registered with M-Pesa</small>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -429,7 +448,7 @@
                 <span>Total</span>
                 <span id="total">KSh 0</span>
               </div>
-              <p class="summary-note">Total is validated on the server.</p>
+              <p class="summary-note" id="paymentNote">You will pay on delivery.</p>
               <button id="placeOrderBtn" class="place-order">PLACE ORDER</button>
             </div>
           </div>
@@ -463,6 +482,9 @@
     const placeBtn = document.getElementById('placeOrderBtn');
     const checkoutPage = document.getElementById('checkoutPage');
     const emptyCart = document.getElementById('emptyCart');
+    const paymentNote = document.getElementById('paymentNote');
+    const mpesaPhoneGroup = document.getElementById('mpesaPhoneGroup');
+    const mpesaPhoneInput = document.getElementById('mpesaPhone');
 
     // ===================== Helpers =====================
     function showMessage(text, type) {
@@ -555,7 +577,17 @@
       opt.addEventListener('click', function() {
         document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
         this.classList.add('selected');
-        this.querySelector('input[type="radio"]').checked = true;
+        const radio = this.querySelector('input[type="radio"]');
+        radio.checked = true;
+
+        // Show/hide M-Pesa phone field
+        if (radio.value === 'mpesa') {
+          mpesaPhoneGroup.classList.add('show');
+          paymentNote.textContent = 'You will receive an M-Pesa prompt on your phone.';
+        } else {
+          mpesaPhoneGroup.classList.remove('show');
+          paymentNote.textContent = 'You will pay when the order is delivered.';
+        }
       });
     });
 
@@ -581,7 +613,31 @@
         return;
       }
 
-      // Build items for backend (full objects)
+      // Determine payment method
+      const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cash_on_delivery';
+
+      // If M-Pesa, ensure phone number is provided
+      let mpesaPhone = '';
+      if (paymentMethod === 'mpesa') {
+        mpesaPhone = mpesaPhoneInput.value.trim();
+        if (!mpesaPhone) {
+          showMessage('Please enter your M-Pesa phone number.', 'error');
+          mpesaPhoneInput.focus();
+          return;
+        }
+        // Normalize phone: remove spaces, add 254 if starts with 0
+        mpesaPhone = mpesaPhone.replace(/\s/g, '');
+        if (mpesaPhone.startsWith('0')) {
+          mpesaPhone = '254' + mpesaPhone.slice(1);
+        }
+        if (!/^2547\d{8}$/.test(mpesaPhone)) {
+          showMessage('Invalid phone number. Use format 07XXXXXXXX or 2547XXXXXXXX.', 'error');
+          mpesaPhoneInput.focus();
+          return;
+        }
+      }
+
+      // Build order data
       const items = cart.map(item => ({
         id: item.id || item._id || 'unknown',
         name: item.name || 'Product',
@@ -591,7 +647,6 @@
       }));
 
       const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
-      const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cash_on_delivery';
 
       const payload = {
         items,
@@ -604,7 +659,8 @@
       placeBtn.textContent = 'PLACING ORDER...';
 
       try {
-        const response = await fetch('/api/orders', {
+        // 1. Create the order
+        const orderResponse = await fetch('/api/orders', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -613,25 +669,94 @@
           body: JSON.stringify(payload)
         });
 
-        const data = await response.json().catch(() => ({}));
+        const orderData = await orderResponse.json().catch(() => ({}));
 
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to place order.');
+        if (!orderResponse.ok) {
+          throw new Error(orderData.message || 'Failed to place order.');
         }
 
-        // Success
-        showMessage(data.message || 'Order placed successfully!', 'success');
+        const orderId = orderData.order?.id || orderData.order?._id;
 
-        // Clear cart
-        localStorage.removeItem('kabarakSokoCart');
+        // 2. If payment method is M-Pesa, initiate STK Push
+        if (paymentMethod === 'mpesa') {
+          showMessage('Initiating M-Pesa payment... Please check your phone.', 'info');
+          placeBtn.textContent = 'WAITING FOR PAYMENT...';
 
-        // Redirect to orders page after short delay
-        setTimeout(() => {
-          const orderId = data.order?.id || '';
-          window.location.href = '/orders.html' + (orderId ? '?order=' + encodeURIComponent(orderId) : '');
-        }, 1500);
+          // Call STK push
+          const stkResponse = await fetch('/api/mpesa/stkpush', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+              orderId: orderId,
+              phoneNumber: mpesaPhone,
+              amount: Math.round(total)
+            })
+          });
+
+          const stkData = await stkResponse.json().catch(() => ({}));
+
+          if (!stkResponse.ok) {
+            throw new Error(stkData.message || 'Failed to initiate M-Pesa payment.');
+          }
+
+          showMessage('STK Push sent! Enter your PIN on your phone to complete payment.', 'success');
+
+          // Poll order status until it changes to 'paid' or 'cancelled'
+          let attempts = 0;
+          const maxAttempts = 30; // 30 * 2s = 60s timeout
+          let orderStatus = orderData.order?.status || 'pending';
+
+          const pollInterval = setInterval(async () => {
+            attempts++;
+            try {
+              const statusRes = await fetch(`/api/orders/${orderId}`, {
+                headers: { 'Authorization': 'Bearer ' + token }
+              });
+              const statusData = await statusRes.json();
+              if (statusData.order) {
+                orderStatus = statusData.order.status;
+                if (orderStatus === 'paid') {
+                  clearInterval(pollInterval);
+                  showMessage('Payment confirmed! Order placed successfully.', 'success');
+                  localStorage.removeItem('kabarakSokoCart');
+                  setTimeout(() => {
+                    window.location.href = `/orders.html?order=${orderId}`;
+                  }, 1500);
+                } else if (orderStatus === 'cancelled') {
+                  clearInterval(pollInterval);
+                  showMessage('Payment failed or was cancelled. Please try again.', 'error');
+                  placeBtn.disabled = false;
+                  placeBtn.textContent = 'PLACE ORDER';
+                }
+              }
+            } catch (pollErr) {
+              console.error('Polling error:', pollErr);
+            }
+
+            if (attempts >= maxAttempts) {
+              clearInterval(pollInterval);
+              showMessage('Payment taking too long. Please check your order status later.', 'info');
+              localStorage.removeItem('kabarakSokoCart');
+              setTimeout(() => {
+                window.location.href = `/orders.html?order=${orderId}`;
+              }, 2000);
+            }
+          }, 2000);
+
+        } else {
+          // Cash on Delivery – order already confirmed
+          showMessage(orderData.message || 'Order placed successfully!', 'success');
+          localStorage.removeItem('kabarakSokoCart');
+          setTimeout(() => {
+            window.location.href = `/orders.html?order=${orderId}`;
+          }, 1500);
+        }
 
       } catch (error) {
+        console.error('Checkout error:', error);
         showMessage(error.message || 'Something went wrong. Please try again.', 'error');
         placeBtn.disabled = false;
         placeBtn.textContent = 'PLACE ORDER';

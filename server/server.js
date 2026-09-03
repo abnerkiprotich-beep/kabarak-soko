@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
+const mpesaRoutes = require('./routes/mpesa'); // <-- NEW
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/mpesa', mpesaRoutes); // <-- NEW
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -42,6 +44,7 @@ mongoose.connect(process.env.MONGODB_URI)
       console.log(`📦 Products API: /api/products`);
       console.log(`📦 Orders API:   /api/orders`);
       console.log(`📦 Admin API:    /api/admin`);
+      console.log(`📦 M-Pesa API:   /api/mpesa`); // <-- NEW
     });
   })
   .catch(err => {
