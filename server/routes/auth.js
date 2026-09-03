@@ -58,5 +58,58 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+const crypto = require('crypto');
 
+// Request password reset
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Generate reset token (valid for 1 hour)
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetExpires = Date.now() + 3600000;
+
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = resetExpires;
+    await user.save();
+
+    const resetUrl = `http://localhost:5000/reset-password.html?token=${resetToken}`;
+    const html = `
+      <h2>Password Reset</h2>
+      <p>You requested a password reset for your KABARAK SOKO account.</p>
+      <p>Click the link below to reset your password. This link expires in 1 hour.</p>
+      <a href="${resetUrl}" style="display:inline-block;padding:10px 20px;background:#16834b;color:#fff;text-decoration:none;border-radius:4px;">Reset Password</a>
+      <p>If you didn't request this, ignore this email.</p>
+    `;
+    await sendEmail(email, 'Reset Your Password - KABARAK SOKO', html);
+    res.json({ success: true, message: 'Password reset email sent' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Reset password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+    if (!user) return res.status(400).json({ message: 'Invalid or expired token' });
+
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 module.exports = router;

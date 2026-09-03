@@ -33,13 +33,14 @@ const userSchema = new mongoose.Schema({
         default: ''
     },
 
-    isAdmin: {
-        type: Boolean,
-        default: false
-    }
-
+      isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  resetPasswordToken: { type: String, default: null },
+  resetPasswordExpires: { type: Date, default: null }
 }, {
-    timestamps: true
+  timestamps: true
 });
 
 

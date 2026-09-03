@@ -127,7 +127,25 @@ router.post('/', async (req, res) => {
 
     await newOrder.save();
 
-    const orderObj = newOrder.toObject();
+  // 2.d Order confirmation email - non-blocking
+  try {
+    const user = await User.findById(userId);
+    const html = `
+      <h2>Order Confirmation</h2>
+      <p>Hi ${user.name},</p>
+      <p>Your order <strong>${newOrder._id}</strong> has been placed successfully.</p>
+      <p>Total: Ksh ${newOrder.total.toLocaleString()}</p>
+      <p>Payment: ${newOrder.paymentMethod}</p>
+      <p>Delivery Address: ${deliveryAddress.address}, ${deliveryAddress.town}</p>
+      <p>You can track your order at: <a href="http://localhost:5000/orders.html?order=${newOrder._id}">View Order</a></p>
+      <p>Thank you for shopping with KABARAK SOKO!</p>
+    `;
+    await sendEmail(user.email, 'Order Confirmation - KABARAK SOKO', html);
+  } catch (emailError) {
+    console.error('Order email failed but order was saved:', emailError.message);
+  }
+
+  const orderObj = newOrder.toObject();
 
     orderObj.id = orderObj._id.toString();
 
