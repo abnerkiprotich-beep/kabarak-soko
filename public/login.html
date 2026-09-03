@@ -73,75 +73,106 @@
             <a href="index.html" class="back-link">← Back to Kabarak Soko</a>
         </section>
     </main>
-<script>
-const loginForm = document.getElementById("loginForm");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const loginButton = document.getElementById("loginButton");
-const buttonText = document.getElementById("buttonText");
-const messageBox = document.getElementById("message");
-const togglePassword = document.getElementById("togglePassword");
 
-function showMessage(message, type){ messageBox.textContent = message; messageBox.className = "message " + type; }
-function clearMessage(){ messageBox.textContent = ""; messageBox.className = "message"; }
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const loginButton = document.getElementById("loginButton");
+        const buttonText = document.getElementById("buttonText");
+        const messageBox = document.getElementById("message");
+        const togglePassword = document.getElementById("togglePassword");
 
-togglePassword.addEventListener("click", function(){
-    if(passwordInput.type === "password"){
-        passwordInput.type = "text";
-        togglePassword.textContent = "Hide";
-        togglePassword.setAttribute("aria-label","Hide password");
-    } else {
-        passwordInput.type = "password";
-        togglePassword.textContent = "Show";
-        togglePassword.setAttribute("aria-label","Show password");
-    }
-});
-
-loginForm.addEventListener("submit", async function(event){
-    event.preventDefault();
-    clearMessage();
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    if(!email){ showMessage("Please enter your email.","error"); emailInput.focus(); return; }
-    if(!password){ showMessage("Please enter your password.","error"); passwordInput.focus(); return; }
-
-    loginButton.disabled = true;
-    loginButton.classList.add("loading");
-    buttonText.textContent = "Logging in...";
-
-    try{
-        const response = await fetch("/api/auth/login",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            credentials:"include",
-            body:JSON.stringify({email:email,password:password})
-        });
-        let data = {};
-        try{ data = await response.json(); }catch(e){ data = {}; }
-
-        if(!response.ok){
-            const errorMessage = data.message || data.error || "Invalid email or password.";
-            showMessage(errorMessage,"error");
-            loginButton.disabled = false;
-            loginButton.classList.remove("loading");
-            buttonText.textContent = "Login";
-            return;
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = "message " + type;
         }
 
-        showMessage("Login successful! Redirecting...","success");
-        if(data.token) localStorage.setItem('kabarakToken', data.token);
-        if(data.user) localStorage.setItem('kabarakUser', JSON.stringify(data.user));
-        localStorage.setItem('isLoggedIn','true');
-        setTimeout(()=>{ window.location.href = "index.html"; }, 800);
+        function clearMessage() {
+            messageBox.textContent = "";
+            messageBox.className = "message";
+        }
 
-    }catch(error){
-        console.error(error);
-        showMessage("Cannot connect to server. Check backend is running.","error");
-        loginButton.disabled = false;
-        loginButton.classList.remove("loading");
-        buttonText.textContent = "Login";
-    }
-});
-</script>
+        togglePassword.addEventListener("click", function() {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePassword.textContent = "Hide";
+                togglePassword.setAttribute("aria-label", "Hide password");
+            } else {
+                passwordInput.type = "password";
+                togglePassword.textContent = "Show";
+                togglePassword.setAttribute("aria-label", "Show password");
+            }
+        });
+
+        loginForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            clearMessage();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email) {
+                showMessage("Please enter your email.", "error");
+                emailInput.focus();
+                return;
+            }
+            if (!password) {
+                showMessage("Please enter your password.", "error");
+                passwordInput.focus();
+                return;
+            }
+
+            loginButton.disabled = true;
+            loginButton.classList.add("loading");
+            buttonText.textContent = "Logging in...";
+
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    const errorMessage = data.message || data.error || "Invalid email or password.";
+                    showMessage(errorMessage, "error");
+                    loginButton.disabled = false;
+                    loginButton.classList.remove("loading");
+                    buttonText.textContent = "Login";
+                    return;
+                }
+
+                // Save token and user info
+                if (data.token) {
+                    localStorage.setItem('kabarakSokoToken', data.token);
+                }
+                if (data.user) {
+                    localStorage.setItem('kabarakSokoUser', JSON.stringify(data.user));
+                }
+                localStorage.setItem('isLoggedIn', 'true');
+
+                showMessage("Login successful! Redirecting...", "success");
+
+                // Determine redirect based on admin status
+                setTimeout(() => {
+                    if (data.user && data.user.isAdmin === true) {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                }, 800);
+
+            } catch (error) {
+                console.error(error);
+                showMessage("Cannot connect to server. Check backend is running.", "error");
+                loginButton.disabled = false;
+                loginButton.classList.remove("loading");
+                buttonText.textContent = "Login";
+            }
+        });
+    </script>
 </body>
 </html>

@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+// POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
@@ -17,7 +18,12 @@ router.post('/register', async (req, res) => {
       success: true,
       message: 'User registered successfully',
       token,
-      user: { id: user._id, name: user.name, email: user.email }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin // <-- NOW INCLUDED
+      }
     });
   } catch (error) {
     console.error('Register error:', error);
@@ -25,6 +31,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -39,7 +46,12 @@ router.post('/login', async (req, res) => {
       success: true,
       message: 'Login successful',
       token,
-      user: { id: user._id, name: user.name, email: user.email }
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin // <-- NOW INCLUDED
+      }
     });
   } catch (error) {
     console.error('Login error:', error);
