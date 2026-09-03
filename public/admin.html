@@ -460,6 +460,8 @@
       <button class="tab-btn active" data-tab="orders">📦 Orders</button>
       <button class="tab-btn" data-tab="products">🛒 Products</button>
       <button class="tab-btn" data-tab="users">👤 Users</button>
+      <button class="tab-btn" data-tab="stores">🏪 Stores</button>
+      <button class="tab-btn" data-tab="approvals">✅ Approvals</button>
     </div>
 
     <!-- TAB: Orders -->
@@ -521,6 +523,32 @@
         </div>
       </div>
     </div>
+    <div class="tab-content" id="tab-stores">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">All Stores</span>
+      <button class="btn-primary" id="refreshStores">Refresh</button>
+    </div>
+    <div class="panel-body">
+      <div id="storesList" class="table-wrapper">
+        <div class="loading-spinner">Loading stores...</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tab-content" id="tab-approvals">
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Pending Product Approvals</span>
+      <button class="btn-primary" id="refreshApprovals">Refresh</button>
+    </div>
+    <div class="panel-body">
+      <div id="approvalsList" class="table-wrapper">
+        <div class="loading-spinner">Loading pending products...</div>
+      </div>
+    </div>
+  </div>
+</div>
   </main>
 
   <!-- MODAL: Add/Edit Product -->
@@ -1028,6 +1056,169 @@
       const user = JSON.parse(localStorage.getItem('kabarakSokoUser') || '{}');
       if (user.name) document.getElementById('adminName').textContent = `👋 ${user.name}`;
     } catch {}
+    async function loadStores() {
+  const container = document.getElementById('storesList');
+  container.innerHTML = '<div class="loading-spinner">Loading stores...</div>';
+
+  try {
+    const data = await apiFetch('/api/stores/admin/all');
+    const stores = data.stores || [];
+
+    if (stores.length === 0) {
+      container.innerHTML = '<p style="text-align:center;color:var(--gray);padding:30px;">No stores registered yet.</p>';
+      return;
+    }
+
+    let html = `
+      <table>
+        <thead>
+          <tr>
+            <th>Store Name</th>
+            <th>Owner</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Verified</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    stores.forEach(store => {
+      const owner = store.owner || {};
+      html += `
+        <tr>
+          <td><strong>${escapeHtml(store.name)}</strong></td>
+          <td>${escapeHtml(owner.name || '')}</td>
+          <td>${escapeHtml(store.email)}</td>
+          <td>
+            <span class="badge ${store.isActive ? 'confirmed' : 'cancelled'}">
+              ${store.isActive ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td>
+            <span class="badge ${store.isVerified ? 'confirmed' : 'pending'}">
+              ${store.isVerified ? '✅ Verified' : '⏳ Pending'}
+            </span>
+          </td>
+          <td>
+            <button class="btn-sm ${store.isVerified ? 'btn-delete' : 'btn-edit'}" onclick="toggleVerify('${store._id}', ${!store.isVerified})">
+              ${store.isVerified ? 'Unverify' : 'Verify'}
+            </button>
+            <button class="btn-sm ${store.isActive ? 'btn-delete' : 'btn-edit'}" onclick="toggleActive('${store._id}', ${!store.isActive})">
+              ${store.isActive ? 'Deactivate' : 'Activate'}
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  } catch (error) {
+    container.innerHTML = `<p style="color:var(--red);">Error: ${error.message}</p>`;
+  }
+}
+
+async function toggleVerify(storeId, isVerified) {
+  if (!confirm(`Are you sure you want to ${isVerified ? 'verify' : 'unverify'} this store?`)) return;
+  try {
+    await apiFetch(`/api/stores/admin/${storeId}/verify`, {
+      method: 'PUT',
+      body: JSON.stringify({ isVerified })
+    });
+    showMessage(`Store ${isVerified ? 'verified' : 'unverified'} successfully`, 'success');
+    loadStores();
+  } catch (error) {
+    showMessage(error.message, 'error');
+  }
+}
+
+async function toggleActive(storeId, isActive) {
+  if (!confirm(`Are you sure you want to ${isActive ? 'activate' : 'deactivate'} this store?`)) return;
+  try {
+    await apiFetch(`/api/stores/admin/${storeId}/activate`, {
+      method: 'PUT',
+      body: JSON.stringify({ isActive })
+    });
+    showMessage(`Store ${isActive ? 'activated' : 'deactivated'} successfully`, 'success');
+    loadStores();
+  } catch (error) {
+    showMessage(error.message, 'error');
+  }
+}
+
+// Add to init or refresh button
+document.getElementById('refreshStores')?.addEventListener('click', loadStores);
+async function loadApprovals() {
+  const container = document.getElementById('approvalsList');
+  container.innerHTML = '<div class="loading-spinner">Loading pending products...</div>';
+
+  try {
+    const data = await apiFetch('/api/products/admin/pending');
+    const products = data.products || [];
+
+    if (products.length === 0) {
+      container.innerHTML = '<p style="text-align:center;color:var(--gray);padding:30px;">No products pending approval.</p>';
+      return;
+    }
+
+    let html = `
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Store</th>
+            <th>Seller</th>
+            <th>Price</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    products.forEach(product => {
+      const store = product.store || {};
+      const seller = product.sellerId || {};
+      html += `
+        <tr>
+          <td><strong>${escapeHtml(product.name)}</strong></td>
+          <td>${escapeHtml(store.name || '')}</td>
+          <td>${escapeHtml(seller.name || '')}</td>
+          <td>${formatPrice(product.price)}</td>
+          <td>${formatDate(product.createdAt)}</td>
+          <td>
+            <button class="btn-sm btn-edit" onclick="approveProduct('${product._id}', true)">✅ Approve</button>
+            <button class="btn-sm btn-delete" onclick="approveProduct('${product._id}', false)">❌ Reject</button>
+          </td>
+        </tr>
+      `;
+    });
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  } catch (error) {
+    container.innerHTML = `<p style="color:var(--red);">Error: ${error.message}</p>`;
+  }
+}
+
+async function approveProduct(productId, isApproved) {
+  if (!confirm(`Are you sure you want to ${isApproved ? 'approve' : 'reject'} this product?`)) return;
+  try {
+    await apiFetch(`/api/products/admin/${productId}/approve`, {
+      method: 'PUT',
+      body: JSON.stringify({ isApproved })
+    });
+    showMessage(`Product ${isApproved ? 'approved' : 'rejected'} successfully`, 'success');
+    loadApprovals();
+  } catch (error) {
+    showMessage(error.message, 'error');
+  }
+}
+
+// Add to init or refresh
+document.getElementById('refreshApprovals')?.addEventListener('click', loadApprovals);
 
     // ===================== INIT =====================
     async function init() {

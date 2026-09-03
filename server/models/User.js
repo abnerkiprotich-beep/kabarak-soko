@@ -28,6 +28,17 @@ const userSchema = new mongoose.Schema({
         default: ''
     },
 
+    role: {
+  type: String,
+  enum: ['customer', 'seller', 'admin'],
+  default: 'customer'
+},
+storeId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Store',
+  default: null
+},
+
     address: {
         type: String,
         default: ''

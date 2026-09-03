@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#16834b">
+  <title>Seller Dashboard - KABARAK SOKO</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #16834b;
+      --green-dark: #0f6b3b;
+      --green-light: #e9f7ef;
+      --white: #ffffff;
+      --dark: #282828;
+      --gray: #757575;
+      --light-bg: #f5f5f5;
+      --border: #e0e0e0;
+      --red: #c62828;
+      --orange: #f68b1e;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--light-bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font: inherit; }
+    input, select, textarea { font: inherit; }
+
+    .header {
+      background: var(--green);
+      color: var(--white);
+      padding: 12px 20px;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .logo span { color: #d9f5e5; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .header-btn {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: var(--white);
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .header-btn:hover { background: rgba(255,255,255,0.25); }
+
+    .main {
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 0 20px 40px;
+    }
+    .page-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+    }
+    .stat-number {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--green);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+      background: var(--white);
+      border-radius: 6px;
+      padding: 4px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+      overflow-x: auto;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 10px 22px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gray);
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { background: var(--green-light); }
+    .tab-btn.active {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .panel {
+      background: var(--white);
+      border-radius: 6px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .panel-body { padding: 20px; }
+
+    .table-wrapper { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      text-align: left;
+      padding: 12px 12px;
+      background: #f8f8f8;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge.pending { background: #fff3e0; color: #e65100; }
+    .badge.confirmed { background: #e8f5e9; color: var(--green); }
+    .badge.processing { background: #e3f2fd; color: #0d47a1; }
+    .badge.paid { background: #e8f5e9; color: var(--green); }
+    .badge.shipped { background: #e8f5e9; color: var(--green); }
+    .badge.delivered { background: #e8f5e9; color: var(--green); }
+    .badge.cancelled { background: #ffebee; color: var(--red); }
+
+    .btn-sm {
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .btn-edit { background: #e3f2fd; color: #0d47a1; }
+    .btn-edit:hover { background: #bbdefb; }
+    .btn-delete { background: #ffebee; color: var(--red); }
+    .btn-delete:hover { background: #ffcdd2; }
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .btn-primary:hover { background: var(--green-dark); }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--white);
+      border-radius: 8px;
+      max-width: 600px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 25px;
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .modal-title { font-size: 22px; font-weight: 800; }
+    .modal-close {
+      border: none;
+      background: none;
+      font-size: 28px;
+      color: var(--gray);
+      cursor: pointer;
+    }
+    .modal-close:hover { color: var(--dark); }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--green);
+      outline: none;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .message {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .message.show { display: block; }
+    .message.success { background: #e8f5e9; color: var(--green); }
+    .message.error { background: #ffebee; color: var(--red); }
+
+    .status-select {
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    .loading-spinner {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    @media (max-width: 850px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .header-inner { flex-direction: column; align-items: stretch; }
+      .header-right { justify-content: space-between; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .tabs { flex-wrap: nowrap; }
+      .tab-btn { font-size: 12px; padding: 8px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="/" class="logo">KABARAK <span>SOKO</span></a>
+    <div class="header-right">
+      <span id="sellerName" style="font-weight:600;">👋 Seller</span>
+      <a href="/" class="header-btn">View Site</a>
+      <button class="header-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <h1 class="page-title">📊 Seller Dashboard</h1>
+
+  <div id="message" class="message"></div>
+
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card">
+      <div class="stat-number" id="statProducts">-</div>
+      <div class="stat-label">Total Products</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="statApproved">-</div>
+      <div class="stat-label">Approved Products</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="statOrders">-</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="statRevenue">-</div>
+      <div class="stat-label">Total Earnings</div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" data-tab="products">🛒 Products</button>
+    <button class="tab-btn" data-tab="orders">📦 Orders</button>
+    <button class="tab-btn" data-tab="analytics">📈 Analytics</button>
+  </div>
+
+  <!-- TAB: Products -->
+  <div class="tab-content active" id="tab-products">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">My Products</span>
+        <button class="btn-primary" id="addProductBtn">+ Add Product</button>
+      </div>
+      <div class="panel-body">
+        <div id="productsList" class="table-wrapper">
+          <div class="loading-spinner">Loading products...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Orders -->
+  <div class="tab-content" id="tab-orders">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Store Orders</span>
+        <button class="btn-primary" id="refreshOrders">Refresh</button>
+      </div>
+      <div class="panel-body">
+        <div id="ordersList" class="table-wrapper">
+          <div class="loading-spinner">Loading orders...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Analytics -->
+  <div class="tab-content" id="tab-analytics">
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Store Analytics</span>
+        <button class="btn-primary" id="refreshAnalytics">Refresh</button>
+      </div>
+      <div class="panel-body">
+        <div id="analyticsContent">
+          <div class="loading-spinner">Loading analytics...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL: Add/Edit Product -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="productModalTitle">Add Product</span>
+      <button class="modal-close" id="productModalClose">&times;</button>
+    </div>
+    <form id="productForm">
+      <input type="hidden" id="productId">
+      <div class="form-group">
+        <label for="productName">Product Name *</label>
+        <input type="text" id="productName" required>
+      </div>
+      <div class="form-group">
+        <label for="productDescription">Description</label>
+        <textarea id="productDescription" rows="3"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="productPrice">Price (KSh) *</label>
+          <input type="number" id="productPrice" required>
+        </div>
+        <div class="form-group">
+          <label for="productOldPrice">Old Price (KSh)</label>
+          <input type="number" id="productOldPrice">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="productCategory">Category *</label>
+          <input type="text" id="productCategory" placeholder="e.g. Phones, Fashion" required>
+        </div>
+        <div class="form-group">
+          <label for="productStock">Stock</label>
+          <input type="number" id="productStock" value="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="productImages">Image URLs (comma separated)</label>
+        <input type="text" id="productImages" placeholder="https://example.com/image.jpg, https://example.com/image2.jpg">
+      </div>
+      <div class="modal-actions" style="display:flex;gap:10px;margin-top:18px;">
+        <button type="button" class="btn-primary" id="productSaveBtn">Save Product</button>
+        <button type="button" class="btn-delete" id="productCancelBtn" style="padding:8px 18px;border-radius:4px;border:none;font-weight:700;">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ===================== HELPERS =====================
+  function getToken() {
+    return localStorage.getItem('kabarakSokoToken') || localStorage.getItem('token') || '';
+  }
+
+  function showMessage(text, type = 'success') {
+    const el = document.getElementById('message');
+    el.textContent = text;
+    el.className = `message show ${type}`;
+    setTimeout(() => { el.className = 'message'; }, 5000);
+  }
+
+  function formatPrice(value) {
+    return `KSh ${(Number(value) || 0).toLocaleString('en-KE', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+  }
+
+  function formatDate(value) {
+    if (!value) return '-';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return '-';
+    return d.toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  function statusBadge(status) {
+    const labels = {
+      pending: 'Pending',
+      confirmed: 'Confirmed',
+      processing: 'Processing',
+      paid: 'Paid',
+      shipped: 'Shipped',
+      delivered: 'Delivered',
+      cancelled: 'Cancelled'
+    };
+    return `<span class="badge ${status}">${labels[status] || status}</span>`;
+  }
+
+  // ===================== API CALLS =====================
+  async function apiFetch(url, options = {}) {
+    const token = getToken();
+    if (!token) {
+      window.location.href = '/login.html';
+      throw new Error('No token');
+    }
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        ...options.headers
+      }
+    });
+    if (response.status === 401 || response.status === 403) {
+      localStorage.removeItem('kabarakSokoToken');
+      localStorage.removeItem('token');
+      window.location.href = '/login.html';
+      throw new Error('Unauthorized');
+    }
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Request failed');
+    }
+    return data;
+  }
+
+  // ===================== LOAD DATA =====================
+  async function loadAnalytics() {
+    try {
+      const data = await apiFetch('/api/stores/my/analytics');
+      const a = data.analytics || {};
+      document.getElementById('statProducts').textContent = a.totalProducts || 0;
+      document.getElementById('statApproved').textContent = a.approvedProducts || 0;
+      document.getElementById('statOrders').textContent = a.totalOrders || 0;
+      document.getElementById('statRevenue').textContent = formatPrice(a.totalEarnings || 0);
+
+      // Render analytics details
+      const container = document.getElementById('analyticsContent');
+      let html = `
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px;">
+          <div style="background:var(--green-light);padding:15px;border-radius:6px;">
+            <strong>Total Earnings</strong><br>
+            <span style="font-size:24px;font-weight:900;color:var(--green);">${formatPrice(a.totalEarnings || 0)}</span>
+          </div>
+          <div style="background:#fff3e0;padding:15px;border-radius:6px;">
+            <strong>Pending Earnings</strong><br>
+            <span style="font-size:24px;font-weight:900;color:#e65100;">${formatPrice(a.pendingEarnings || 0)}</span>
+          </div>
+          <div style="background:#e3f2fd;padding:15px;border-radius:6px;">
+            <strong>Delivered Revenue</strong><br>
+            <span style="font-size:24px;font-weight:900;color:#0d47a1;">${formatPrice(a.deliveredRevenue || 0)}</span>
+          </div>
+        </div>
+        <h3>Recent Orders</h3>
+      `;
+
+      if (a.recentOrders && a.recentOrders.length > 0) {
+        html += `<table>
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>`;
+        a.recentOrders.forEach(order => {
+          const user = order.userId || {};
+          html += `<tr>
+            <td>${escapeHtml(order.id || order._id)}</td>
+            <td>${escapeHtml(user.name || '')}</td>
+            <td>${formatPrice(order.total)}</td>
+            <td>${statusBadge(order.status)}</td>
+            <td>${formatDate(order.createdAt)}</td>
+          </tr>`;
+        });
+        html += '</tbody></table>';
+      } else {
+        html += '<p style="color:var(--gray);">No recent orders.</p>';
+      }
+
+      container.innerHTML = html;
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  }
+
+  async function loadProducts() {
+    const container = document.getElementById('productsList');
+    container.innerHTML = '<div class="loading-spinner">Loading products...</div>';
+
+    try {
+      const data = await apiFetch('/api/products/my-products');
+      const products = data.products || [];
+
+      if (products.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--gray);padding:30px;">No products yet. Add your first product!</p>';
+        return;
+      }
+
+      let html = `<table><thead><tr>
+        <th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th>
+      </tr></thead><tbody>`;
+
+      products.forEach(product => {
+        html += `<tr>
+          <td><strong>${escapeHtml(product.name)}</strong></td>
+          <td>${escapeHtml(product.category)}</td>
+          <td>${formatPrice(product.price)}</td>
+          <td>${product.stock || 0}</td>
+          <td><span class="badge ${product.isApproved ? 'confirmed' : 'pending'}">${product.isApproved ? '✅ Approved' : '⏳ Pending'}</span></td>
+          <td>
+            <button class="btn-sm btn-edit" onclick="editProduct('${product._id}')">Edit</button>
+            <button class="btn-sm btn-delete" onclick="deleteProduct('${product._id}')">Delete</button>
+          </td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    } catch (error) {
+      container.innerHTML = `<p style="color:var(--red);">Error: ${error.message}</p>`;
+    }
+  }
+
+  async function loadOrders() {
+    const container = document.getElementById('ordersList');
+    container.innerHTML = '<div class="loading-spinner">Loading orders...</div>';
+
+    try {
+      const data = await apiFetch('/api/orders/my-store/orders');
+      const orders = data.orders || [];
+
+      if (orders.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--gray);padding:30px;">No orders yet.</p>';
+        return;
+      }
+
+      let html = `<table><thead><tr>
+        <th>Order ID</th><th>Customer</th><th>Total</th><th>Commission</th><th>Earnings</th><th>Status</th><th>Date</th><th>Action</th>
+      </tr></thead><tbody>`;
+
+      orders.forEach(order => {
+        const user = order.userId || {};
+        html += `<tr>
+          <td>${escapeHtml(order.id || order._id)}</td>
+          <td>${escapeHtml(user.name || '')}<br><small style="color:var(--gray);">${escapeHtml(user.email || '')}</small></td>
+          <td>${formatPrice(order.total)}</td>
+          <td>${formatPrice(order.commission || 0)}</td>
+          <td>${formatPrice(order.sellerEarnings || 0)}</td>
+          <td>${statusBadge(order.status)}</td>
+          <td>${formatDate(order.createdAt)}</td>
+          <td>
+            <select class="status-select" data-order-id="${order.id || order._id}" onchange="updateOrderStatus(this)">
+              <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+              <option value="confirmed" ${order.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+              <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+            </select>
+          </td>
+        </tr>`;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    } catch (error) {
+      container.innerHTML = `<p style="color:var(--red);">Error: ${error.message}</p>`;
+    }
+  }
+
+  async function updateOrderStatus(select) {
+    const orderId = select.dataset.orderId;
+    const status = select.value;
+
+    try {
+      await apiFetch(`/api/orders/my-store/orders/${orderId}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status })
+      });
+      showMessage('Order status updated successfully', 'success');
+      loadOrders();
+    } catch (error) {
+      showMessage(error.message, 'error');
+      loadOrders(); // revert
+    }
+  }
+
+  // ===================== PRODUCT CRUD =====================
+  function openProductModal(product = null) {
+    const modal = document.getElementById('productModal');
+    const title = document.getElementById('productModalTitle');
+    const idField = document.getElementById('productId');
+    const nameField = document.getElementById('productName');
+    const descField = document.getElementById('productDescription');
+    const priceField = document.getElementById('productPrice');
+    const oldPriceField = document.getElementById('productOldPrice');
+    const categoryField = document.getElementById('productCategory');
+    const stockField = document.getElementById('productStock');
+    const imagesField = document.getElementById('productImages');
+
+    if (product) {
+      title.textContent = 'Edit Product';
+      idField.value = product._id;
+      nameField.value = product.name || '';
+      descField.value = product.description || '';
+      priceField.value = product.price || '';
+      oldPriceField.value = product.oldPrice || '';
+      categoryField.value = product.category || '';
+      stockField.value = product.stock || 0;
+      imagesField.value = (product.images || []).join(', ');
+    } else {
+      title.textContent = 'Add Product';
+      idField.value = '';
+      nameField.value = '';
+      descField.value = '';
+      priceField.value = '';
+      oldPriceField.value = '';
+      categoryField.value = '';
+      stockField.value = 0;
+      imagesField.value = '';
+    }
+    modal.classList.add('show');
+  }
+
+  function closeProductModal() {
+    document.getElementById('productModal').classList.remove('show');
+  }
+
+  async function saveProduct() {
+    const id = document.getElementById('productId').value;
+    const data = {
+      name: document.getElementById('productName').value.trim(),
+      description: document.getElementById('productDescription').value.trim(),
+      price: parseFloat(document.getElementById('productPrice').value),
+      oldPrice: parseFloat(document.getElementById('productOldPrice').value) || null,
+      category: document.getElementById('productCategory').value.trim(),
+      stock: parseInt(document.getElementById('productStock').value) || 0,
+      images: document.getElementById('productImages').value.split(',').map(s => s.trim()).filter(Boolean)
+    };
+
+    if (!data.name || !data.price || !data.category) {
+      showMessage('Name, price and category are required', 'error');
+      return;
+    }
+
+    try {
+      if (id) {
+        await apiFetch(`/api/products/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(data)
+        });
+        showMessage('Product updated successfully. Awaiting admin re-approval.', 'success');
+      } else {
+        await apiFetch('/api/products', {
+          method: 'POST',
+          body: JSON.stringify(data)
+        });
+        showMessage('Product added successfully. Awaiting admin approval.', 'success');
+      }
+      closeProductModal();
+      loadProducts();
+    } catch (error) {
+      showMessage(error.message, 'error');
+    }
+  }
+
+  async function editProduct(id) {
+    try {
+      const data = await apiFetch('/api/products/my-products');
+      const product = data.products.find(p => p._id === id);
+      if (product) openProductModal(product);
+    } catch (error) {
+      showMessage(error.message, 'error');
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    try {
+      await apiFetch(`/api/products/${id}`, { method: 'DELETE' });
+      showMessage('Product deleted successfully', 'success');
+      loadProducts();
+    } catch (error) {
+      showMessage(error.message, 'error');
+    }
+  }
+
+  // ===================== UI EVENTS =====================
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+
+      if (btn.dataset.tab === 'orders') loadOrders();
+      else if (btn.dataset.tab === 'analytics') loadAnalytics();
+    });
+  });
+
+  document.getElementById('addProductBtn').addEventListener('click', () => openProductModal(null));
+  document.getElementById('productModalClose').addEventListener('click', closeProductModal);
+  document.getElementById('productCancelBtn').addEventListener('click', closeProductModal);
+  document.getElementById('productSaveBtn').addEventListener('click', saveProduct);
+  document.getElementById('refreshOrders').addEventListener('click', loadOrders);
+  document.getElementById('refreshAnalytics').addEventListener('click', loadAnalytics);
+
+  document.getElementById('productModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeProductModal();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('kabarakSokoToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('kabarakSokoUser');
+    window.location.href = '/login.html';
+  });
+
+  try {
+    const user = JSON.parse(localStorage.getItem('kabarakSokoUser') || '{}');
+    if (user.name) document.getElementById('sellerName').textContent = `👋 ${user.name}`;
+  } catch {}
+
+  // ===================== INIT =====================
+  async function init() {
+    const token = getToken();
+    if (!token) {
+      window.location.href = '/login.html';
+      return;
+    }
+    await loadAnalytics();
+    await loadProducts();
+    await loadOrders();
+  }
+  init();
+</script>
+
+</body>
+</html>

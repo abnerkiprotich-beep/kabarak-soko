@@ -25,6 +25,19 @@ const timelineSchema = new mongoose.Schema({
 
 const orderSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+storeId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'Store',
+  required: false
+},
+commission: {
+  type: Number,
+  default: 0
+},
+sellerEarnings: {
+  type: Number,
+  default: 0
+},
   items: { type: [itemSchema], required: true, validate: [v => v.length > 0, 'At least one item'] },
   total: { type: Number, required: true, min: 0 },
   deliveryAddress: { type: addressSchema, required: true },

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Store - KABARAK SOKO</title>
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Arial,sans-serif; background:#f4f6f5; color:#111827; min-height:100vh; display:flex; align-items:center; justify-content:center; }
+    .container { width:100%; max-width:500px; background:#fff; border-radius:12px; padding:30px; box-shadow:0 4px 18px rgba(0,0,0,0.08); }
+    h1 { text-align:center; font-size:24px; margin-bottom:6px; }
+    p.sub { text-align:center; color:#6b7280; font-size:14px; margin-bottom:22px; }
+    .form-group { margin-bottom:16px; }
+    label { display:block; font-weight:700; font-size:13px; margin-bottom:6px; }
+    input, textarea { width:100%; padding:12px; border:1px solid #d1d5db; border-radius:8px; font-size:14px; }
+    input:focus, textarea:focus { border-color:#16834b; outline:none; box-shadow:0 0 0 3px rgba(22,131,75,0.12); }
+    textarea { min-height:80px; resize:vertical; }
+    .btn { width:100%; padding:14px; border:none; background:#16834b; color:#fff; font-weight:700; border-radius:8px; cursor:pointer; font-size:15px; }
+    .btn:hover { background:#0f6b3b; }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; }
+    .message { padding:12px; border-radius:8px; margin-bottom:16px; display:none; font-size:13px; }
+    .message.error { display:block; background:#fdecec; color:#b42318; border:1px solid #f5caca; }
+    .message.success { display:block; background:#e8f7ec; color:#24743d; border:1px solid #d3eedb; }
+    .back-link { display:block; text-align:center; margin-top:16px; color:#6b7280; font-size:13px; text-decoration:none; }
+    .back-link:hover { color:#16834b; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Register Your Store</h1>
+    <p class="sub">Start selling on KABARAK SOKO</p>
+    <div id="message" class="message"></div>
+    <form id="storeForm">
+      <div class="form-group">
+        <label for="storeName">Store Name *</label>
+        <input type="text" id="storeName" placeholder="e.g. Abner's Electronics" required>
+      </div>
+      <div class="form-group">
+        <label for="storeEmail">Store Email *</label>
+        <input type="email" id="storeEmail" placeholder="store@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="storePhone">Store Phone</label>
+        <input type="tel" id="storePhone" placeholder="07XXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label for="storeDescription">Store Description</label>
+        <textarea id="storeDescription" placeholder="Tell customers about your store..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="storeAddress">Store Address</label>
+        <input type="text" id="storeAddress" placeholder="Nakuru, Kenya">
+      </div>
+      <button type="submit" class="btn" id="registerBtn">Register Store</button>
+    </form>
+    <a href="/index.html" class="back-link">← Back to Home</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('storeForm');
+    const messageEl = document.getElementById('message');
+    const registerBtn = document.getElementById('registerBtn');
+
+    function showMessage(text, type) {
+      messageEl.textContent = text;
+      messageEl.className = 'message ' + type;
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('storeName').value.trim();
+      const email = document.getElementById('storeEmail').value.trim();
+      const phone = document.getElementById('storePhone').value.trim();
+      const description = document.getElementById('storeDescription').value.trim();
+      const address = document.getElementById('storeAddress').value.trim();
+
+      if (!name || !email) {
+        showMessage('Store name and email are required.', 'error');
+        return;
+      }
+
+      const token = localStorage.getItem('kabarakSokoToken');
+      if (!token) {
+        showMessage('Please login first. Redirecting...', 'error');
+        setTimeout(() => window.location.href = '/login.html', 1500);
+        return;
+      }
+
+      registerBtn.disabled = true;
+      registerBtn.textContent = 'Registering...';
+
+      try {
+        const response = await fetch('/api/stores/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ name, email, phone, description, address })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to register store.');
+        }
+
+        showMessage('Store registered successfully! Please wait for admin verification.', 'success');
+        registerBtn.textContent = '✅ Registered!';
+        setTimeout(() => {
+          window.location.href = '/my-store.html';
+        }, 2000);
+
+      } catch (error) {
+        showMessage(error.message || 'Something went wrong. Please try again.', 'error');
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Register Store';
+      }
+    });
+  </script>
+</body>
+</html>
