@@ -139,21 +139,54 @@
     }
 
     @media (max-width: 768px) {
-  .top-bar {
-    padding: 6px 10px;
+  body { padding-bottom: 70px !important; }
+  
+  /* Hide squeezed layout */
+  .top-bar { display: none !important; }
+  .main-container { display: block !important; }
+  .categories-sidebar { display: none !important; }
+
+  /* BOTTOM NAV BAR - like Jumia */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #ddd;
+    justify-content: space-around;
+    padding: 6px 0;
+    z-index: 9999;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  }
+  .mobile-bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #555;
     font-size: 11px;
-    overflow-x: auto;
-    white-space: nowrap;
+    position: relative;
   }
-  .top-bar-content {
-    gap: 10px;
-  }
-  .top-bar-links {
-    gap: 12px;
+  .mobile-bottom-nav .nav-item.active { color: #f68b1e; }
+  .mobile-bottom-nav .nav-icon { font-size: 22px; }
+  .cart-badge {
+    position: absolute;
+    top: -2px;
+    right: -8px;
+    background: #f68b1e;
+    color: white;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 10px;
   }
 }
 
-
+/* Hide bottom nav on laptop */
+@media (min-width: 769px) {
+  .mobile-bottom-nav { display: none !important; }
+}
     /* =========================================================
        DESKTOP HEADER
        ========================================================= */
@@ -3017,6 +3050,26 @@ function toggleWishlist(button) {
   fetchProducts();
 
 </script>
+<!-- MOBILE BOTTOM NAV - JUMIA STYLE -->
+<div class="mobile-bottom-nav">
+  <a href="/" class="nav-item active">
+    <div class="nav-icon">⌂</div>
+    <span>Home</span>
+  </a>
+  <a href="#categories" class="nav-item">
+    <div class="nav-icon">☰</div>
+    <span>Categories</span>
+  </a>
+  <a href="cart.html" class="nav-item">
+    <div class="nav-icon">🛒</div>
+    <span>Cart</span>
+    <span class="cart-badge">0</span>
+  </a>
+  <a href="profile.html" class="nav-item">
+    <div class="nav-icon">👤</div>
+    <span>Account</span>
+  </a>
+</div>
 
 </body>
 </html>
