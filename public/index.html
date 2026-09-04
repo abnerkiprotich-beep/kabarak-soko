@@ -53,7 +53,6 @@
       min-height: 100vh;
       padding-bottom: calc(var(--nav-height) + 10px);
       overflow-x: hidden;
-      font-size: 16px; /* base */
     }
 
     a { color: inherit; text-decoration: none; }
@@ -155,7 +154,7 @@
     }
 
     /* =========================================================
-       SLIDER
+       SLIDER (unchanged)
        ========================================================= */
     .slider {
       position: relative;
@@ -481,7 +480,7 @@
     }
 
     /* =========================================================
-       RESPONSIVE – TABLET / DESKTOP
+       RESPONSIVE
        ========================================================= */
     @media (min-width: 700px) {
       .category-grid { grid-template-columns: repeat(6, 1fr); }
@@ -491,72 +490,1004 @@
       .slide h2 { font-size: 32px; }
     }
 
-    /* =========================================================
-       RESPONSIVE – MOBILE (LARGER FONTS)
-       ========================================================= */
-    @media (max-width: 699px) {
-      /* Base font bump */
-      body { font-size: 15px; }
-
-      /* Header search */
-      .search-area input { font-size: 16px; } /* prevents iOS zoom */
-      .search-area button { font-size: 13px; padding: 0 14px; }
-
-      /* Category cards */
-      .category-icon { font-size: 32px; }
-      .category-card span { font-size: 14px; font-weight: 700; }
-
-      /* Flash sale */
-      .flash-header h3 { font-size: 20px; }
-      .flash-timer { font-size: 16px; padding: 4px 14px; }
-      .flash-product .name { font-size: 13px; font-weight: 700; }
-      .flash-product .price { font-size: 16px; }
-      .flash-product .old-price { font-size: 13px; }
-
-      /* Product grid */
-      .product-image { height: 170px; } /* slightly taller */
-      .product-name {
-        font-size: 14px;
-        font-weight: 700;
-        height: auto;
-        min-height: 38px;
-        line-height: 1.4;
-      }
-      .product-price { font-size: 18px; }
-      .product-old-price { font-size: 13px; }
-      .discount-badge { font-size: 13px; }
-      .rating { font-size: 13px; gap: 6px; }
-      .stars { letter-spacing: 1px; }
-      .add-cart-button { font-size: 14px; padding: 10px; font-weight: 800; }
-
-      /* Section headers */
-      .section-header h2 { font-size: 20px; }
-      .section-header a { font-size: 14px; }
-
-      /* Bottom nav */
-      .bottom-nav-item { font-size: 12px; gap: 3px; }
-      .bottom-nav-item .icon { font-size: 26px; }
-      .bottom-nav-item .badge { font-size: 11px; min-width: 18px; height: 18px; }
-
-      /* Slider */
-      .slide-label { font-size: 13px; }
-      .slide h2 { font-size: 26px; }
-      .slide p { font-size: 15px; }
-      .slide-button { font-size: 14px; padding: 10px 22px; }
-
-      /* Empty / loading */
-      .empty-products, .loading { font-size: 16px; }
-    }
-
     @media (max-width: 420px) {
       .logo { font-size: 18px; }
+      .search-area input { font-size: 12px; }
+      .search-area button { font-size: 11px; padding: 0 10px; }
       .flash-products { grid-template-columns: repeat(2, 1fr); }
-      .product-image { height: 140px; }
-      .product-name { font-size: 13px; min-height: 34px; }
-      .product-price { font-size: 16px; }
-      .bottom-nav-item .icon { font-size: 24px; }
-      .bottom-nav-item { font-size: 11px; }
+      .product-image { height: 120px; }
     }
+
+    /* =========================================================
+       MOBILE PHONE LAYOUT
+       Matches the supplied KABARAK SOKO mobile reference
+       ========================================================= */
+
+    .categories-section {
+      margin-top: 0;
+    }
+
+    @media (max-width: 699px) {
+      html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        padding-bottom: calc(var(--nav-height) + 12px);
+      }
+
+      /* Header becomes a stacked mobile app header. */
+      .header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        min-height: 181px;
+        padding: 18px 22px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
+        border-radius: 0;
+      }
+
+      .logo {
+        width: 100%;
+        font-size: 25px;
+        line-height: 1;
+        letter-spacing: -0.7px;
+      }
+
+      .search-area {
+        width: 100%;
+        height: 54px;
+        min-height: 54px;
+        flex: none;
+      }
+
+      .search-area input {
+        min-width: 0;
+        width: 100%;
+        padding: 0 18px 0 20px;
+        border-radius: 28px 0 0 28px;
+        font-size: 16px;
+      }
+
+      .search-area button {
+        flex: 0 0 126px;
+        padding: 0 14px;
+        border-radius: 0 28px 28px 0;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      .header-icons {
+        display: none;
+      }
+
+      .main {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0 18px 18px;
+      }
+
+      /* Tall mobile hero like the supplied screenshot. */
+      .slider {
+        width: 100%;
+        height: 420px;
+        margin: 0 0 18px;
+        border-radius: 0 0 12px 12px;
+      }
+
+      .slide {
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 38px 45px 70px;
+      }
+
+      .slide-content {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .slide-label {
+        padding: 10px 20px;
+        margin-bottom: 24px;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .slide h2 {
+        font-size: clamp(32px, 8vw, 42px);
+        line-height: 1.12;
+        margin-bottom: 24px;
+      }
+
+      .slide p {
+        max-width: 500px;
+        font-size: 20px;
+        line-height: 1.45;
+        margin-bottom: 34px;
+      }
+
+      .slide-button {
+        min-height: 74px;
+        padding: 14px 32px;
+        border-radius: 5px;
+        font-size: 21px;
+        font-weight: 800;
+      }
+
+      .slider-controls {
+        bottom: 25px;
+        gap: 11px;
+      }
+
+      .slider-dot {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Popular Categories heading. */
+      .category-section-header {
+        height: 88px;
+        margin: 0 0 18px;
+        padding: 0 22px;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .category-section-header h2 {
+        font-size: 25px;
+        font-weight: 800;
+      }
+
+      .category-section-header a {
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      /* Two large category cards per row. */
+      .category-grid {
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin: 0 0 20px;
+      }
+
+      .category-card {
+        min-width: 0;
+        min-height: 166px;
+        padding: 28px 8px 20px;
+        border-radius: 9px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .category-icon {
+        font-size: 43px;
+        line-height: 1;
+        margin-bottom: 18px;
+      }
+
+      .category-card span:last-child {
+        font-size: 18px;
+        line-height: 1.15;
+        font-weight: 700;
+      }
+
+      /* Mobile flash sale and product grids. */
+      .flash-sale {
+        margin: 18px 0;
+        padding: 16px 12px;
+      }
+
+      .flash-products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flash-product img {
+        height: 105px;
+      }
+
+      .section-header {
+        min-height: 64px;
+        padding: 10px 14px;
+      }
+
+      .section-header h2 {
+        font-size: 18px;
+      }
+
+      .product-grid {
+        width: 100%;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .product-image {
+        height: 150px;
+      }
+
+      .product-info {
+        padding: 10px 9px 12px;
+      }
+
+      .product-name {
+        font-size: 13px;
+      }
+
+      .product-price {
+        font-size: 15px;
+      }
+
+      .add-cart-button {
+        min-height: 40px;
+        font-size: 12px;
+      }
+
+      /* Exactly five equal-width bottom tabs. */
+      .bottom-nav {
+        height: var(--nav-height);
+        padding: 4px 0 env(safe-area-inset-bottom);
+      }
+
+      .bottom-nav-item {
+        min-width: 0;
+        width: 20%;
+        flex: 1 1 20%;
+        padding: 5px 2px;
+        gap: 4px;
+        font-size: 11px;
+      }
+
+      .bottom-nav-item .icon {
+        font-size: 27px;
+      }
+
+      .bottom-nav-item .badge {
+        top: 0;
+        transform: translateX(17px);
+      }
+    }
+
+    @media (max-width: 380px) {
+      .header {
+        min-height: 166px;
+        padding: 16px;
+        gap: 14px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .search-area {
+        height: 50px;
+        min-height: 50px;
+      }
+
+      .search-area input {
+        font-size: 14px;
+        padding-left: 16px;
+      }
+
+      .search-area button {
+        flex-basis: 104px;
+        font-size: 14px;
+      }
+
+      .main {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .slider {
+        height: 365px;
+      }
+
+      .slide {
+        padding: 30px 28px 60px;
+      }
+
+      .slide-label {
+        font-size: 13px;
+        padding: 8px 14px;
+        margin-bottom: 20px;
+      }
+
+      .slide h2 {
+        font-size: 30px;
+      }
+
+      .slide p {
+        font-size: 17px;
+        margin-bottom: 25px;
+      }
+
+      .slide-button {
+        min-height: 58px;
+        font-size: 17px;
+        padding: 12px 24px;
+      }
+
+      .category-section-header {
+        height: 72px;
+        padding: 0 16px;
+      }
+
+      .category-section-header h2 {
+        font-size: 21px;
+      }
+
+      .category-section-header a {
+        font-size: 13px;
+      }
+
+      .category-grid {
+        gap: 10px;
+      }
+
+      .category-card {
+        min-height: 145px;
+      }
+
+      .category-icon {
+        font-size: 36px;
+        margin-bottom: 14px;
+      }
+
+      .category-card span:last-child {
+        font-size: 16px;
+      }
+
+      .bottom-nav-item .icon {
+        font-size: 24px;
+      }
+
+      .bottom-nav-item {
+        font-size: 10px;
+      }
+    }
+
+
+    /* =========================================================
+       KABARAK SOKO MOBILE APP EXPERIENCE
+       Inspired by the supplied marketplace references.
+       Green branding is retained for KABARAK SOKO.
+       ========================================================= */
+
+    .quick-strip,
+    .promo-strip,
+    .whats-new,
+    .message-modal {
+      display: none;
+    }
+
+    @media (max-width: 699px) {
+      :root {
+        --nav-height: 74px;
+      }
+
+      body {
+        background: #f5f5f5;
+        padding-bottom: calc(var(--nav-height) + 10px);
+      }
+
+      /* ---------- APP HEADER ---------- */
+      .header {
+        position: sticky;
+        top: 0;
+        min-height: 136px;
+        padding: 16px 18px 14px;
+        display: block;
+        border-radius: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,.10);
+      }
+
+      .logo {
+        display: block;
+        font-size: 25px;
+        line-height: 1;
+        margin-bottom: 16px;
+        letter-spacing: -.6px;
+      }
+
+      .search-area {
+        width: 100%;
+        height: 54px;
+        min-height: 54px;
+        display: flex;
+        margin: 0;
+      }
+
+      .search-area input {
+        width: 100%;
+        min-width: 0;
+        border-radius: 28px 0 0 28px;
+        padding: 0 16px 0 20px;
+        font-size: 15px;
+      }
+
+      .search-area button {
+        flex: 0 0 112px;
+        border-radius: 0 28px 28px 0;
+        padding: 0 10px;
+        font-size: 15px;
+      }
+
+      .header-icons {
+        display: none;
+      }
+
+      /* ---------- MAIN ---------- */
+      .main {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0 0 18px;
+      }
+
+      /* ---------- HERO ---------- */
+      .slider {
+        height: 305px;
+        margin: 0 0 8px;
+        border-radius: 0;
+      }
+
+      .slide {
+        padding: 30px 28px 58px;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      .slide-content {
+        width: 100%;
+        max-width: 86%;
+      }
+
+      .slide-label {
+        padding: 8px 14px;
+        margin-bottom: 18px;
+        font-size: 12px;
+        border-radius: 5px;
+      }
+
+      .slide h2 {
+        font-size: clamp(27px, 8vw, 38px);
+        line-height: 1.12;
+        margin-bottom: 15px;
+      }
+
+      .slide p {
+        font-size: 16px;
+        line-height: 1.4;
+        margin-bottom: 22px;
+      }
+
+      .slide-button {
+        min-height: 50px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 15px;
+      }
+
+      .slider-controls {
+        bottom: 17px;
+        gap: 8px;
+      }
+
+      .slider-dot {
+        width: 10px;
+        height: 10px;
+      }
+
+      /* ---------- QUICK CATEGORY ICONS ---------- */
+      .quick-strip {
+        display: flex;
+        overflow-x: auto;
+        gap: 3px;
+        padding: 12px 8px 9px;
+        background: #fff;
+        scrollbar-width: none;
+      }
+
+      .quick-strip::-webkit-scrollbar {
+        display: none;
+      }
+
+      .quick-item {
+        flex: 0 0 20%;
+        min-width: 66px;
+        border: 0;
+        background: transparent;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 2px;
+      }
+
+      .quick-icon {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--green-light);
+        font-size: 26px;
+      }
+
+      /* ---------- POPULAR CATEGORIES ---------- */
+      .category-section-header {
+        height: 62px;
+        margin: 8px 0 0;
+        padding: 0 16px;
+        border-radius: 0;
+      }
+
+      .category-section-header h2 {
+        font-size: 20px;
+      }
+
+      .category-section-header a {
+        font-size: 13px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 7px;
+        padding: 8px;
+        margin: 0;
+        background: #fff;
+      }
+
+      .category-card {
+        min-height: 100px;
+        padding: 9px 3px;
+        border-radius: 7px;
+        box-shadow: none;
+        border: 1px solid #f0f0f0;
+      }
+
+      .category-icon {
+        font-size: 30px;
+        margin-bottom: 8px;
+      }
+
+      .category-card span:last-child {
+        font-size: 11px;
+        text-align: center;
+      }
+
+      /* ---------- PROMO ---------- */
+      .promo-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 9px 0;
+        padding: 16px;
+        background: linear-gradient(135deg, var(--green-dark), var(--green));
+        color: #fff;
+      }
+
+      .promo-copy {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .promo-copy span {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .4px;
+      }
+
+      .promo-copy strong {
+        font-size: 18px;
+      }
+
+      .promo-copy small {
+        font-size: 11px;
+        opacity: .9;
+      }
+
+      .promo-strip button {
+        flex: 0 0 auto;
+        border: 0;
+        background: #fff;
+        color: var(--green-dark);
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      /* ---------- FLASH SALE ---------- */
+      .flash-sale {
+        margin: 8px 0;
+        padding: 10px 8px;
+        border-radius: 0;
+        background: #fff;
+      }
+
+      .flash-header {
+        padding: 3px 6px 10px;
+      }
+
+      .flash-header h3 {
+        font-size: 19px;
+      }
+
+      .flash-products {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 7px;
+        overflow: hidden;
+      }
+
+      .flash-product {
+        min-width: 0;
+        padding: 5px;
+      }
+
+      .flash-product img {
+        width: 100%;
+        height: 88px;
+        object-fit: cover;
+        border-radius: 3px;
+      }
+
+      .flash-product .name {
+        display: none;
+      }
+
+      .flash-product .price {
+        font-size: 12px;
+        margin-top: 6px;
+        color: var(--danger);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* ---------- WHAT'S NEW ---------- */
+      .whats-new {
+        display: block;
+        background: #fff;
+        margin: 8px 0;
+      }
+
+      .whats-new .section-header {
+        margin: 0;
+        padding: 12px 14px;
+        min-height: 54px;
+      }
+
+      .new-product-preview {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 7px;
+        padding: 0 8px 12px;
+        overflow: hidden;
+      }
+
+      .new-preview-card {
+        min-width: 0;
+      }
+
+      .new-preview-card img {
+        width: 100%;
+        height: 92px;
+        object-fit: cover;
+        background: #f7f7f7;
+        border-radius: 4px;
+      }
+
+      .new-preview-card strong {
+        display: block;
+        margin-top: 5px;
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* ---------- FEATURED PRODUCTS ---------- */
+      #productsSection {
+        margin-top: 8px;
+        background: #fff;
+      }
+
+      #productsSection > .section-header {
+        margin: 0;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .product-card {
+        min-width: 0;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .product-image {
+        height: 150px;
+      }
+
+      .product-info {
+        padding: 9px;
+      }
+
+      .product-name {
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      .product-price {
+        font-size: 15px;
+      }
+
+      .product-old-price {
+        font-size: 10px;
+      }
+
+      .add-cart-button {
+        min-height: 38px;
+        font-size: 11px;
+      }
+
+      /* ---------- BOTTOM NAV ---------- */
+      .bottom-nav {
+        height: var(--nav-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 3px 0 env(safe-area-inset-bottom);
+        background: #fff;
+        border-top: 1px solid #ddd;
+        box-shadow: 0 -2px 8px rgba(0,0,0,.08);
+        z-index: 5000;
+      }
+
+      .bottom-nav-item {
+        width: 20%;
+        min-width: 0;
+        flex: 1 1 20%;
+        padding: 4px 2px;
+        gap: 3px;
+        font-size: 10px;
+        font-weight: 600;
+      }
+
+      .bottom-nav-item .icon {
+        font-size: 26px;
+        line-height: 1;
+      }
+
+      .bottom-nav-item.active {
+        color: var(--green);
+      }
+
+      .bottom-nav-item .badge {
+        top: 0;
+        transform: translateX(15px);
+      }
+
+      /* ---------- MESSAGE CENTER ---------- */
+      .message-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: flex-end;
+        background: rgba(0,0,0,.35);
+        z-index: 10000;
+      }
+
+      .message-modal.open {
+        display: flex;
+      }
+
+      .message-sheet {
+        width: 100%;
+        max-height: 88vh;
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 18px 18px 0 0;
+        animation: messageUp .22s ease-out;
+      }
+
+      @keyframes messageUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+
+      .message-head {
+        position: sticky;
+        top: 0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 18px 48px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .message-head h2 {
+        font-size: 21px;
+      }
+
+      .message-head button {
+        position: absolute;
+        left: 15px;
+        border: 0;
+        background: transparent;
+        font-size: 31px;
+        color: #555;
+      }
+
+      .message-list {
+        padding: 4px 0;
+      }
+
+      .message-row {
+        width: 100%;
+        min-height: 70px;
+        border: 0;
+        border-bottom: 1px solid #f1f1f1;
+        background: #fff;
+        display: grid;
+        grid-template-columns: 52px 1fr 22px;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 18px;
+        text-align: left;
+        color: #222;
+      }
+
+      .message-icon {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 7px;
+        background: #e8f6ee;
+        font-size: 24px;
+      }
+
+      .message-icon.system { background: #fff3b0; }
+      .message-icon.updates { background: #d9f5d3; }
+      .message-icon.promo { background: #ffe1cf; }
+
+      .message-row span:nth-child(2) {
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .message-row b {
+        font-size: 29px;
+        color: #999;
+        font-weight: 400;
+      }
+
+      .seller-chat {
+        margin-top: 8px;
+        padding: 20px 18px 40px;
+        background: #f5f5f5;
+      }
+
+      .seller-chat h3 {
+        margin-bottom: 60px;
+        font-size: 18px;
+      }
+
+      .seller-chat p {
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .seller-chat a {
+        color: #1684c4;
+        text-decoration: underline;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .header {
+        min-height: 130px;
+        padding: 14px 14px 12px;
+      }
+
+      .logo {
+        font-size: 22px;
+        margin-bottom: 13px;
+      }
+
+      .search-area {
+        height: 50px;
+        min-height: 50px;
+      }
+
+      .search-area button {
+        flex-basis: 96px;
+        font-size: 13px;
+      }
+
+      .slider {
+        height: 285px;
+      }
+
+      .slide {
+        padding: 26px 22px 52px;
+      }
+
+      .slide h2 {
+        font-size: 28px;
+      }
+
+      .slide p {
+        font-size: 14px;
+      }
+
+      .slide-button {
+        min-height: 46px;
+        font-size: 14px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+      }
+
+      .category-card {
+        min-height: 90px;
+      }
+
+      .category-icon {
+        font-size: 25px;
+      }
+
+      .category-card span:last-child {
+        font-size: 9px;
+      }
+
+      .quick-item {
+        font-size: 10px;
+      }
+
+      .quick-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 22px;
+      }
+
+      .flash-product img,
+      .new-preview-card img {
+        height: 76px;
+      }
+
+      .bottom-nav-item {
+        font-size: 9px;
+      }
+
+      .bottom-nav-item .icon {
+        font-size: 23px;
+      }
+    }
+
   </style>
 </head>
 
@@ -635,7 +1566,13 @@
     </section>
 
     <!-- CATEGORIES -->
-    <section class="category-grid" id="categoryGrid">
+    <section class="categories-section">
+      <div class="section-header category-section-header">
+        <h2>Popular Categories</h2>
+        <a href="#" id="viewAllCategories">VIEW ALL</a>
+      </div>
+
+      <div class="category-grid" id="categoryGrid">
       <a href="#" class="category-card" data-category="Phones">
         <span class="category-icon">📱</span>
         <span>Phones</span>
@@ -668,54 +1605,138 @@
         <span class="category-icon">💊</span>
         <span>Health</span>
       </a>
+      </div>
     </section>
 
-    <!-- FLASH SALE -->
+    <!-- QUICK CATEGORY STRIP -->
+    <section class="quick-strip" aria-label="Quick categories">
+      <button class="quick-item" data-category="Phones">
+        <span class="quick-icon">📱</span>
+        <span>Phones</span>
+      </button>
+      <button class="quick-item" data-category="Appliances">
+        <span class="quick-icon">🧊</span>
+        <span>Appliances</span>
+      </button>
+      <button class="quick-item" data-category="Fashion">
+        <span class="quick-icon">👟</span>
+        <span>Shoes</span>
+      </button>
+      <button class="quick-item" data-category="Home">
+        <span class="quick-icon">🍳</span>
+        <span>Kitchen</span>
+      </button>
+      <button class="quick-item" data-category="Electronics">
+        <span class="quick-icon">💻</span>
+        <span>Electronics</span>
+      </button>
+    </section>
+
+    <!-- PROMO STRIP -->
+    <section class="promo-strip">
+      <div class="promo-copy">
+        <span>🔥 KABARAK SOKO DEALS</span>
+        <strong>Big savings. Great products.</strong>
+        <small>Shop trusted sellers across Kenya.</small>
+      </div>
+      <button type="button" data-nav="categories">SHOP NOW</button>
+    </section>
+
+    <!-- FLASH SALE (dynamic from products) -->
     <section class="flash-sale" id="flashSale">
       <div class="flash-header">
         <h3>Flash Sale</h3>
         <span class="flash-timer" id="flashTimer">--:--:--</span>
       </div>
       <div class="flash-products" id="flashProducts">
-        <div class="loading" style="grid-column:1/-1;">Loading deals...</div>
+        <div class="loading" style="grid-column:1/-1;">Loading...</div>
+      </div>
+    </section>
+
+    <!-- WHAT'S NEW -->
+    <section class="whats-new">
+      <div class="section-header">
+        <h2>What's New</h2>
+        <a href="#" id="viewNewProducts">VIEW ALL</a>
+      </div>
+      <div class="new-product-preview" id="newProductPreview">
+        <div class="loading">Loading...</div>
       </div>
     </section>
 
     <!-- FEATURED PRODUCTS -->
-    <div class="section-header">
+    <div id="productsSection">
+      <div class="section-header">
       <h2 id="productsTitle">Featured Products</h2>
       <a href="#" id="clearFilter">VIEW ALL</a>
     </div>
-    <div class="product-grid" id="productGrid">
-      <div class="loading">Loading products...</div>
+      <div class="product-grid" id="productGrid">
+        <div class="loading">Loading products...</div>
+      </div>
     </div>
 
   </main>
 
   <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav" id="bottomNav">
-    <button class="bottom-nav-item active" data-tab="home">
-      <span class="icon">🏠</span>
+  <nav class="bottom-nav" id="bottomNav" aria-label="Main navigation">
+    <button class="bottom-nav-item active" data-tab="home" type="button">
+      <span class="icon">⌂</span>
       <span>Home</span>
     </button>
-    <button class="bottom-nav-item" data-tab="categories">
-      <span class="icon">☰</span>
-      <span>Categories</span>
+    <button class="bottom-nav-item" data-tab="categories" type="button">
+      <span class="icon">▦</span>
+      <span>Category</span>
     </button>
-    <button class="bottom-nav-item" data-tab="cart">
+    <button class="bottom-nav-item" data-tab="wishlist" type="button">
+      <span class="icon">♡</span>
+      <span>Wishlist</span>
+    </button>
+    <button class="bottom-nav-item" data-tab="cart" type="button">
       <span class="icon">🛒</span>
       <span>Cart</span>
       <span class="badge" id="bottomCartBadge">0</span>
     </button>
-    <button class="bottom-nav-item" data-tab="wishlist">
-      <span class="icon">♡</span>
-      <span>Wishlist</span>
-    </button>
-    <button class="bottom-nav-item" data-tab="account">
-      <span class="icon">👤</span>
+    <button class="bottom-nav-item" data-tab="account" type="button">
+      <span class="icon">♙</span>
       <span>Account</span>
     </button>
   </nav>
+
+  <!-- MOBILE MESSAGE CENTER -->
+  <div class="message-modal" id="messageModal" aria-hidden="true">
+    <div class="message-sheet">
+      <div class="message-head">
+        <button type="button" id="closeMessage" aria-label="Close">×</button>
+        <h2>Message Center</h2>
+      </div>
+      <div class="message-list">
+        <button type="button" class="message-row" data-message="chat">
+          <span class="message-icon">👩🏽‍💼</span>
+          <span>Contact Us With Chat</span><b>›</b>
+        </button>
+        <button type="button" class="message-row" data-message="order">
+          <span class="message-icon">📦</span>
+          <span>Order Query (Available 24 hours)</span><b>›</b>
+        </button>
+        <button type="button" class="message-row">
+          <span class="message-icon system">🔊</span>
+          <span>System Message</span><b>›</b>
+        </button>
+        <button type="button" class="message-row">
+          <span class="message-icon updates">📋</span>
+          <span>Order Updates</span><b>›</b>
+        </button>
+        <button type="button" class="message-row">
+          <span class="message-icon promo">🏷️</span>
+          <span>Promotions</span><b>›</b>
+        </button>
+      </div>
+      <div class="seller-chat">
+        <h3>Chats with sellers</h3>
+        <p><a href="login.html">Log in</a> and chat with seller</p>
+      </div>
+    </div>
+  </div>
 
   <!-- =======================================================
        JAVASCRIPT – ALL FUNCTIONALITY
@@ -917,13 +1938,14 @@
           products = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
           renderProducts(products);
           renderFlashSale(products);
+          renderNewProductPreview(products);
         } catch (err) {
           console.error(err);
           productGrid.innerHTML = `<div class="empty-products">Unable to load products</div>`;
         }
       }
 
-      // -------------- Flash sale --------------
+      // -------------- Flash sale (show first 3 products with discount) --------------
       function renderFlashSale(productList) {
         if (!productList || productList.length === 0) {
           flashProducts.innerHTML = `<div class="loading" style="grid-column:1/-1;">No deals</div>`;
@@ -952,7 +1974,32 @@
         flashProducts.innerHTML = html;
       }
 
-      // -------------- Flash timer --------------
+
+      // -------------- What's New preview --------------
+      function renderNewProductPreview(productList) {
+        const container = document.getElementById('newProductPreview');
+        if (!container) return;
+
+        const items = (productList || []).slice(0, 4);
+        if (!items.length) {
+          container.innerHTML = '<div class="loading">No new products</div>';
+          return;
+        }
+
+        container.innerHTML = items.map(p => {
+          const image = p.images && p.images.length ? p.images[0] : '';
+          return `
+            <div class="new-preview-card">
+              ${image
+                ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(p.name)}" loading="lazy">`
+                : `<div style="height:92px;background:#f3f3f3;border-radius:4px;"></div>`}
+              <strong>${escapeHtml(p.name || 'Product')}</strong>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // -------------- Flash timer (countdown to next hour) --------------
       function updateFlashTimer() {
         const now = new Date();
         const nextHour = new Date(now);
@@ -1015,8 +2062,68 @@
         renderProducts(products);
       });
 
+
+      const viewNewProducts = document.getElementById('viewNewProducts');
+      if (viewNewProducts) {
+        viewNewProducts.addEventListener('click', e => {
+          e.preventDefault();
+          document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
+      const viewAllCategories = document.getElementById('viewAllCategories');
+      if (viewAllCategories) {
+        viewAllCategories.addEventListener('click', e => {
+          e.preventDefault();
+          document.getElementById('categoryGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
       cartButton.addEventListener('click', () => window.location.href = 'cart.html');
       accountButton.addEventListener('click', () => window.location.href = 'account.html');
+
+
+      // -------------- Mobile quick actions & message center --------------
+      document.querySelectorAll('.quick-item[data-category]').forEach(item => {
+        item.addEventListener('click', function() {
+          filterByCategory(this.dataset.category);
+        });
+      });
+
+      const messageModal = document.getElementById('messageModal');
+      const closeMessage = document.getElementById('closeMessage');
+
+      function openMessageCenter() {
+        if (!messageModal) return;
+        messageModal.classList.add('open');
+        messageModal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeMessageCenter() {
+        if (!messageModal) return;
+        messageModal.classList.remove('open');
+        messageModal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (closeMessage) closeMessage.addEventListener('click', closeMessageCenter);
+
+      if (messageModal) {
+        messageModal.addEventListener('click', function(e) {
+          if (e.target === messageModal) closeMessageCenter();
+        });
+
+        document.querySelectorAll('.message-row[data-message="chat"]').forEach(row => {
+          row.addEventListener('click', () => {
+            window.location.href = 'help.html';
+          });
+        });
+
+        document.querySelectorAll('.message-row[data-message="order"]').forEach(row => {
+          row.addEventListener('click', () => {
+            window.location.href = 'orders.html';
+          });
+        });
+      }
 
       // -------------- Bottom nav --------------
       const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
