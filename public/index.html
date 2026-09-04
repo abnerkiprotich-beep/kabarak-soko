@@ -7,10 +7,7 @@
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
     if (ref) {
-      // Store referral code in localStorage
       localStorage.setItem('referralCode', ref);
-      // Also you might want to log the click
-      // We'll let the server know via an API call later
     }
   })();
 </script>
@@ -138,55 +135,7 @@
       font-weight: 600;
     }
 
-    @media (max-width: 768px) {
-  body { padding-bottom: 70px !important; }
-  
-  /* Hide squeezed layout */
-  .top-bar { display: none !important; }
-  .main-container { display: block !important; }
-  .categories-sidebar { display: none !important; }
 
-  /* BOTTOM NAV BAR - like Jumia */
-  .mobile-bottom-nav {
-    display: flex !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: white;
-    border-top: 1px solid #ddd;
-    justify-content: space-around;
-    padding: 6px 0;
-    z-index: 9999;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  }
-  .mobile-bottom-nav .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #555;
-    font-size: 11px;
-    position: relative;
-  }
-  .mobile-bottom-nav .nav-item.active { color: #f68b1e; }
-  .mobile-bottom-nav .nav-icon { font-size: 22px; }
-  .cart-badge {
-    position: absolute;
-    top: -2px;
-    right: -8px;
-    background: #f68b1e;
-    color: white;
-    font-size: 10px;
-    padding: 2px 5px;
-    border-radius: 10px;
-  }
-}
-
-/* Hide bottom nav on laptop */
-@media (min-width: 769px) {
-  .mobile-bottom-nav { display: none !important; }
-}
     /* =========================================================
        DESKTOP HEADER
        ========================================================= */
@@ -1465,31 +1414,6 @@
 
     }
 
-    /* === KABARAK SOKO - MOBILE FIX - JUMIA TABS === */
-.mobile-bottom-nav { display: none; }
-
-@media (max-width: 768px) {
-  body { padding-bottom: 70px !important; }
-  .top-bar { display: none !important; }
-  .mobile-bottom-nav {
-    display: flex !important;
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
-    background: #fff;
-    border-top: 1px solid #ddd;
-    justify-content: space-around;
-    padding: 8px 0;
-    z-index: 999999;
-  }
-  .mobile-bottom-nav .nav-item {
-    display: flex; flex-direction: column;
-    align-items: center; text-decoration: none;
-    color: #777; font-size: 10px;
-  }
-  .mobile-bottom-nav .nav-item.active { color: #f68b1e; font-weight: bold; }
-  .mobile-bottom-nav .nav-icon { font-size: 22px; }
-}
   </style>
 </head>
 
@@ -1970,12 +1894,12 @@
 
 
         <a
-          href="#sell"
+          href="/register-store.html"
           class="quick-action"
         >
 
           <div class="quick-icon">
-            S
+            🏪
           </div>
 
           <div>
@@ -1986,6 +1910,29 @@
 
             <small>
               Start selling today
+            </small>
+
+          </div>
+
+        </a>
+
+        <a
+          href="/affiliate-dashboard.html"
+          class="quick-action"
+        >
+
+          <div class="quick-icon">
+            🤝
+          </div>
+
+          <div>
+
+            <strong>
+              Become an Affiliate
+            </strong>
+
+            <small>
+              Earn commissions
             </small>
 
           </div>
@@ -2270,7 +2217,7 @@
           SELL WITH US
         </h3>
 
-        <a href="#sell">
+        <a href="/register-store.html">
           Sell on KABARAK SOKO
         </a>
 
@@ -3075,26 +3022,5 @@ function toggleWishlist(button) {
   fetchProducts();
 
 </script>
-<!-- MOBILE BOTTOM NAV - JUMIA STYLE -->
-<div class="mobile-bottom-nav">
-  <a href="/" class="nav-item active">
-    <div class="nav-icon">⌂</div>
-    <span>Home</span>
-  </a>
-  <a href="#categories" class="nav-item">
-    <div class="nav-icon">☰</div>
-    <span>Categories</span>
-  </a>
-  <a href="cart.html" class="nav-item">
-    <div class="nav-icon">🛒</div>
-    <span>Cart</span>
-    <span class="cart-badge">0</span>
-  </a>
-  <a href="profile.html" class="nav-item">
-    <div class="nav-icon">👤</div>
-    <span>Account</span>
-  </a>
-</div>
-
 </body>
 </html>
