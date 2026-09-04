@@ -1,14 +1,3 @@
-  // Detect referral code from URL and store in localStorage/session
-  (function() {
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get('ref');
-    if (ref) {
-      // Store referral code in localStorage
-      localStorage.setItem('referralCode', ref);
-      // Also you might want to log the click
-      // We'll let the server know via an API call later
-    }
-  })();
 </script>
   <meta charset="UTF-8">
 
@@ -1592,7 +1581,7 @@ iframe {
   }
 
   .hero-layout {
-    width: 100%;
+    width: 100%; 
     display: block !important;
     margin: 0 0 10px !important;
   }
