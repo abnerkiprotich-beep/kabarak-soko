@@ -53,6 +53,7 @@
       min-height: 100vh;
       padding-bottom: calc(var(--nav-height) + 10px);
       overflow-x: hidden;
+      font-size: 16px; /* base */
     }
 
     a { color: inherit; text-decoration: none; }
@@ -154,7 +155,7 @@
     }
 
     /* =========================================================
-       SLIDER (unchanged)
+       SLIDER
        ========================================================= */
     .slider {
       position: relative;
@@ -480,7 +481,7 @@
     }
 
     /* =========================================================
-       RESPONSIVE
+       RESPONSIVE – TABLET / DESKTOP
        ========================================================= */
     @media (min-width: 700px) {
       .category-grid { grid-template-columns: repeat(6, 1fr); }
@@ -490,12 +491,71 @@
       .slide h2 { font-size: 32px; }
     }
 
+    /* =========================================================
+       RESPONSIVE – MOBILE (LARGER FONTS)
+       ========================================================= */
+    @media (max-width: 699px) {
+      /* Base font bump */
+      body { font-size: 15px; }
+
+      /* Header search */
+      .search-area input { font-size: 16px; } /* prevents iOS zoom */
+      .search-area button { font-size: 13px; padding: 0 14px; }
+
+      /* Category cards */
+      .category-icon { font-size: 32px; }
+      .category-card span { font-size: 14px; font-weight: 700; }
+
+      /* Flash sale */
+      .flash-header h3 { font-size: 20px; }
+      .flash-timer { font-size: 16px; padding: 4px 14px; }
+      .flash-product .name { font-size: 13px; font-weight: 700; }
+      .flash-product .price { font-size: 16px; }
+      .flash-product .old-price { font-size: 13px; }
+
+      /* Product grid */
+      .product-image { height: 170px; } /* slightly taller */
+      .product-name {
+        font-size: 14px;
+        font-weight: 700;
+        height: auto;
+        min-height: 38px;
+        line-height: 1.4;
+      }
+      .product-price { font-size: 18px; }
+      .product-old-price { font-size: 13px; }
+      .discount-badge { font-size: 13px; }
+      .rating { font-size: 13px; gap: 6px; }
+      .stars { letter-spacing: 1px; }
+      .add-cart-button { font-size: 14px; padding: 10px; font-weight: 800; }
+
+      /* Section headers */
+      .section-header h2 { font-size: 20px; }
+      .section-header a { font-size: 14px; }
+
+      /* Bottom nav */
+      .bottom-nav-item { font-size: 12px; gap: 3px; }
+      .bottom-nav-item .icon { font-size: 26px; }
+      .bottom-nav-item .badge { font-size: 11px; min-width: 18px; height: 18px; }
+
+      /* Slider */
+      .slide-label { font-size: 13px; }
+      .slide h2 { font-size: 26px; }
+      .slide p { font-size: 15px; }
+      .slide-button { font-size: 14px; padding: 10px 22px; }
+
+      /* Empty / loading */
+      .empty-products, .loading { font-size: 16px; }
+    }
+
     @media (max-width: 420px) {
       .logo { font-size: 18px; }
-      .search-area input { font-size: 12px; }
-      .search-area button { font-size: 11px; padding: 0 10px; }
       .flash-products { grid-template-columns: repeat(2, 1fr); }
-      .product-image { height: 120px; }
+      .product-image { height: 140px; }
+      .product-name { font-size: 13px; min-height: 34px; }
+      .product-price { font-size: 16px; }
+      .bottom-nav-item .icon { font-size: 24px; }
+      .bottom-nav-item { font-size: 11px; }
     }
   </style>
 </head>
@@ -610,14 +670,14 @@
       </a>
     </section>
 
-    <!-- FLASH SALE (dynamic from products) -->
+    <!-- FLASH SALE -->
     <section class="flash-sale" id="flashSale">
       <div class="flash-header">
         <h3>Flash Sale</h3>
         <span class="flash-timer" id="flashTimer">--:--:--</span>
       </div>
       <div class="flash-products" id="flashProducts">
-        <div class="loading" style="grid-column:1/-1;">Loading...</div>
+        <div class="loading" style="grid-column:1/-1;">Loading deals...</div>
       </div>
     </section>
 
@@ -863,7 +923,7 @@
         }
       }
 
-      // -------------- Flash sale (show first 3 products with discount) --------------
+      // -------------- Flash sale --------------
       function renderFlashSale(productList) {
         if (!productList || productList.length === 0) {
           flashProducts.innerHTML = `<div class="loading" style="grid-column:1/-1;">No deals</div>`;
@@ -892,7 +952,7 @@
         flashProducts.innerHTML = html;
       }
 
-      // -------------- Flash timer (countdown to next hour) --------------
+      // -------------- Flash timer --------------
       function updateFlashTimer() {
         const now = new Date();
         const nextHour = new Date(now);
