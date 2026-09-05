@@ -16,7 +16,7 @@
 
   <style>
     /* ============================================================
-       MOBILE‑FIRST GLOBAL STYLES
+       MOBILE‑FIRST GLOBAL (phones + tablets share this)
        ============================================================ */
     * {
       margin: 0;
@@ -37,7 +37,6 @@
       --danger: #e53935;
       --star: #f5a623;
       --sale-red: #e74c3c;
-      --sale-orange: #f39c12;
       --nav-height: 72px;
     }
 
@@ -50,7 +49,7 @@
       background: var(--light-bg);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: var(--nav-height);
+      padding-bottom: var(--nav-height); /* space for bottom nav on all mobile/tablet */
     }
 
     a {
@@ -70,18 +69,25 @@
     }
 
     /* ============================================================
-       MOBILE DEFAULTS (phones)
+       PHONE & TABLET DEFAULTS
+       (these are hidden until true desktop width)
        ============================================================ */
     .top-bar,
     .footer,
     .categories-panel,
-    .quick-actions {
-      display: none;
-    }
-    .mobile-bottom-nav {
-      display: flex;
+    .quick-actions,
+    .header-actions {
+      display: none !important;
     }
 
+    /* Bottom nav is visible on ALL phones & tablets */
+    .mobile-bottom-nav {
+      display: flex !important;
+    }
+
+    /* ============================================================
+       HEADER – stays clean on all mobile/tablet
+       ============================================================ */
     .header {
       background: var(--green);
       color: var(--white);
@@ -136,11 +142,9 @@
       font-size: 13px;
     }
 
-    .header-actions {
-      display: none;
-    }
-
-    /* --- HOT BAR --- */
+    /* ============================================================
+       HOT BAR – scrollable on mobile
+       ============================================================ */
     .hot-bar {
       background: var(--white);
       padding: 8px 14px;
@@ -176,14 +180,18 @@
       border-radius: 20px;
     }
 
-    /* --- MAIN --- */
+    /* ============================================================
+       MAIN LAYOUT
+       ============================================================ */
     .main {
       max-width: 1250px;
       margin: 0 auto;
       padding: 8px 10px 20px;
     }
 
-    /* --- HERO SLIDER --- */
+    /* ============================================================
+       HERO SLIDER – full width, clean on mobile
+       ============================================================ */
     .hero-layout {
       display: grid;
       grid-template-columns: 1fr;
@@ -281,7 +289,9 @@
       transform: scale(1.25);
     }
 
-    /* --- SUPER BRAND SALE --- */
+    /* ============================================================
+       SUPER BRAND SALE
+       ============================================================ */
     .super-sale-banner {
       background: linear-gradient(135deg, #f39c12, #e67e22);
       padding: 20px 16px;
@@ -303,7 +313,9 @@
       font-weight: 600;
     }
 
-    /* --- SECTIONS --- */
+    /* ============================================================
+       SECTIONS
+       ============================================================ */
     .section {
       margin-bottom: 14px;
     }
@@ -323,7 +335,9 @@
       font-weight: 700;
     }
 
-    /* --- CATEGORY GRID --- */
+    /* ============================================================
+       CATEGORY GRID – 3 columns on all phones/tablets
+       ============================================================ */
     .category-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -356,7 +370,9 @@
       line-height: 1.2;
     }
 
-    /* --- FLASH SALE --- */
+    /* ============================================================
+       FLASH SALE
+       ============================================================ */
     .flash-sale {
       background: var(--white);
       border-radius: 12px;
@@ -398,7 +414,9 @@
       transition: 0.2s;
     }
 
-    /* --- PRODUCT CARDS (matches screenshot) --- */
+    /* ============================================================
+       PRODUCT CARDS – 2 columns on all phones/tablets
+       ============================================================ */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -518,7 +536,9 @@
       background: var(--green-dark);
     }
 
-    /* --- WHAT'S NEW (horizontal scroll) --- */
+    /* ============================================================
+       WHAT'S NEW – horizontal scroll
+       ============================================================ */
     .whats-new {
       margin: 10px 0 14px;
     }
@@ -577,7 +597,9 @@
       color: var(--muted);
     }
 
-    /* --- MOBILE BOTTOM NAV --- */
+    /* ============================================================
+       MOBILE BOTTOM NAV – visible on phones & tablets
+       ============================================================ */
     .mobile-bottom-nav {
       display: flex;
       position: fixed;
@@ -633,7 +655,9 @@
       font-weight: 700;
     }
 
-    /* --- MOBILE MESSAGE OVERLAY --- */
+    /* ============================================================
+       MOBILE MESSAGE OVERLAY
+       ============================================================ */
     .mobile-page-message {
       display: none;
       position: fixed;
@@ -684,11 +708,91 @@
     }
 
     /* ============================================================
-       TABLET (≥ 769px)
+       TABLET – slightly larger, but still mobile‑first layout
+       (no top bar, no footer, no header actions, bottom nav stays)
        ============================================================ */
     @media (min-width: 769px) {
+      .logo {
+        font-size: 26px;
+      }
+      .search-area {
+        flex: 1 1 auto;
+        order: initial;
+        max-width: 500px;
+        height: 44px;
+        margin-top: 0;
+      }
+      .search-area input {
+        border-radius: 6px 0 0 6px;
+      }
+      .search-button {
+        width: 100px;
+        border-radius: 0 6px 6px 0;
+      }
+
+      .slider {
+        height: 300px;
+      }
+      .slide h2 {
+        font-size: 32px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr); /* stays 2 columns on tablets */
+      }
+      .flash-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .new-item {
+        flex: 0 0 150px;
+      }
+
+      /* Still hidden on tablets */
+      .top-bar,
+      .footer,
+      .categories-panel,
+      .quick-actions,
       .header-actions {
+        display: none !important;
+      }
+      .mobile-bottom-nav {
+        display: flex !important;
+      }
+    }
+
+    /* ============================================================
+       DESKTOP (≥ 1025px) – only here we show the full desktop UI
+       ============================================================ */
+    @media (min-width: 1025px) {
+      /* Show desktop-only elements */
+      .top-bar {
+        display: block !important;
+        background: var(--green-dark);
+        color: #eee;
+        font-size: 13px;
+        padding: 6px 20px;
+      }
+      .top-bar-content {
+        max-width: 1250px;
+        margin: 0 auto;
         display: flex;
+        justify-content: space-between;
+      }
+      .top-bar-links {
+        display: flex;
+        gap: 20px;
+      }
+      .top-bar-links a {
+        color: #d9f5e5;
+        font-weight: 600;
+      }
+
+      .header-actions {
+        display: flex !important;
         align-items: center;
         gap: 6px;
       }
@@ -718,79 +822,13 @@
         font-size: 11px;
         margin-left: 4px;
       }
-      .search-area {
-        flex: 1 1 auto;
-        order: initial;
-        max-width: 600px;
-        height: 44px;
-        margin-top: 0;
-      }
-      .search-area input {
-        border-radius: 6px 0 0 6px;
-      }
-      .search-button {
-        width: 100px;
-        border-radius: 0 6px 6px 0;
-      }
-      .logo {
-        font-size: 26px;
-      }
+
       .mobile-bottom-nav {
-        display: none;
-      }
-      .footer {
-        display: block;
-      }
-
-      .slider {
-        height: 300px;
-      }
-      .slide h2 {
-        font-size: 32px;
-      }
-
-      .category-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .product-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      .flash-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      .new-item {
-        flex: 0 0 150px;
-      }
-    }
-
-    /* ============================================================
-       DESKTOP (≥ 1025px)
-       ============================================================ */
-    @media (min-width: 1025px) {
-      .top-bar {
-        display: block;
-        background: var(--green-dark);
-        color: #eee;
-        font-size: 13px;
-        padding: 6px 20px;
-      }
-      .top-bar-content {
-        max-width: 1250px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-      }
-      .top-bar-links {
-        display: flex;
-        gap: 20px;
-      }
-      .top-bar-links a {
-        color: #d9f5e5;
-        font-weight: 600;
+        display: none !important; /* hide bottom nav on desktop */
       }
 
       .footer {
+        display: block !important;
         background: #2c2c2c;
         color: #ddd;
         padding: 30px 20px 20px;
@@ -825,6 +863,25 @@
         color: #888;
       }
 
+      .categories-panel {
+        display: block !important;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      }
+      .quick-actions {
+        display: flex !important;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      }
+
+      .hero-layout {
+        grid-template-columns: 210px minmax(0, 1fr) 210px;
+        gap: 14px;
+      }
+
       .slider {
         height: 360px;
       }
@@ -844,58 +901,12 @@
       .new-item {
         flex: 0 0 180px;
       }
-      .categories-panel {
-        display: block;
-      }
-      .quick-actions {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .hero-layout {
-        grid-template-columns: 210px minmax(0, 1fr) 210px;
-        gap: 14px;
-      }
     }
 
     /* ============================================================
-       EXTRA SMALL PHONES
+       VERY LARGE PHONES (just keep the same phone layout)
+       No special overrides – phones stay as they are.
        ============================================================ */
-    @media (max-width: 420px) {
-  .slider {
-    height: 260px;
-  }
-  .slide h2 {
-    font-size: 28px !important;
-    line-height: 1.2;
-  }
-  .slide p {
-    font-size: 15px !important;
-  }
-  .product-image {
-    height: 160px;
-  }
-  .product-price {
-    font-size: 18px !important;
-  }
-  .product-name {
-    font-size: 14px !important;
-  }
-  .category-grid {
-    gap: 10px;
-  }
-  .category-card {
-    padding: 16px 6px;
-    min-height: 90px;
-  }
-  .category-icon {
-    font-size: 32px !important;
-  }
-  .category-card span {
-    font-size: 13px !important;
-    font-weight: 700;
-  }
-}
   </style>
 </head>
 
@@ -960,8 +971,8 @@
     <section class="hero-layout">
 
       <!-- CATEGORY SIDEBAR (desktop only) -->
-      <aside class="panel categories-panel" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-        <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-weight:700;">Categories</div>
+      <aside class="categories-panel" style="padding:14px 0;">
+        <div style="padding:0 16px 10px;font-weight:700;border-bottom:1px solid var(--border);">Categories</div>
         <ul style="list-style:none;padding:6px 0;">
           <li><a href="#" data-category="Supermarket" style="display:block;padding:8px 16px;font-size:13px;">🛒 Supermarket</a></li>
           <li><a href="#" data-category="Phones" style="display:block;padding:8px 16px;font-size:13px;">📱 Phones</a></li>
@@ -973,7 +984,7 @@
       </aside>
 
       <!-- SLIDER -->
-      <section class="panel slider" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <section class="slider" style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
         <div class="slide active">
           <div class="slide-content">
             <span class="slide-label">✨ STYLE FOR EVERYONE</span>
@@ -1006,7 +1017,7 @@
       </section>
 
       <!-- QUICK ACTIONS (desktop only) -->
-      <aside class="panel quick-actions" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+      <aside class="quick-actions">
         <a href="#help" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);">
           <span style="font-size:24px;">❓</span>
           <div><strong style="font-size:13px;">Help Centre</strong><br><small style="color:var(--muted);font-size:11px;">Need assistance?</small></div>
@@ -1088,7 +1099,7 @@
       <h2>✨ What's New</h2>
       <div class="new-scroll" id="newScroll">
         <!-- populated by JS -->
-        <div class="loading" style="grid-column:1/-1;padding:12px;width:100%;">Loading new arrivals...</div>
+        <div class="loading" style="padding:12px;width:100%;">Loading new arrivals...</div>
       </div>
     </section>
 
