@@ -16,7 +16,7 @@
 
   <style>
     /* ============================================================
-       GLOBAL RESET & BASE
+       GLOBAL RESET
        ============================================================ */
     * {
       margin: 0;
@@ -34,11 +34,11 @@
       --border: #e8e8e8;
       --danger: #e53935;
       --star: #f5a623;
-      --nav-height: 76px;
+      --nav-height: 82px;
     }
 
     html {
-      font-size: 16px; /* base for rem – now 1rem = 16px */
+      font-size: 18px; /* bigger base for phones */
       scroll-behavior: smooth;
     }
 
@@ -47,7 +47,7 @@
       background: var(--light-bg);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: calc(var(--nav-height) + 8px);
+      padding-bottom: calc(var(--nav-height) + 12px);
       font-size: 1rem;
       line-height: 1.5;
     }
@@ -69,7 +69,7 @@
     }
 
     /* ============================================================
-       PHONE & TABLET DEFAULTS
+       PHONE & TABLET DEFAULTS (hidden until desktop)
        ============================================================ */
     .top-bar,
     .footer,
@@ -84,16 +84,16 @@
     }
 
     /* ============================================================
-       HEADER – larger, clearer
+       HEADER – bigger on phone
        ============================================================ */
     .header {
       background: var(--green);
       color: var(--white);
-      padding: 12px 14px 8px;
+      padding: 14px 16px 10px;
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
     }
     .header-content {
       max-width: 1250px;
@@ -101,10 +101,10 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
     .logo {
-      font-size: 1.6rem;
+      font-size: 2rem;
       font-weight: 900;
       letter-spacing: -0.5px;
       white-space: nowrap;
@@ -116,39 +116,39 @@
     .search-area {
       flex: 1 1 100%;
       display: flex;
-      height: 48px;
+      height: 56px;
       order: 2;
-      margin-top: 6px;
+      margin-top: 8px;
     }
     .search-area input {
       flex: 1;
       border: none;
       outline: none;
-      padding: 0 18px;
-      border-radius: 30px 0 0 30px;
-      font-size: 1rem;
+      padding: 0 20px;
+      border-radius: 40px 0 0 40px;
+      font-size: 1.05rem;
       color: var(--text);
       background: var(--white);
     }
     .search-button {
-      width: 80px;
+      width: 96px;
       border: none;
       background: #303030;
       color: var(--white);
       font-weight: 700;
-      border-radius: 0 30px 30px 0;
-      font-size: 0.95rem;
+      border-radius: 0 40px 40px 0;
+      font-size: 1.05rem;
     }
 
     /* ============================================================
-       HOT BAR – bigger text
+       HOT BAR – bigger & bolder
        ============================================================ */
     .hot-bar {
       background: var(--white);
-      padding: 10px 16px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
       overflow-x: auto;
       white-space: nowrap;
       border-bottom: 1px solid var(--border);
@@ -161,49 +161,49 @@
     .hot-label {
       background: var(--danger);
       color: #fff;
-      padding: 4px 14px;
-      border-radius: 30px;
-      font-size: 0.85rem;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 1rem;
       font-weight: 800;
     }
     .hot-bar span {
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       color: var(--text);
     }
     .hot-bar .highlight {
       color: var(--danger);
       font-weight: 700;
       background: #fff0f0;
-      padding: 4px 14px;
-      border-radius: 30px;
+      padding: 6px 16px;
+      border-radius: 40px;
     }
 
     /* ============================================================
-       MAIN LAYOUT
+       MAIN
        ============================================================ */
     .main {
       max-width: 1250px;
       margin: 0 auto;
-      padding: 10px 12px 20px;
+      padding: 12px 14px 24px;
     }
 
     /* ============================================================
-       HERO SLIDER – bigger, clearer
+       SLIDER – taller, bigger text
        ============================================================ */
     .hero-layout {
       display: grid;
       grid-template-columns: 1fr;
       gap: 0;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .slider {
       position: relative;
-      height: 280px;
+      height: 320px;
       background: #eee;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     }
     .slide {
       position: absolute;
@@ -211,7 +211,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 28px;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.6s ease;
@@ -231,52 +231,52 @@
     }
     .slide-content {
       width: 100%;
-      max-width: 480px;
+      max-width: 520px;
     }
     .slide-label {
       display: inline-block;
-      padding: 4px 16px;
+      padding: 6px 18px;
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 30px;
-      font-size: 0.85rem;
+      border-radius: 40px;
+      font-size: 1rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .slide h2 {
-      font-size: 2rem;
+      font-size: 2.4rem;
       line-height: 1.1;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .slide p {
-      font-size: 1rem;
+      font-size: 1.1rem;
       line-height: 1.4;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       opacity: 0.9;
     }
     .slide-button {
       border: none;
       background: var(--white);
       color: var(--green-dark);
-      padding: 12px 28px;
-      border-radius: 40px;
+      padding: 14px 34px;
+      border-radius: 60px;
       font-weight: 700;
-      font-size: 1rem;
-      min-height: 48px;
+      font-size: 1.1rem;
+      min-height: 56px;
     }
 
     .slider-controls {
       position: absolute;
-      bottom: 14px;
+      bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 8px;
+      gap: 10px;
       z-index: 5;
     }
     .slider-dot {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       border: none;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.5);
@@ -284,28 +284,28 @@
     }
     .slider-dot.active {
       background: var(--white);
-      transform: scale(1.3);
+      transform: scale(1.4);
     }
 
     /* ============================================================
-       SUPER BRAND SALE
+       SUPER BRAND SALE – bigger
        ============================================================ */
     .super-sale-banner {
       background: linear-gradient(135deg, #f39c12, #e67e22);
-      padding: 24px 16px;
-      border-radius: 16px;
-      margin: 16px 0 20px;
+      padding: 28px 18px;
+      border-radius: 20px;
+      margin: 18px 0 22px;
       color: #fff;
-      box-shadow: 0 4px 16px rgba(243, 156, 18, 0.3);
+      box-shadow: 0 4px 20px rgba(243, 156, 18, 0.3);
       text-align: center;
     }
     .super-sale-banner h2 {
-      font-size: 1.6rem;
+      font-size: 2rem;
       font-weight: 900;
       letter-spacing: -0.5px;
     }
     .super-sale-banner p {
-      font-size: 1rem;
+      font-size: 1.2rem;
       opacity: 0.95;
       margin-top: 6px;
       font-weight: 600;
@@ -315,40 +315,40 @@
        SECTIONS
        ============================================================ */
     .section {
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
     .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 0 10px;
+      padding: 16px 0 12px;
     }
     .section-header h2 {
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       font-weight: 800;
     }
     .section-header a {
       color: var(--green-dark);
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: 700;
     }
 
     /* ============================================================
-       CATEGORY GRID – 3 columns
+       CATEGORY GRID – 2 columns on phone (bigger tiles)
        ============================================================ */
     .category-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
     }
     .category-card {
       background: var(--white);
-      padding: 18px 8px;
+      padding: 22px 10px;
       text-align: center;
-      border-radius: 12px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       transition: 0.2s;
-      min-height: 80px;
+      min-height: 100px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -356,14 +356,14 @@
     }
     .category-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     }
     .category-icon {
-      font-size: 2rem;
-      margin-bottom: 4px;
+      font-size: 2.8rem;
+      margin-bottom: 6px;
     }
     .category-card span {
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       font-weight: 600;
       line-height: 1.2;
     }
@@ -373,90 +373,90 @@
        ============================================================ */
     .flash-sale {
       background: var(--white);
-      border-radius: 16px;
-      padding: 16px 14px 12px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-      margin-bottom: 16px;
+      border-radius: 20px;
+      padding: 18px 16px 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      margin-bottom: 18px;
     }
     .flash-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
     .flash-header h2 {
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: var(--danger);
     }
     .countdown {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-weight: 700;
       background: #1e1e1e;
       color: #fff;
-      padding: 6px 16px;
-      border-radius: 40px;
-      letter-spacing: 1px;
+      padding: 8px 18px;
+      border-radius: 60px;
+      letter-spacing: 2px;
     }
 
     .flash-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
     .flash-grid .product-card {
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       border: 1px solid var(--border);
       transition: 0.2s;
     }
 
     /* ============================================================
-       PRODUCT CARDS – bigger & bolder
+       PRODUCT CARDS – huge & bold
        ============================================================ */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      padding: 4px 0;
+      gap: 16px;
+      padding: 6px 0;
     }
     .product-card {
       background: var(--white);
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
       transition: transform 0.2s, box-shadow 0.2s;
       position: relative;
     }
     .product-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
     }
     .wishlist-button {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 12px;
+      right: 12px;
       z-index: 2;
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border: none;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.96);
       color: #888;
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       display: flex;
       align-items: center;
       justify-content: center;
       backdrop-filter: blur(2px);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     }
     .wishlist-button.active {
       color: var(--danger);
     }
     .product-image {
       width: 100%;
-      height: 190px;
+      height: 230px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -470,17 +470,17 @@
     }
     .product-placeholder {
       color: #aaa;
-      font-size: 0.9rem;
+      font-size: 1rem;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
     }
     .product-info {
-      padding: 12px 14px 14px;
+      padding: 14px 16px 16px;
     }
     .product-name {
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       line-height: 1.3;
-      min-height: 38px;
+      min-height: 44px;
       overflow: hidden;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -489,68 +489,70 @@
       margin-bottom: 6px;
     }
     .product-price {
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       font-weight: 800;
       color: var(--green-dark);
     }
     .product-old-price {
-      font-size: 0.9rem;
+      font-size: 1.05rem;
       color: var(--muted);
       text-decoration: line-through;
-      margin-left: 8px;
+      margin-left: 10px;
       font-weight: 400;
     }
     .rating {
       display: flex;
       align-items: center;
-      gap: 6px;
-      margin: 8px 0 6px;
-      font-size: 0.85rem;
+      gap: 8px;
+      margin: 10px 0 8px;
+      font-size: 1rem;
     }
     .stars {
       color: var(--star);
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      font-size: 1.1rem;
     }
     .reviews {
       color: var(--muted);
+      font-size: 0.95rem;
     }
     .fulfilled-by {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .add-cart-button {
       width: 100%;
       border: none;
       background: var(--green);
       color: var(--white);
-      padding: 12px 0;
-      border-radius: 40px;
+      padding: 14px 0;
+      border-radius: 60px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       transition: 0.2s;
-      min-height: 48px;
+      min-height: 56px;
     }
     .add-cart-button:hover {
       background: var(--green-dark);
     }
 
     /* ============================================================
-       WHAT'S NEW – horizontal scroll, bigger items
+       WHAT'S NEW – horizontal, bigger
        ============================================================ */
     .whats-new {
-      margin: 12px 0 18px;
+      margin: 14px 0 20px;
     }
     .whats-new h2 {
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       font-weight: 800;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     .new-scroll {
       display: flex;
-      gap: 14px;
+      gap: 16px;
       overflow-x: auto;
-      padding: 4px 2px 12px;
+      padding: 6px 2px 14px;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
@@ -558,30 +560,30 @@
       display: none;
     }
     .new-item {
-      flex: 0 0 140px;
+      flex: 0 0 160px;
       background: var(--white);
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 16px;
+      padding: 14px;
       text-align: center;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
     .new-item img {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       object-fit: cover;
-      border-radius: 10px;
-      margin: 0 auto 8px;
+      border-radius: 12px;
+      margin: 0 auto 10px;
       background: #f0f0f0;
     }
     .new-item .name {
-      font-size: 0.85rem;
+      font-size: 1rem;
       font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .new-item .price {
-      font-size: 0.95rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--green-dark);
     }
@@ -589,16 +591,16 @@
     .empty-products,
     .loading {
       grid-column: 1 / -1;
-      padding: 40px 16px;
+      padding: 50px 20px;
       text-align: center;
       background: var(--white);
-      border-radius: 12px;
+      border-radius: 16px;
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
     /* ============================================================
-       MOBILE BOTTOM NAV – bigger, with Wishlist
+       MOBILE BOTTOM NAV – bigger
        ============================================================ */
     .mobile-bottom-nav {
       display: flex;
@@ -609,9 +611,9 @@
       height: var(--nav-height);
       background: var(--white);
       border-top: 1px solid var(--border);
-      box-shadow: 0 -3px 16px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 -3px 20px rgba(0, 0, 0, 0.06);
       z-index: 999999;
-      padding: 6px 4px env(safe-area-inset-bottom);
+      padding: 8px 6px env(safe-area-inset-bottom);
     }
     .bottom-nav-item {
       flex: 1;
@@ -623,17 +625,17 @@
       align-items: center;
       justify-content: center;
       gap: 2px;
-      font-size: 0.75rem;
+      font-size: 0.9rem;
       font-weight: 500;
       position: relative;
-      padding: 4px 0;
+      padding: 6px 0;
     }
     .bottom-nav-icon {
-      font-size: 1.6rem;
+      font-size: 2.2rem;
       line-height: 1;
     }
     .bottom-nav-label {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: 500;
     }
     .bottom-nav-item.active {
@@ -643,17 +645,17 @@
     .bottom-cart-badge {
       position: absolute;
       top: 2px;
-      margin-left: 22px;
-      min-width: 18px;
-      height: 18px;
-      padding: 0 5px;
+      margin-left: 28px;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: var(--danger);
       color: #fff;
-      border-radius: 20px;
-      font-size: 0.7rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
       font-weight: 700;
     }
 
@@ -676,8 +678,8 @@
       width: 100%;
       max-width: 600px;
       background: var(--white);
-      border-radius: 24px 24px 0 0;
-      padding: 28px 24px 34px;
+      border-radius: 32px 32px 0 0;
+      padding: 32px 26px 38px;
       animation: slideUp 0.3s ease;
     }
     @keyframes slideUp {
@@ -689,29 +691,29 @@
       }
     }
     .mobile-message-card h3 {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       margin-bottom: 8px;
     }
     .mobile-message-card p {
       color: var(--muted);
-      font-size: 1rem;
+      font-size: 1.1rem;
       line-height: 1.5;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .mobile-message-close {
       width: 100%;
       border: none;
       background: var(--green);
       color: #fff;
-      padding: 16px;
-      border-radius: 40px;
+      padding: 18px;
+      border-radius: 60px;
       font-weight: 700;
-      font-size: 1rem;
-      min-height: 52px;
+      font-size: 1.1rem;
+      min-height: 60px;
     }
 
     /* ============================================================
-       TABLET – slightly larger, still mobile layout
+       TABLET – moderate size bump
        ============================================================ */
     @media (min-width: 769px) {
       .logo {
@@ -726,17 +728,19 @@
       }
       .search-area input {
         border-radius: 8px 0 0 8px;
+        font-size: 1rem;
       }
       .search-button {
         width: 100px;
         border-radius: 0 8px 8px 0;
+        font-size: 1rem;
       }
 
       .slider {
         height: 340px;
       }
       .slide h2 {
-        font-size: 2.4rem;
+        font-size: 2.2rem;
       }
 
       .category-grid {
@@ -1070,7 +1074,7 @@
         <div class="countdown" id="flashCountdown">00:00:00</div>
       </div>
       <div class="flash-grid" id="flashGrid">
-        <div class="loading" style="grid-column:1/-1;padding:16px;">Loading deals...</div>
+        <div class="loading" style="grid-column:1/-1;padding:20px;">Loading deals...</div>
       </div>
     </section>
 
@@ -1093,7 +1097,7 @@
     <section class="whats-new">
       <h2>✨ What's New</h2>
       <div class="new-scroll" id="newScroll">
-        <div class="loading" style="padding:16px;width:100%;">Loading new arrivals...</div>
+        <div class="loading" style="padding:20px;width:100%;">Loading new arrivals...</div>
       </div>
     </section>
 
@@ -1334,8 +1338,8 @@
     async function fetchProducts() {
       try {
         productGrid.innerHTML = `<div class="loading">Loading products...</div>`;
-        flashGrid.innerHTML = `<div class="loading" style="grid-column:1/-1;padding:16px;">Loading deals...</div>`;
-        newScroll.innerHTML = `<div class="loading" style="padding:16px;width:100%;">Loading new arrivals...</div>`;
+        flashGrid.innerHTML = `<div class="loading" style="grid-column:1/-1;padding:20px;">Loading deals...</div>`;
+        newScroll.innerHTML = `<div class="loading" style="padding:20px;width:100%;">Loading new arrivals...</div>`;
 
         const res = await fetch('/api/products');
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1349,7 +1353,7 @@
         newScroll.innerHTML = newItems.map(p => `
           <div class="new-item">
             ${p.images?.[0] ? `<img src="${escapeHtml(p.images[0])}" alt="${escapeHtml(p.name)}" loading="lazy">` :
-              `<div style="width:80px;height:80px;background:#eee;border-radius:10px;margin:0 auto 8px;"></div>`}
+              `<div style="width:100px;height:100px;background:#eee;border-radius:12px;margin:0 auto 10px;"></div>`}
             <div class="name">${escapeHtml(p.name)}</div>
             <div class="price">${formatPrice(p.price)}</div>
           </div>
@@ -1423,7 +1427,7 @@
     mobileMessage.addEventListener('click', e => { if (e.target === mobileMessage) mobileMessage.classList.remove('show'); });
 
     // ===========================================================
-    // BOTTOM NAV – now includes Wishlist
+    // BOTTOM NAV – Wishlist included
     // ===========================================================
     const bottomItems = document.querySelectorAll('[data-bottom-nav]');
 
