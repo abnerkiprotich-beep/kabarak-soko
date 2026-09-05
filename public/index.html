@@ -38,7 +38,7 @@
     }
 
     html {
-      font-size: 18px; /* bigger base for phones */
+      font-size: 18px;
       scroll-behavior: smooth;
     }
 
@@ -50,6 +50,7 @@
       padding-bottom: calc(var(--nav-height) + 12px);
       font-size: 1rem;
       line-height: 1.5;
+      overflow-x: hidden;
     }
 
     a {
@@ -69,7 +70,7 @@
     }
 
     /* ============================================================
-       PHONE & TABLET DEFAULTS (hidden until desktop)
+       HIDE DESKTOP ELEMENTS ON MOBILE
        ============================================================ */
     .top-bar,
     .footer,
@@ -84,7 +85,7 @@
     }
 
     /* ============================================================
-       HEADER – bigger on phone
+       HEADER
        ============================================================ */
     .header {
       background: var(--green);
@@ -141,7 +142,7 @@
     }
 
     /* ============================================================
-       HOT BAR – bigger & bolder
+       HOT BAR
        ============================================================ */
     .hot-bar {
       background: var(--white);
@@ -188,7 +189,7 @@
     }
 
     /* ============================================================
-       SLIDER – taller, bigger text
+       SLIDER
        ============================================================ */
     .hero-layout {
       display: grid;
@@ -288,7 +289,7 @@
     }
 
     /* ============================================================
-       SUPER BRAND SALE – bigger
+       SUPER BRAND SALE
        ============================================================ */
     .super-sale-banner {
       background: linear-gradient(135deg, #f39c12, #e67e22);
@@ -334,7 +335,7 @@
     }
 
     /* ============================================================
-       CATEGORY GRID – 2 columns on phone (bigger tiles)
+       CATEGORY GRID – 2 columns on phone
        ============================================================ */
     .category-grid {
       display: grid;
@@ -413,7 +414,7 @@
     }
 
     /* ============================================================
-       PRODUCT CARDS – huge & bold
+       PRODUCT CARDS
        ============================================================ */
     .product-grid {
       display: grid;
@@ -538,7 +539,7 @@
     }
 
     /* ============================================================
-       WHAT'S NEW – horizontal, bigger
+       WHAT'S NEW
        ============================================================ */
     .whats-new {
       margin: 14px 0 20px;
@@ -600,7 +601,7 @@
     }
 
     /* ============================================================
-       MOBILE BOTTOM NAV – bigger
+       MOBILE BOTTOM NAV
        ============================================================ */
     .mobile-bottom-nav {
       display: flex;
@@ -660,60 +661,181 @@
     }
 
     /* ============================================================
-       MOBILE MESSAGE OVERLAY
+       PAGE OVERLAYS – Account & Wishlist
        ============================================================ */
-    .mobile-page-message {
-      display: none;
+    .page-overlay {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 2000;
-      align-items: flex-end;
-      justify-content: center;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--light-bg);
+      z-index: 99999;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      padding-bottom: calc(var(--nav-height) + 20px);
     }
-    .mobile-page-message.show {
-      display: flex;
+    .page-overlay.open {
+      transform: translateX(0);
     }
-    .mobile-message-card {
-      width: 100%;
-      max-width: 600px;
-      background: var(--white);
-      border-radius: 32px 32px 0 0;
-      padding: 32px 26px 38px;
-      animation: slideUp 0.3s ease;
-    }
-    @keyframes slideUp {
-      from {
-        transform: translateY(100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-    .mobile-message-card h3 {
-      font-size: 1.6rem;
-      margin-bottom: 8px;
-    }
-    .mobile-message-card p {
-      color: var(--muted);
-      font-size: 1.1rem;
-      line-height: 1.5;
-      margin-bottom: 22px;
-    }
-    .mobile-message-close {
-      width: 100%;
-      border: none;
+    .page-overlay .page-header {
       background: var(--green);
-      color: #fff;
-      padding: 18px;
-      border-radius: 60px;
+      color: var(--white);
+      padding: 18px 16px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+    .page-overlay .page-header h2 {
+      font-size: 1.4rem;
       font-weight: 700;
+    }
+    .page-overlay .page-close {
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 2rem;
+      padding: 4px 8px;
+      line-height: 1;
+    }
+    .page-overlay .page-body {
+      padding: 16px 16px 30px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Account page specific */
+    .account-profile {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .account-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--green-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      flex-shrink: 0;
+      color: var(--green);
+    }
+    .account-info h3 {
       font-size: 1.1rem;
-      min-height: 60px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .account-info p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .account-info .view-profile {
+      color: var(--green);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .account-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .account-stat {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    .account-stat .stat-icon {
+      font-size: 2rem;
+      margin-bottom: 4px;
+    }
+    .account-stat .stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .account-section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 22px 0 12px;
+      color: var(--text);
+    }
+
+    .account-menu {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      margin-bottom: 6px;
+    }
+    .account-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      transition: 0.15s;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .account-menu-item:last-child {
+      border-bottom: none;
+    }
+    .account-menu-item:hover {
+      background: var(--green-light);
+    }
+    .account-menu-item .menu-icon {
+      font-size: 1.4rem;
+      width: 32px;
+      text-align: center;
+    }
+    .account-menu-item .menu-arrow {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 1.2rem;
+    }
+
+    /* Wishlist page */
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .wishlist-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .wishlist-empty .big-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+    .wishlist-empty h3 {
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: var(--text);
     }
 
     /* ============================================================
-       TABLET – moderate size bump
+       TABLET
        ============================================================ */
     @media (min-width: 769px) {
       .logo {
@@ -770,7 +892,7 @@
     }
 
     /* ============================================================
-       DESKTOP (≥ 1025px) – full layout
+       DESKTOP
        ============================================================ */
     @media (min-width: 1025px) {
       .top-bar {
@@ -962,7 +1084,7 @@
   <!-- =========================================================
        MAIN CONTENT
        ========================================================= -->
-  <main class="main">
+  <main class="main" id="homePage">
 
     <!-- =========================================================
          HERO LAYOUT
@@ -1134,6 +1256,87 @@
   </footer>
 
   <!-- =========================================================
+       ACCOUNT PAGE OVERLAY
+       ========================================================= -->
+  <div class="page-overlay" id="accountPage">
+    <div class="page-header">
+      <h2>👤 My Account</h2>
+      <button class="page-close" id="closeAccount">✕</button>
+    </div>
+    <div class="page-body">
+
+      <!-- Profile -->
+      <div class="account-profile">
+        <div class="account-avatar">👤</div>
+        <div class="account-info">
+          <h3>Welcome Kiprotich Cheruiyot!</h3>
+          <p>cheruiyot13725@gmail.com</p>
+          <span class="view-profile">VIEW PROFILE →</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="account-stats">
+        <div class="account-stat">
+          <div class="stat-icon">📦</div>
+          <div class="stat-label">My Orders</div>
+        </div>
+        <div class="account-stat">
+          <div class="stat-icon">❤️</div>
+          <div class="stat-label">Wishlist</div>
+        </div>
+      </div>
+
+      <!-- Need Assistance -->
+      <div class="account-section-title">📞 Need Assistance?</div>
+      <div class="account-menu">
+        <div class="account-menu-item"><span class="menu-icon">🆘</span> Help & Support <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">📧</span> Contact Us <span class="menu-arrow">›</span></div>
+      </div>
+
+      <!-- My Account -->
+      <div class="account-section-title">📋 My KABARAK SOKO Account</div>
+      <div class="account-menu">
+        <div class="account-menu-item"><span class="menu-icon">📦</span> Orders <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">📨</span> Inbox <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">⭐</span> Ratings &amp; Reviews <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">🎫</span> Vouchers <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">❤️</span> Wishlist <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">🏪</span> Follow Seller <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">👁️</span> Recently Viewed <span class="menu-arrow">›</span></div>
+      </div>
+
+      <!-- Settings -->
+      <div class="account-section-title">⚙️ My Settings</div>
+      <div class="account-menu">
+        <div class="account-menu-item"><span class="menu-icon">🔧</span> Settings <span class="menu-arrow">›</span></div>
+        <div class="account-menu-item"><span class="menu-icon">🔒</span> Privacy &amp; Security <span class="menu-arrow">›</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================
+       WISHLIST PAGE OVERLAY
+       ========================================================= -->
+  <div class="page-overlay" id="wishlistPage">
+    <div class="page-header">
+      <h2>❤️ My Wishlist</h2>
+      <button class="page-close" id="closeWishlist">✕</button>
+    </div>
+    <div class="page-body">
+      <div id="wishlistContent">
+        <!-- Dynamically populated -->
+        <div class="wishlist-empty">
+          <div class="big-icon">💔</div>
+          <h3>Your wishlist is empty</h3>
+          <p>Start adding your favorite products by tapping the heart icon on any product.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
        MOBILE BOTTOM NAV – Home, Category, Wishlist, Cart, Account
        ========================================================= -->
   <nav class="mobile-bottom-nav" aria-label="Main navigation">
@@ -1180,6 +1383,13 @@
     const mobileMessageTitle = document.getElementById('mobileMessageTitle');
     const mobileMessageText = document.getElementById('mobileMessageText');
     const mobileMessageClose = document.getElementById('mobileMessageClose');
+
+    // Overlays
+    const accountPage = document.getElementById('accountPage');
+    const wishlistPage = document.getElementById('wishlistPage');
+    const closeAccount = document.getElementById('closeAccount');
+    const closeWishlist = document.getElementById('closeWishlist');
+    const wishlistContent = document.getElementById('wishlistContent');
 
     let products = [];
     let cart = [];
@@ -1241,6 +1451,7 @@
 
     function saveWishlist() {
       localStorage.setItem('kabarakSokoWishlist', JSON.stringify(wishlist));
+      renderWishlistPage();
     }
 
     function toggleWishlist(btn) {
@@ -1261,6 +1472,36 @@
       saveWishlist();
     }
 
+    function renderWishlistPage() {
+      if (!wishlistContent) return;
+      if (wishlist.length === 0) {
+        wishlistContent.innerHTML = `
+          <div class="wishlist-empty">
+            <div class="big-icon">💔</div>
+            <h3>Your wishlist is empty</h3>
+            <p>Start adding your favorite products by tapping the heart icon on any product.</p>
+          </div>
+        `;
+        return;
+      }
+      wishlistContent.innerHTML = `
+        <div class="wishlist-grid">
+          ${wishlist.map(item => `
+            <div class="product-card" style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.04);">
+              <div class="product-image" style="height:160px;">
+                ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" loading="lazy">` :
+                  `<div class="product-placeholder">📷 No image</div>`}
+              </div>
+              <div class="product-info" style="padding:12px 14px;">
+                <div class="product-name" style="font-size:1rem;min-height:30px;">${escapeHtml(item.name)}</div>
+                <div class="product-price" style="font-size:1.3rem;">${formatPrice(item.price)}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
     // ===========================================================
     // HELPERS
     // ===========================================================
@@ -1276,6 +1517,41 @@
     function escapeHtml(str) {
       return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
+
+    // ===========================================================
+    // OVERLAY CONTROLS
+    // ===========================================================
+    function openAccount() {
+      accountPage.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAccountPage() {
+      accountPage.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function openWishlist() {
+      renderWishlistPage();
+      wishlistPage.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWishlistPage() {
+      wishlistPage.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    closeAccount.addEventListener('click', closeAccountPage);
+    closeWishlist.addEventListener('click', closeWishlistPage);
+
+    // Close overlays on backdrop click
+    accountPage.addEventListener('click', function(e) {
+      if (e.target === this) closeAccountPage();
+    });
+    wishlistPage.addEventListener('click', function(e) {
+      if (e.target === this) closeWishlistPage();
+    });
 
     // ===========================================================
     // RENDER PRODUCT CARDS
@@ -1417,27 +1693,46 @@
     // HEADER BUTTONS
     // ===========================================================
     cartButton.addEventListener('click', () => window.location.href = 'cart.html');
-    accountButton.addEventListener('click', () => window.location.href = 'account.html');
-    helpButton.addEventListener('click', () => window.location.href = 'help.html');
+    accountButton.addEventListener('click', openAccount);
+    helpButton.addEventListener('click', () => {
+      showMobileMessage('❓ Help & Support', 'For any assistance, please contact us at support@kabaraksoko.com or call +254 790 140 643.');
+    });
 
     // ===========================================================
     // MOBILE MESSAGE
     // ===========================================================
+    function showMobileMessage(title, text) {
+      mobileMessageTitle.textContent = title;
+      mobileMessageText.textContent = text;
+      mobileMessage.classList.add('show');
+    }
+
     mobileMessageClose.addEventListener('click', () => mobileMessage.classList.remove('show'));
     mobileMessage.addEventListener('click', e => { if (e.target === mobileMessage) mobileMessage.classList.remove('show'); });
 
     // ===========================================================
-    // BOTTOM NAV – Wishlist included
+    // BOTTOM NAV – Home, Category, Wishlist, Cart, Account
     // ===========================================================
     const bottomItems = document.querySelectorAll('[data-bottom-nav]');
 
     function handleBottomNav(tab) {
       bottomItems.forEach(el => el.classList.toggle('active', el.dataset.bottomNav === tab));
-      if (tab === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
-      else if (tab === 'categories') categoriesSection.scrollIntoView({ behavior: 'smooth' });
-      else if (tab === 'wishlist') window.location.href = 'wishlist.html';
-      else if (tab === 'cart') window.location.href = 'cart.html';
-      else if (tab === 'account') window.location.href = 'account.html';
+
+      // Close any open overlays first
+      closeAccountPage();
+      closeWishlistPage();
+
+      if (tab === 'home') {
+        document.getElementById('homePage').scrollIntoView({ behavior: 'smooth' });
+      } else if (tab === 'categories') {
+        categoriesSection.scrollIntoView({ behavior: 'smooth' });
+      } else if (tab === 'wishlist') {
+        openWishlist();
+      } else if (tab === 'cart') {
+        window.location.href = 'cart.html';
+      } else if (tab === 'account') {
+        openAccount();
+      }
     }
 
     bottomItems.forEach(item => {
@@ -1463,7 +1758,7 @@
     document.querySelectorAll('[data-nav]').forEach(btn => {
       btn.addEventListener('click', () => {
         const dest = btn.dataset.nav;
-        if (dest === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (dest === 'home') document.getElementById('homePage').scrollIntoView({ behavior: 'smooth' });
         else if (dest === 'categories') categoriesSection.scrollIntoView({ behavior: 'smooth' });
         else if (dest === 'cart') window.location.href = 'cart.html';
       });
@@ -1492,7 +1787,9 @@
     loadCart();
     loadWishlist();
     updateCartCount();
+    renderWishlistPage();
     fetchProducts();
   </script>
+
 </body>
 </html>
